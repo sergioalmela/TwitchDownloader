@@ -1,10 +1,10 @@
 {
   "name": "twitch-downloader",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.1",
+  "description": "Free tool to download Twitch content with GUI",
+  "author": "Sergio Almela and Santi Mansilla",
   "private": true,
-  "license": "SEE LICENSE IN ../LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
