@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN ../LICENSE",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
