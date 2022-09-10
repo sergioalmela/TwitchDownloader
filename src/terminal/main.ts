@@ -12,6 +12,13 @@ while (true) {
 
     function downloadVod() {
         input("Enter the Twitch video URL: ")
+
+        // Download VOD from Twitch
+        const vodController = require('../main/vod/vod.controller')
+        const VodController = new vodController()
+
+        // Parse and sanitize URL first to get the ID, the we should make auth validation
+        VodController.getVod()
     }
 
     function invalidResponse() {
