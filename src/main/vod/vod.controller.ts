@@ -1,32 +1,52 @@
 const axios = require('axios')
 
+// TODO: Move to interfaces file
+interface Credentials {
+  signature: string
+  value: string
+}
+
 class VodController {
+  async getFeeds (id: string, credentials: Credentials): Promise<object> {
+    const response = await axios.get(`https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
+
+    // TODO: Parse this string into something like m3u8
+    return response.data
+  }
+
   getVod (): string {
     return 'GOT Vod!'
   }
 
-  async getAuth (isVod): Promise<string> {
-    const id : Number = 1579649789
-    let json = null
-
-    if (isVod) {
-      json = '{"operationName": "PlaybackAccessToken","variables": {"isLive": false,"login": "","isVod": true,"vodID": "' + id + '","playerType": "channel_home_live"},"extensions": {"persistedQuery": {"version": 1,"sha256Hash": "0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712"}}}'
-    } else {
-      json = '{"operationName": "PlaybackAccessToken","variables": {"isLive": true,"login": "' + id + '","isVod": false,"vodID": "","playerType": "channel_home_live"},"extensions": {"persistedQuery": {"version": 1,"sha256Hash": "0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712"}}}'
+  async getAuth (id: string, isVod: Boolean): Promise<string> {
+    const json: object = {
+      operationName: 'PlaybackAccessToken',
+      variables: {
+        isLive: !isVod,
+        login: '',
+        isVod: isVod,
+        vodID: isVod ? id.toString() : '',
+        playerType: 'site'
+      },
+      extensions: {
+        persistedQuery: {
+          version: 1,
+          sha256Hash: '0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712'
+        }
+      }
     }
 
-    const parsed = JSON.parse(json)
-
-    const config = {
+    const config: object = {
       headers: {
         'Content-Type': 'text/plain;charset=UTF-8',
         'Client-ID': 'kimne78kx3ncx6brgo4mv6wki5h1ko'
       }
     }
-    const response = await axios.post('https://gql.twitch.tv/gql', parsed, config)
 
-    if (response.status === 200 && (typeof response.data === 'object')) {
-      return response.data
+    const { data, status } = await axios.post('https://gql.twitch.tv/gql', json, config)
+
+    if (status === 200 && (typeof data === 'object')) {
+      return data.data.videoPlaybackAccessToken
     } else {
       // TODO: Return error
     }
