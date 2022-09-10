@@ -1,4 +1,4 @@
-//require('./dist/main')
+// require('./dist/main')
 
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
@@ -8,13 +8,13 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-    },
-    /*webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
+    /* webPreferences: {
       preload: path.join('public', 'preload.js')
-    }*/
+    } */
   })
 
   win.loadFile('public/index.html')
