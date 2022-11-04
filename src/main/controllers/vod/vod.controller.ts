@@ -1,10 +1,10 @@
-import Credentials from "../../interfaces/Credential"
-import { getFeedList } from "./feed.controller"
+import Credentials from '../../interfaces/Credential'
+import { getFeedList } from './feed.controller'
 
 const axios = require('axios')
 
 class VodController {
-  async getFeeds (id: string, credentials: Credentials): Promise<Array<object>> {
+  async getFeeds (id: string, credentials: Credentials): Promise<object[]> {
     const response = await axios.get(`https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
 
     return getFeedList(response.data)

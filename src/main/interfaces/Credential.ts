@@ -1,4 +1,4 @@
 export default interface Credential {
-    signature: string
-    value: string
+  signature: string
+  value: string
 }
