@@ -1,8 +1,9 @@
 // Terminal options to download content from Twitch (No GUI)
 export {}
 
+import Credentials from "../main/interfaces/Credential"
 const prompts = require('prompts')
-const handler = require('../main/twitch/handler.controller')
+const handler = require('../main/handlers/twitch.handler')
 
 async function main (): Promise<any> {
   const onCancel = prompt => {
@@ -53,14 +54,16 @@ async function downloadVod (): Promise<any> {
   const path = null
 
   // Download VOD from Twitch
-  const vodController = require('../main/vod/vod.controller')
+  const vodController = require('../main/controllers/vod/vod.controller')
   const VodController = new vodController()
 
   const id: string = handler.parseUrl(url)
 
-  const credentials = await VodController.getAuth(id, true)
+  const credentials:Credentials = await VodController.getAuth(id, true)
 
-  const feeds = await VodController.getFeeds(id, credentials)
+  const feeds:Array<object> = await VodController.getFeeds(id, credentials)
+
+  console.log(feeds)
   // Parse and sanitize URL first to get the ID, the we should make auth validation
   VodController.getVod(credentials, id)
 }
