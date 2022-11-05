@@ -9,7 +9,7 @@ const ipcRenderer = electron.ipcRenderer
 
 controllers = {
   vod: () => {
-    const vodController = require('../main/controllers/vod/vod.controller')
+    const vodController = require('../main/controllers/vod.controller')
     return new vodController()
   }
 }

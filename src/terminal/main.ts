@@ -1,19 +1,17 @@
 // Terminal options to download content from Twitch (No GUI)
-import Credentials from '../main/interfaces/Credential'
+import { download } from '../main/services/file.service'
+import { getFeeds } from '../main/controllers/feed.controller'
+import Menu from '../main/interfaces/Menu'
+import Playlist from '../main/interfaces/Playlist'
 
 export {}
 const prompts = require('prompts')
-const handler = require('../main/handlers/twitch.handler')
+
+const onCancel = prompt => {
+  process.exit()
+}
 
 async function main (): Promise<any> {
-  const onCancel = prompt => {
-    process.exit()
-  }
-
-  interface Menu {
-    menu: string
-  }
-
   const response: Menu = await prompts({
     type: 'text',
     name: 'menu',
@@ -54,16 +52,25 @@ async function downloadVod (): Promise<any> {
   const path = null
 
   // Download VOD from Twitch
-  const vodController = require('../main/controllers/vod/vod.controller')
-  const VodController = new vodController()
+  const feeds = await getFeeds(url)
+  const feedOptions = feeds.map((feed: Playlist, index) => {
+    return {
+      title: feed.video,
+      value: feed.video
+    }
+  })
 
-  const id: string = handler.parseUrl(url)
+  // Iterate feeds, and promp user to download a feed showing video
+  const responseFeeds: Menu = await prompts({
+    type: 'select',
+    name: 'selectQuality',
+    message: 'Select the export quality',
+    choices: feedOptions,
+    initial: 1
+  }, { onCancel })
 
-  const credentials: Credentials = await VodController.getAuth(id, true)
+  download()
 
-  const feeds: object[] = await VodController.getFeeds(id, credentials)
-
-  console.log(feeds)
   // Parse and sanitize URL first to get the ID, the we should make auth validation
-  VodController.getVod(credentials, id)
+  // VodController.getVod(credentials, id)
 }
