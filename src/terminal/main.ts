@@ -6,6 +6,7 @@ import Feed from '../main/interfaces/Feed'
 import Menu from '../main/interfaces/prompt/Menu'
 import DownloadPath from '../main/interfaces/prompt/DownloadPath'
 import ExportQuality from '../main/interfaces/prompt/ExportQuality'
+import Playlist from '../main/interfaces/Playlist'
 
 export {}
 const prompts = require('prompts')
@@ -38,6 +39,7 @@ async function main (): Promise<any> {
 
 main()
 
+// TODO: Check if is valid twitch URL
 async function downloadVod (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
@@ -66,8 +68,8 @@ async function downloadVod (): Promise<any> {
     initial: 1
   }, { onCancel })
 
-  const downloadUrl: string = feeds[responseFeeds.exportQuality].url
+  const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
 
   // TODO: Set error control in every iteration
-  await download(downloadUrl, parsePath(path.downloadPath))
+  await download(selectedFeed, parsePath(path.downloadPath))
 }

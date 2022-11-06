@@ -19,7 +19,7 @@ const getFeeds = async (url: string): Promise<Feed> => {
 const getFeedOptions = (feeds): FeedOption => {
   return feeds.map((feed: Playlist, index: number) => {
     return {
-      title: feed.video,
+      title: feed.video === 'chunked' ? 'Original' : feed.video,
       value: index
     }
   })
