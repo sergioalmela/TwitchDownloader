@@ -1,5 +1,5 @@
 // Terminal options to download content from Twitch (No GUI)
-import { download } from '../main/services/file.service'
+import { download, parsePath } from '../main/services/file.service'
 import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
 import FeedOption from '../main/interfaces/FeedOption'
 import Feed from '../main/interfaces/Feed'
@@ -47,10 +47,11 @@ async function downloadVod (): Promise<any> {
 
   const url: string = response.url
 
+  // TODO: Check if path has extension, if not, ask again
   const path: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
-    message: 'Enter the path to download the video (absolute or relative)'
+    message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
   }, { onCancel })
 
   const feeds: Feed = await getFeeds(url)
@@ -68,5 +69,5 @@ async function downloadVod (): Promise<any> {
   const downloadUrl: string = feeds[responseFeeds.exportQuality].url
 
   // TODO: Set error control in every iteration
-  await download(downloadUrl, path.downloadPath)
+  await download(downloadUrl, parsePath(path.downloadPath))
 }
