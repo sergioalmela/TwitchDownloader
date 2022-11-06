@@ -20,10 +20,14 @@ const printDownloadPercentage = (segment: Segment, totalSegments: number) => {
   console.log(`Downloaded: ${Math.round(segment.num / totalSegments * 100)} %`)
 }
 
-// Remove extension from path
+// Remove extension from path, if there is no extension, then add default name
 // TODO: In the future, accept more extensions than mp4
 const parsePath = (path: string) => {
-  return path.split('.').slice(0, -1).join('.')
+  if (!path.includes('.')) {
+    return `${path}/twitchDownload`
+  } else {
+    return path.substring(0, path.lastIndexOf('.'))
+  }
 }
 
 export {

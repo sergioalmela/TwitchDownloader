@@ -7,7 +7,7 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
     variables: {
       isLive: !isVod,
       login: '',
-      isVod: isVod,
+      isVod,
       vodID: isVod ? id.toString() : '',
       playerType: 'site'
     },
