@@ -1,9 +1,10 @@
 import Playlist from '../interfaces/Playlist'
+import Feed from '../interfaces/Feed'
 const m3u8Parser = require('m3u8-parser')
 
 // https://www.twitch.tv/videos/1629671834?filter=archives&sort=time
 // Passed a manifest string, returns an array of feeds
-const getFeedList = (manifest: string): object[] => {
+const getFeedList = (manifest: string): Feed => {
   const parser = new m3u8Parser.Parser()
   parser.addParser({
     expression: /^#VOD-FRAMERATE/,

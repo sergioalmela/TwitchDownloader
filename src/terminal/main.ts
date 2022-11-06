@@ -1,8 +1,11 @@
 // Terminal options to download content from Twitch (No GUI)
 import { download } from '../main/services/file.service'
-import { getFeeds } from '../main/controllers/feed.controller'
-import Menu from '../main/interfaces/Menu'
-import Playlist from '../main/interfaces/Playlist'
+import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
+import FeedOption from '../main/interfaces/FeedOption'
+import Feed from '../main/interfaces/Feed'
+import Menu from '../main/interfaces/prompt/Menu'
+import DownloadPath from '../main/interfaces/prompt/DownloadPath'
+import ExportQuality from '../main/interfaces/prompt/ExportQuality'
 
 export {}
 const prompts = require('prompts')
@@ -36,10 +39,6 @@ async function main (): Promise<any> {
 main()
 
 async function downloadVod (): Promise<any> {
-  interface Url {
-    url: string
-  }
-
   const response: Url = await prompts({
     type: 'text',
     name: 'url',
@@ -48,29 +47,26 @@ async function downloadVod (): Promise<any> {
 
   const url: string = response.url
 
-  // const path = input("Enter the local path to download (or empty to download here): ")
-  const path = null
+  const path: DownloadPath = await prompts({
+    type: 'text',
+    name: 'downloadPath',
+    message: 'Enter the path to download the video (absolute or relative)'
+  }, { onCancel })
 
-  // Download VOD from Twitch
-  const feeds = await getFeeds(url)
-  const feedOptions = feeds.map((feed: Playlist, index) => {
-    return {
-      title: feed.video,
-      value: feed.video
-    }
-  })
+  const feeds: Feed = await getFeeds(url)
+  const feedOptions: FeedOption = await getFeedOptions(feeds)
 
   // Iterate feeds, and promp user to download a feed showing video
-  const responseFeeds: Menu = await prompts({
+  const responseFeeds: ExportQuality = await prompts({
     type: 'select',
-    name: 'selectQuality',
+    name: 'exportQuality',
     message: 'Select the export quality',
     choices: feedOptions,
     initial: 1
   }, { onCancel })
 
-  download()
+  const downloadUrl: string = feeds[responseFeeds.exportQuality].url
 
-  // Parse and sanitize URL first to get the ID, the we should make auth validation
-  // VodController.getVod(credentials, id)
+  // TODO: Set error control in every iteration
+  await download(downloadUrl, path.downloadPath)
 }

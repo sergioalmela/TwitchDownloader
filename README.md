@@ -26,6 +26,14 @@
 | Multi language support  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |
 | Detailed wiki and video tutorials  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |
 
+## How to execute
+```
+npm install
+npm run start:terminal
+```
+
+Feel free to contribute to the project by opening a pull request or by opening an issue.
+
 ## Thanks to
 This project is inspired by Twitch Recover, a similar tool made in Java
 
