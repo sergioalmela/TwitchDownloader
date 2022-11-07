@@ -19,7 +19,7 @@ async function main (): Promise<any> {
   const response: Menu = await prompts({
     type: 'text',
     name: 'menu',
-    message: "Menu:\n1. Download a stream (Unavailable)\n2. Download a clip (Unavailable)\n3. Download a video\nPlease enter the number of the option you want to select (number between 1-3)"
+    message: 'Menu:\n1. Download a stream (Unavailable)\n2. Download a clip (Unavailable)\n3. Download a video\nPlease enter the number of the option you want to select (number between 1-3)'
   }, { onCancel })
 
   if (response.menu === '1') {
