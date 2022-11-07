@@ -7,7 +7,7 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
     variables: {
       isLive: !isVod,
       login: '',
-      isVod: isVod,
+      isVod,
       vodID: isVod ? id.toString() : '',
       playerType: 'site'
     },
@@ -35,6 +35,15 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   }
 }
 
+const isContentRestricted = (data: any[] | string): boolean => {
+  if (Array.isArray(data)) {
+    const error_code = data[0].error_code
+    return error_code.includes('restricted')
+  }
+
+  return false
+}
+
 const parseUrl = (url: string): string => {
   const regex = /(?<=videos\/)(\d+)/g
   const id = url.match(regex)
@@ -43,5 +52,6 @@ const parseUrl = (url: string): string => {
 
 export {
   getAuth,
-  parseUrl
+  parseUrl,
+  isContentRestricted
 }
