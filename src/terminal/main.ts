@@ -1,5 +1,5 @@
 // Terminal options to download content from Twitch (No GUI)
-import { download, parsePath } from '../main/services/file.service'
+import { parsePath } from '../main/services/file.service'
 import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
 import FeedOption from '../main/interfaces/FeedOption'
 import Feed from '../main/interfaces/Feed'
@@ -7,6 +7,7 @@ import Menu from '../main/interfaces/prompt/Menu'
 import DownloadPath from '../main/interfaces/prompt/DownloadPath'
 import ExportQuality from '../main/interfaces/prompt/ExportQuality'
 import Playlist from '../main/interfaces/Playlist'
+import { download } from '../main/controllers/vod.controller'
 
 export {}
 const prompts = require('prompts')

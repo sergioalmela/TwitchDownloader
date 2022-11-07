@@ -6,11 +6,13 @@ const m3u8stream = require('m3u8stream')
 const mkdirp = require('mkdirp')
 const cliProgress = require('cli-progress')
 
-const download = (selectedFeed: Playlist, path: string) => {
+const downloadFromFeed = (selectedFeed: Playlist, path: string) => {
   // TODO: Set error control
-  mkdirp(path).then(() => {
-    const extension = selectedFeed.url === 'audio_only' || selectedFeed.codecs.startsWith('mp4a') ? 'mp3' : 'mp4'
+  const cleanPath = path.split('.').length > 1 ? path.split('/').slice(0, -1).join('/') : path
+  mkdirp(cleanPath).then(() => {
+    const extension = getExtension(selectedFeed)
     path = `${addFileName(path)}.${extension}`
+
     const stream = m3u8stream(selectedFeed.url)
     stream.pipe(fs.createWriteStream(path))
 
@@ -35,6 +37,10 @@ const download = (selectedFeed: Playlist, path: string) => {
   })
 }
 
+const getExtension = (playlist: Playlist): string => {
+  return playlist.url === 'audio_only' || playlist.codecs.startsWith('mp4a') ? 'mp3' : 'mp4'
+}
+
 const getDownloadPercentage = (segment: Segment, totalSegments: number) => {
   return Math.round(segment.num / totalSegments * 100)
 }
@@ -46,15 +52,15 @@ const parsePath = (path: string) => {
 
 // Remove extension from path, if there is no extension, then add default name 'twitchDownload'
 const addFileName = (path: string) => {
-  // If path is empty, then remove slash
+  // If path is empty, then remove slash and remove extension (only mp4 support yet)
   const defaultName = 'twitchDownload'
 
   return path.split('.').length > 1
-    ? path
+    ? path.split('.').slice(0, -1).join('.')
     : path === '' ? defaultName : `${path}/${defaultName}`
 }
 
 export {
-  download,
+  downloadFromFeed,
   parsePath
 }

@@ -35,6 +35,47 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   }
 }
 
+const getFeedFromId = async (id: string, credentials: Credentials): Promise<any> => {
+  return await axios.get(`https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
+}
+
+const getRestrictedData = async (id: string): Promise<any> => {
+  const config: any = {
+    headers: {
+      'User-Agent': 'Mozilla/5.0',
+      Accept: '"application/vnd.twitchtv.v5+json',
+      'Client-ID': 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+    }
+  }
+
+  return await axios.get(`https://api.twitch.tv/kraken/videos/${id}`, config)
+}
+
+const getRestrictedFeed = async (id: string): Promise<any> => {
+  const responseFromRestricted = await getRestrictedData(id)
+
+  const baseUrlRaw = responseFromRestricted.data.seek_previews_url
+  // Get content from baseUrlRaw until second slash (excluding https://)
+  const baseUrl = baseUrlRaw.split('/').slice(0, 4).join('/')
+
+  const urlType = responseFromRestricted.data.broadcast_type === 'highlight' ? `highlight-${id}` : 'index-dvr'
+
+  // Add manually the restricted feed options
+  const resolutions = responseFromRestricted.data.resolutions
+  const framerates = responseFromRestricted.data.fps
+
+  const feedHead = '#EXTM3U\n #EXT-X-TWITCH-INFO:ORIGIN="s3",B="false",REGION="EU",USER-IP="185.74.243.1",SERVING-ID="92a7f29d6bfa456aa651b98dd9ae7764",CLUSTER="cloudfront_vod",USER-COUNTRY="ES",MANIFEST-CLUSTER="cloudfront_vod"\n'
+
+  let response = ''
+  for (const alias in resolutions) {
+    const resolution = resolutions[alias]
+    const framerate = framerates[alias]
+    response += `#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="${alias}",NAME="${resolution}",AUTOSELECT=NO,DEFAULT=NO\n #EXT-X-STREAM-INF:BANDWIDTH=8770285,CODECS="avc1.4D402A,mp4a.40.2",RESOLUTION=${resolution},VIDEO="${alias}",FRAME-RATE=${framerate}\n ${baseUrl}/chunked/${urlType}.m3u8\n`
+  }
+
+  return response
+}
+
 const isContentRestricted = (data: any[] | string): boolean => {
   if (Array.isArray(data)) {
     const error_code = data[0].error_code
@@ -53,5 +94,7 @@ const parseUrl = (url: string): string => {
 export {
   getAuth,
   parseUrl,
+  getFeedFromId,
+  getRestrictedFeed,
   isContentRestricted
 }
