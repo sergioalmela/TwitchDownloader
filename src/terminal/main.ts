@@ -19,16 +19,14 @@ async function main (): Promise<any> {
   const response: Menu = await prompts({
     type: 'text',
     name: 'menu',
-    message: "Menu:\nStreams:\n1. Get a live stream link (get the M3U8 stream link of a live stream).\n2. Download a stream live. (Currently unavailable, coming in the beta)\n\nVODs:\n3. Get the link to a VOD (including sub-only).\n4. Download a VOD (including sub-only).\n5. Recover a VOD - 60 days maximum (can be less in rare cases).\n\nHighlights:\n6. Retrieve the link to a highlight.\n7. Download a highlight.\n8. Recover a highlight.\n\nVideos:\n9. Check if a VOD/highlight has muted segments.\n10. 'Unmute' a VOD/highlight (be able to view the muted segments of the M3U8).\n11. Download an M3U8 file.\n12. Convert a TS file to MP4.\n\nClips:\n13. Retrieve permanent link of a clip - never deleted.\n14. Download a clip.\n15. Recover ALL clips from a stream - NO time limit.\n\nMass options: (Currently unavailable, coming in the beta)\n16. Mass recover options. (Currently unavailable, coming in the beta)\n17. Mass download options. (Currently unavailable, coming in the beta)\nPlease enter the number of the option you want to select (number between 1-17 inclusive)"
+    message: "Menu:\n1. Download a stream (Unavailable)\n2. Download a clip (Unavailable)\n3. Download a video\nPlease enter the number of the option you want to select (number between 1-3)"
   }, { onCancel })
 
   if (response.menu === '1') {
-    console.log('Download a video')
+    console.log('Download a Stream')
   } else if (response.menu === '2') {
     console.log('Download a clip')
   } else if (response.menu === '3') {
-    console.log('Download a stream')
-  } else if (response.menu === '4') {
     console.log('Download VOD')
     downloadVod()
   } else {
