@@ -1,4 +1,4 @@
-import { assert, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import Playlist from '../src/main/interfaces/Playlist'
 import { getAuth, getFeedFromId, getIdFromUrl } from '../src/main/services/twitch.service'
 import Credential from '../src/main/interfaces/Credential'
