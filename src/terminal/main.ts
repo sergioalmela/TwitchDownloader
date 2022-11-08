@@ -1,5 +1,4 @@
 // Terminal options to download content from Twitch (No GUI)
-import { parsePath } from '../main/services/file.service'
 import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
 import FeedOption from '../main/interfaces/FeedOption'
 import Feed from '../main/interfaces/Feed'
@@ -70,5 +69,5 @@ async function downloadVod (): Promise<any> {
   const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
 
   // TODO: Set error control in every iteration
-  await download(selectedFeed, parsePath(path.downloadPath))
+  await download(selectedFeed, path.downloadPath)
 }

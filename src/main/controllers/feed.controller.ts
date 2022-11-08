@@ -36,16 +36,7 @@ const getFeedOptions = (feeds): FeedOption => {
 
 // Passed a manifest string, returns an array of feeds
 const getFeedList = (manifest: string): Feed => {
-  const parser = new m3u8Parser.Parser()
-  parser.addParser({
-    expression: /^#VOD-FRAMERATE/,
-    customType: 'framerate'
-  })
-
-  parser.push(manifest)
-  parser.end()
-
-  const playlists = parser.manifest.playlists
+  const playlists = getPlaylists(manifest)
 
   return playlists.map((playlist): Playlist => {
     return {
@@ -57,6 +48,19 @@ const getFeedList = (manifest: string): Feed => {
       codecs: playlist.attributes.CODECS
     }
   })
+}
+
+const getPlaylists = (manifest: string) => {
+  const parser = new m3u8Parser.Parser()
+  parser.addParser({
+    expression: /^#VOD-FRAMERATE/,
+    customType: 'framerate'
+  })
+
+  parser.push(manifest)
+  parser.end()
+
+  return parser.manifest.playlists
 }
 
 export {
