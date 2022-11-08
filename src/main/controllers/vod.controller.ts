@@ -1,8 +1,8 @@
 import { downloadFromFeed } from '../services/file.service'
 import Playlist from '../interfaces/Playlist'
 
-const download = (selectedFeed: Playlist, path: string): void => {
-  downloadFromFeed(selectedFeed, path)
+const download = async (selectedFeed: Playlist, path: string): Promise<boolean> => {
+  return await downloadFromFeed(selectedFeed, path)
 }
 
 export {

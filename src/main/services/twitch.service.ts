@@ -1,7 +1,7 @@
-import Credentials from '../interfaces/Credential'
+import Credential from '../interfaces/Credential'
 import axios from 'axios'
 
-const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
+const getAuth = async (id: string, isVod: Boolean): Promise<Credential> => {
   const json: object = {
     operationName: 'PlaybackAccessToken',
     variables: {
@@ -35,7 +35,7 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   }
 }
 
-const getFeedFromId = async (id: string, credentials: Credentials): Promise<any> => {
+const getFeedFromId = async (id: string, credentials: Credential): Promise<any> => {
   return await axios.get(`https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
 }
 
@@ -83,7 +83,7 @@ const isContentRestricted = (data: any[] | string): boolean => {
   return false
 }
 
-const parseUrl = (url: string): string => {
+const getIdFromUrl = (url: string): string => {
   const regex = /(?<=videos\/)(\d+)/g
   const id = url.match(regex)
   return id[0].toString()
@@ -91,7 +91,7 @@ const parseUrl = (url: string): string => {
 
 export {
   getAuth,
-  parseUrl,
+  getIdFromUrl,
   getFeedFromId,
   getRestrictedFeed,
   isContentRestricted

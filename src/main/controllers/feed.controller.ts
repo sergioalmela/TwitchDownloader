@@ -1,5 +1,5 @@
-import { getAuth, getFeedFromId, getRestrictedFeed, isContentRestricted, parseUrl } from '../services/twitch.service'
-import Credentials from '../interfaces/Credential'
+import { getAuth, getFeedFromId, getRestrictedFeed, isContentRestricted, getIdFromUrl } from '../services/twitch.service'
+import Credential from '../interfaces/Credential'
 import Playlist from '../interfaces/Playlist'
 import FeedOption from '../interfaces/FeedOption'
 import Feed from '../interfaces/Feed'
@@ -7,9 +7,9 @@ import Feed from '../interfaces/Feed'
 const m3u8Parser = require('m3u8-parser')
 
 const getFeeds = async (url: string): Promise<Feed> => {
-  const id: string = parseUrl(url)
+  const id: string = getIdFromUrl(url)
 
-  const credentials: Credentials = await getAuth(id, true)
+  const credentials: Credential = await getAuth(id, true)
 
   let response
   let responseData = null

@@ -6,15 +6,21 @@ const m3u8stream = require('m3u8stream')
 const mkdirp = require('mkdirp')
 const cliProgress = require('cli-progress')
 
-const downloadFromFeed = (selectedFeed: Playlist, path: string): void => {
-  // TODO: Set error control
+const downloadFromFeed = async (selectedFeed: Playlist, path: string): Promise<boolean> => {
   path = parsePath(path)
   const cleanPath: string = path.split('.').length > 1 ? path.split('/').slice(0, -1).join('/') : path
-  mkdirp(cleanPath).then(() => {
-    const extension = getExtension(selectedFeed)
-    path = `${addFileName(path)}.${extension}`
 
-    const stream = m3u8stream(selectedFeed.url)
+  mkdirp.sync(cleanPath)
+
+  const extension = getExtension(selectedFeed)
+  path = `${addFileName(path)}.${extension}`
+
+  return await downloadStream(selectedFeed.url, path)
+}
+
+const downloadStream = async (url: string, path: string): Promise<boolean> => {
+  return await new Promise((resolve) => {
+    const stream = m3u8stream(url)
     stream.pipe(fs.createWriteStream(path))
 
     const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
@@ -30,10 +36,14 @@ const downloadFromFeed = (selectedFeed: Playlist, path: string): void => {
 
       if (segment.num === totalSegments) {
         progress.stop()
-        return true
+        resolve(true)
       }
 
       previousPercentage = percentage
+    })
+
+    stream.on('error', function () {
+      resolve(false)
     })
   })
 }
