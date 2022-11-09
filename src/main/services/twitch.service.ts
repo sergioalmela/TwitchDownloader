@@ -2,7 +2,7 @@ import Credential from '../interfaces/Credential'
 import axios from 'axios'
 
 const getAuth = async (id: string, isVod: Boolean): Promise<Credential> => {
-  const json: object = {
+  const authConfigVod: object = {
     operationName: 'PlaybackAccessToken',
     variables: {
       isLive: !isVod,
@@ -19,14 +19,14 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credential> => {
     }
   }
 
-  const config: object = {
+  const headers: object = {
     headers: {
       'Content-Type': 'text/plain;charset=UTF-8',
       'Client-ID': 'kimne78kx3ncx6brgo4mv6wki5h1ko'
     }
   }
 
-  const { data, status } = await axios.post('https://gql.twitch.tv/gql', json, config)
+  const { data, status } = await axios.post('https://gql.twitch.tv/gql', authConfigVod, headers)
 
   if (status === 200 && (typeof data === 'object')) {
     return data.data.videoPlaybackAccessToken
@@ -86,7 +86,8 @@ const isContentRestricted = (data: any[] | string): boolean => {
 const getIdFromUrl = (url: string): string => {
   const regex = /(?<=videos\/)(\d+)/g
   const id = url.match(regex)
-  return id[0].toString()
+
+  return id ? id[0] : null
 }
 
 export {
