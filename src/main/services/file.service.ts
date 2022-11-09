@@ -6,6 +6,10 @@ const m3u8stream = require('m3u8stream')
 const mkdirp = require('mkdirp')
 const cliProgress = require('cli-progress')
 
+const barFormat = {
+  format: 'Progress [{bar}] {percentage}% | ETA: {eta_formatted} | ET: {duration_formatted}'
+}
+
 const downloadFromFeed = async (selectedFeed: Playlist, path: string): Promise<boolean> => {
   path = parsePath(path)
   const cleanPath: string = path.split('.').length > 1 ? path.split('/').slice(0, -1).join('/') : path
@@ -23,7 +27,7 @@ const downloadStream = async (url: string, path: string): Promise<boolean> => {
     const stream = m3u8stream(url)
     stream.pipe(fs.createWriteStream(path))
 
-    const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
+    const progress = new cliProgress.SingleBar(barFormat, cliProgress.Presets.shades_classic)
     progress.start(100, 0)
 
     let previousPercentage: number = -1
