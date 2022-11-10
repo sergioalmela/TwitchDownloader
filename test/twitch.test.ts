@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import Playlist from '../src/main/interfaces/Playlist'
 import { getAuth, getFeedFromId, getIdFromUrl } from '../src/main/services/twitch.service'
-import Credential from '../src/main/interfaces/Credential'
+import Credentials from '../src/main/interfaces/Credentials'
 import { download } from '../src/main/controllers/vod.controller'
 import * as fs from 'fs'
 
 const url = 'https://www.twitch.tv/videos/839518098?filter=all&sort=time'
 const id = '839518098'
-let credential: Credential
+let credential: Credentials
 
 const videoFeed: Playlist = {
   video: '160p30',

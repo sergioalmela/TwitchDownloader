@@ -1,7 +1,7 @@
-import Credential from '../interfaces/Credential'
+import Credentials from '../interfaces/Credentials'
 import axios from 'axios'
 
-const getAuth = async (id: string, isVod: Boolean): Promise<Credential> => {
+const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   const json: object = {
     operationName: 'PlaybackAccessToken',
     variables: {
@@ -35,7 +35,7 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credential> => {
   }
 }
 
-const getFeedFromId = async (id: string, credentials: Credential): Promise<any> => {
+const getFeedFromId = async (id: string, credentials: Credentials): Promise<any> => {
   return await axios.get(`https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
 }
 

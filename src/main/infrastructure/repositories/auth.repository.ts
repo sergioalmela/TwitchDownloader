@@ -3,10 +3,11 @@ import {IAuthRepository} from '../../domain/repository/authRepository.interface'
 import {IdClipVo} from '../../domain/valueObjects/idClip.vo'
 import {IdVodVo} from '../../domain/valueObjects/idVod.vo'
 import axios from 'axios'
+import Credentials from "../../interfaces/Credentials";
 
 @injectable()
 export class AuthRepository implements IAuthRepository {
-  async getAuthVod (id: IdVodVo): Promise<Credential> {
+  async getAuthVod (id: IdVodVo): Promise<Credentials> {
     const authConfigVod: object = {
       operationName: 'PlaybackAccessToken',
       variables: {
@@ -29,11 +30,11 @@ export class AuthRepository implements IAuthRepository {
     return data.data.data.videoPlaybackAccessToken
   }
 
-  async getAuthClip (id: IdClipVo): Promise<Credential> {
+  async getAuthClip (id: IdClipVo): Promise<Credentials> {
     const authConfigClip: object = {
       operationName: 'VideoAccessToken_Clip',
       variables: {
-        slug: 'CogentBitterPartridgeMikeHogu-8j5AAzneEfHAOELt'
+        slug: id.value.toString()
       },
       extensions: {
         persistedQuery: {
@@ -45,7 +46,7 @@ export class AuthRepository implements IAuthRepository {
 
     const data = await axios.post('https://gql.twitch.tv/gql', authConfigClip, this.getHeaders())
 
-    return data.data.videoPlaybackAccessToken
+    return data.data.data.clip.playbackAccessToken
   }
 
   private getHeaders (): object {

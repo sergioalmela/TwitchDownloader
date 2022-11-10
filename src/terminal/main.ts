@@ -11,8 +11,9 @@ import { download } from '../main/controllers/vod.controller'
 import { AuthController } from '../main/infrastructure/controllers/auth.controller'
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
+import axios from "axios";
 const authController = container.get<AuthController>(
-  ContainerSymbols.AuthController
+    ContainerSymbols.AuthController
 )
 
 export {}
@@ -54,9 +55,7 @@ async function downloadVod (): Promise<any> {
 
   const url: string = response.url
 
-  const credentials = await authController.getClipCredentials(url)
-  console.log(credentials)
-  process.exit()
+  //const credentials = await authController.getClipCredentials(url)
 
   // TODO: Check if path has extension, if not, ask again
   const path: DownloadPath = await prompts({

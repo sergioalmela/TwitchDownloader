@@ -18,13 +18,12 @@ export class PathRepository implements IPathRepository {
   }
 
   getClipId (url: string): IdClipVo {
-    const regex = /(?:https:\/\/)?[clips]?\.twitch\.tv\/(\S+)/i
-    const id = url.match(regex)
+    const id = (url.split("/").pop()).split(/[?#]/)[0]
 
     if (!id) {
       throw new InvalidUrlException()
     }
 
-    return new IdClipVo(id[0])
+    return new IdClipVo(id)
   }
 }
