@@ -1,0 +1,3 @@
+interface Url {
+  url: string
+}

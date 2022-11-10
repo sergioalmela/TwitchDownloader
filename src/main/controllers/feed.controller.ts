@@ -1,4 +1,4 @@
-import { getAuth, getFeedFromId, getRestrictedFeed, isContentRestricted, getIdFromUrl } from '../services/twitch.service'
+import {getAuth, getFeedFromId, getIdFromUrl, getRestrictedFeed, isContentRestricted} from '../services/twitch.service'
 import Credential from '../interfaces/Credential'
 import Playlist from '../interfaces/Playlist'
 import FeedOption from '../interfaces/FeedOption'

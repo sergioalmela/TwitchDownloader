@@ -1,4 +1,5 @@
 // Terminal options to download content from Twitch (No GUI)
+import 'reflect-metadata'
 import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
 import FeedOption from '../main/interfaces/FeedOption'
 import Feed from '../main/interfaces/Feed'
@@ -7,6 +8,12 @@ import DownloadPath from '../main/interfaces/prompt/DownloadPath'
 import ExportQuality from '../main/interfaces/prompt/ExportQuality'
 import Playlist from '../main/interfaces/Playlist'
 import { download } from '../main/controllers/vod.controller'
+import { AuthController } from '../main/infrastructure/controllers/auth.controller'
+import container from '../main/container'
+import { ContainerSymbols } from '../main/symbols'
+const authController = container.get<AuthController>(
+  ContainerSymbols.AuthController
+)
 
 export {}
 const prompts = require('prompts')
@@ -46,6 +53,10 @@ async function downloadVod (): Promise<any> {
   })
 
   const url: string = response.url
+
+  const credentials = await authController.getClipCredentials(url)
+  console.log(credentials)
+  process.exit()
 
   // TODO: Check if path has extension, if not, ask again
   const path: DownloadPath = await prompts({
