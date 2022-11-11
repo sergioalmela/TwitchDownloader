@@ -2,9 +2,9 @@
 import 'reflect-metadata'
 import Menu from '../main/interfaces/prompt/Menu'
 import container from '../main/container'
-import {ContainerSymbols} from '../main/symbols'
-import {DownloaderController} from '../main/infrastructure/controllers/downloader.controller'
-import {UrlVo} from '../main/domain/valueObjects/url.vo'
+import { ContainerSymbols } from '../main/symbols'
+import { DownloaderController } from '../main/infrastructure/controllers/downloader.controller'
+import { UrlVo } from '../main/domain/valueObjects/url.vo'
 
 const downloaderController = container.get<DownloaderController>(
   ContainerSymbols.DownloadController

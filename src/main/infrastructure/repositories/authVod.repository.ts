@@ -1,13 +1,13 @@
-import {injectable} from 'inversify'
-import {IAuthRepository} from '../../domain/repository/authRepository.interface'
+import { injectable } from 'inversify'
+import { IAuthRepository } from '../../domain/repository/authRepository.interface'
 import axios from 'axios'
 import Credentials from '../../interfaces/Credentials'
-import {Id} from '../../domain/valueObjects/id.vo'
-import {authHeaders} from '../../domain/constants/authHeaders'
+import { IdVo } from '../../domain/valueObjects/id.vo'
+import { authHeaders } from '../../domain/constants/authHeaders'
 
 @injectable()
 export class AuthVodRepository implements IAuthRepository {
-  async auth (id: Id): Promise<Credentials> {
+  async auth (id: IdVo): Promise<Credentials> {
     const authConfigVod: object = {
       operationName: 'PlaybackAccessToken',
       variables: {

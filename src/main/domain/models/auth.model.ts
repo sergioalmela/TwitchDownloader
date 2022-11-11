@@ -1,7 +1,7 @@
-import {Id} from '../valueObjects/id.vo'
+import { IdVo } from '../valueObjects/id.vo'
 
 export class AuthModel {
   constructor (
-    public readonly id: Id
+    public readonly id: IdVo
   ) {}
 }

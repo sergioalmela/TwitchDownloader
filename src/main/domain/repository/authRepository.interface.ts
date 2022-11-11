@@ -1,6 +1,6 @@
 import Credentials from '../../interfaces/Credentials'
-import {Id} from '../valueObjects/id.vo'
+import { IdVo } from '../valueObjects/id.vo'
 
 export interface IAuthRepository {
-  auth: (id: Id) => Promise<Credentials>
+  auth: (id: IdVo) => Promise<Credentials>
 }
