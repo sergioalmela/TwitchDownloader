@@ -9,6 +9,9 @@ import {PathRepository} from './infrastructure/repositories/path.repository'
 import {IPathRepository} from './domain/repository/pathRepository.interface'
 import {AuthClipUseCase} from './application/useCases/authClip.usecase'
 import {GetClipIdFromUrlUseCase} from "./application/useCases/getClipIdFromUrl.usecase";
+import {DownloaderController} from "./infrastructure/controllers/downloader.controller";
+import {DetectContentTypeUseCase} from "./application/useCases/detectContentType.usecase";
+import {ContentRepository} from "./infrastructure/repositories/content.repository";
 
 const container = new Container()
 
@@ -21,6 +24,10 @@ container
 container
   .bind<IPathRepository>(ContainerSymbols.PathRepository)
   .to(PathRepository)
+
+container
+    .bind<ContentRepository>(ContainerSymbols.ContentRepository)
+    .to(ContentRepository)
 
 // #endregion
 
@@ -42,6 +49,10 @@ container
     .bind<GetClipIdFromUrlUseCase>(ContainerSymbols.GetClipIdFromUrlUseCase)
     .to(GetClipIdFromUrlUseCase)
 
+container
+    .bind<DetectContentTypeUseCase>(ContainerSymbols.DetectContentTypeUseCase)
+    .to(DetectContentTypeUseCase)
+
 // #endregion
 
 // #region Controllers
@@ -49,6 +60,10 @@ container
 container
   .bind<AuthController>(ContainerSymbols.AuthController)
   .to(AuthController)
+
+container
+    .bind<DownloaderController>(ContainerSymbols.DownloadController)
+    .to(DownloaderController)
 
 // #endregion
 

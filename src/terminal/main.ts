@@ -8,12 +8,12 @@ import DownloadPath from '../main/interfaces/prompt/DownloadPath'
 import ExportQuality from '../main/interfaces/prompt/ExportQuality'
 import Playlist from '../main/interfaces/Playlist'
 import { download } from '../main/controllers/vod.controller'
-import { AuthController } from '../main/infrastructure/controllers/auth.controller'
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
-import axios from "axios";
-const authController = container.get<AuthController>(
-    ContainerSymbols.AuthController
+import {DownloaderController} from "../main/infrastructure/controllers/downloader.controller";
+import {UrlVo} from "../main/domain/valueObjects/url.vo";
+const downloaderController = container.get<DownloaderController>(
+    ContainerSymbols.DownloadController
 )
 
 export {}
@@ -53,12 +53,12 @@ async function downloadVod (): Promise<any> {
     message: 'Enter the Twitch video URL'
   })
 
-  const url: string = response.url
+  const url: UrlVo = new UrlVo(response.url)
 
-  //const credentials = await authController.getClipCredentials(url)
+  const d = downloaderController.downloadContent(url)
 
   // TODO: Check if path has extension, if not, ask again
-  const path: DownloadPath = await prompts({
+  /*const path: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
     message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
@@ -79,5 +79,5 @@ async function downloadVod (): Promise<any> {
   const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
 
   // TODO: Set error control in every iteration
-  await download(selectedFeed, path.downloadPath)
+  await download(selectedFeed, path.downloadPath)*/
 }

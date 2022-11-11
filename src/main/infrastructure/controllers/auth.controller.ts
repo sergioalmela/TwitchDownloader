@@ -7,6 +7,7 @@ import {IdClipVo} from '../../domain/valueObjects/idClip.vo'
 import {AuthClipUseCase} from '../../application/useCases/authClip.usecase'
 import {GetClipIdFromUrlUseCase} from '../../application/useCases/getClipIdFromUrl.usecase'
 import Credentials from "../../interfaces/Credentials";
+import {UrlVo} from "../../domain/valueObjects/url.vo";
 
 @injectable()
 export class AuthController {
@@ -21,13 +22,13 @@ export class AuthController {
     private readonly getClipIdFromUrl: GetClipIdFromUrlUseCase
   ) {}
 
-  async getVodCredentials (url: string): Promise<Credentials> {
+  async getVodCredentials (url: UrlVo): Promise<Credentials> {
     const id: IdVodVo = this.getVodIdFromUrl.execute(url)
 
     return await this.authVodUseCase.execute(id)
   }
 
-  async getClipCredentials (url: string): Promise<Credentials> {
+  async getClipCredentials (url: UrlVo): Promise<Credentials> {
     const id: IdClipVo = this.getClipIdFromUrl.execute(url)
 
     return await this.authClipUseCase.execute(id)

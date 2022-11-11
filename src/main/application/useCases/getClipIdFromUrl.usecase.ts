@@ -3,6 +3,7 @@ import {ContainerSymbols} from '../../symbols'
 import {IAuthRepository} from '../../domain/repository/authRepository.interface'
 import {IPathRepository} from '../../domain/repository/pathRepository.interface'
 import {IdClipVo} from '../../domain/valueObjects/idClip.vo'
+import {UrlVo} from "../../domain/valueObjects/url.vo";
 
 @injectable()
 export class GetClipIdFromUrlUseCase {
@@ -13,7 +14,7 @@ export class GetClipIdFromUrlUseCase {
     private readonly pathRepository: IPathRepository
   ) {}
 
-  execute (url: string): IdClipVo {
+  execute (url: UrlVo): IdClipVo {
     return this.pathRepository.getClipId(url)
   }
 }
