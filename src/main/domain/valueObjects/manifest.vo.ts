@@ -2,8 +2,8 @@
   M3U8 Manifest
  */
 
-import { ValueObject } from './valueObject'
-import { VOFormatException } from '../errors/voFormatException'
+import {ValueObject} from './valueObject'
+import {VOFormatException} from '../errors/voFormatException'
 
 export class ManifestVo extends ValueObject<string> {
   public equals (valueObject: ManifestVo) {

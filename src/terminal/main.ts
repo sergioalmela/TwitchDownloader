@@ -3,11 +3,17 @@ import 'reflect-metadata'
 import Menu from '../main/interfaces/prompt/Menu'
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
-import { DownloaderController } from '../main/infrastructure/controllers/downloader.controller'
+import { FeedController } from '../main/infrastructure/controllers/feed.controller'
 import { UrlVo } from '../main/domain/valueObjects/url.vo'
+import { PlaylistVo } from '../main/domain/valueObjects/playlist.vo'
+import { FeedVo } from '../main/domain/valueObjects/feed.vo'
+import DownloadPath from '../main/infrastructure/types/prompt/DownloadPath'
+import ExportQuality from '../main/infrastructure/types/prompt/ExportQuality'
+import { PlaylistModel } from '../main/domain/models/playlist.model'
+import Playlist from '../main/infrastructure/types/Playlist'
 
-const downloaderController = container.get<DownloaderController>(
-  ContainerSymbols.DownloadController
+const feedsController = container.get<FeedController>(
+  ContainerSymbols.FeedController
 )
 
 export {}
@@ -17,27 +23,7 @@ const onCancel = prompt => {
   process.exit()
 }
 
-async function main (): Promise<any> {
-  const response: Menu = await prompts({
-    type: 'text',
-    name: 'menu',
-    message: 'Menu:\n1. Download a stream (Unavailable)\n2. Download a clip (Unavailable)\n3. Download a video\nPlease enter the number of the option you want to select (number between 1-3)'
-  }, { onCancel })
-
-  if (response.menu === '1') {
-    console.log('Download a Stream')
-  } else if (response.menu === '2') {
-    console.log('Download a clip')
-  } else if (response.menu === '3') {
-    console.log('Download VOD')
-    downloadVod()
-  } else {
-    console.log('Invalid option')
-    main()
-  }
-}
-
-main()
+downloadVod()
 
 // TODO: Check if is valid twitch URL
 async function downloadVod (): Promise<any> {
@@ -49,29 +35,25 @@ async function downloadVod (): Promise<any> {
 
   const url: UrlVo = new UrlVo(response.url)
 
-  const d = downloaderController.downloadContent(url)
+  const feeds: PlaylistVo[] = await feedsController.getFeeds(url)
 
-  // TODO: Check if path has extension, if not, ask again
-  /* const path: DownloadPath = await prompts({
+  const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
+
+  const path: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
     message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
   }, { onCancel })
 
-  const feeds: Feed = await getFeeds(url)
-  const feedOptions: FeedOption = await getFeedOptions(feeds)
-
-  // Iterate feeds, and promp user to download a feed showing video
   const responseFeeds: ExportQuality = await prompts({
     type: 'select',
     name: 'exportQuality',
     message: 'Select the export quality',
-    choices: feedOptions,
+    choices: feedOptions.map(a => a.value),
     initial: 1
   }, { onCancel })
 
   const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
 
-  // TODO: Set error control in every iteration
-  await download(selectedFeed, path.downloadPath) */
+  // await download(selectedFeed, path.downloadPath)
 }

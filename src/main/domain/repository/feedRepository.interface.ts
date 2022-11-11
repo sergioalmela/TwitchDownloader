@@ -1,7 +1,6 @@
-import { ManifestVo } from '../valueObjects/manifest.vo'
-import Credentials from '../../interfaces/Credentials'
-import { IdVo } from '../valueObjects/id.vo'
+import {ManifestVo} from '../valueObjects/manifest.vo'
+import {PlaylistVo} from '../valueObjects/playlist.vo'
 
 export interface IFeedRepository {
-  getVodManifest: (id: IdVo, credentials: Credentials) => Promise<ManifestVo>
+  getFeed: (manifest: ManifestVo) => PlaylistVo[]
 }

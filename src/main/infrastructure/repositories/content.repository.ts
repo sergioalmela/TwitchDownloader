@@ -1,6 +1,6 @@
-import { injectable } from 'inversify'
-import { ContentTypes } from '../../domain/constants/contentTypes.enum'
-import { UrlVo } from '../../domain/valueObjects/url.vo'
+import {injectable} from 'inversify'
+import {ContentTypes} from '../../domain/constants/contentTypes.enum'
+import {UrlVo} from '../../domain/valueObjects/url.vo'
 
 @injectable()
 export class ContentRepository {

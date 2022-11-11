@@ -6,7 +6,8 @@ const Repositories = {
   ManifestClipRepository: Symbol.for('ManifestClipRepository'),
   PathRepository: Symbol.for('PathRepository'),
   ContentRepository: Symbol.for('ContentRepository'),
-  ManifestRepository: Symbol.for('ManifestRepository')
+  ManifestRepository: Symbol.for('ManifestRepository'),
+  FeedRepository: Symbol.for('FeedRepository')
 }
 
 const UseCases = {
@@ -17,11 +18,13 @@ const UseCases = {
   DetectContentTypeUseCase: Symbol.for('DetectContentTypeUseCase'),
   GetVodManifestUseCase: Symbol.for('GetVodManifestUseCase'),
   GetClipManifestUseCase: Symbol.for('GetClipManifestUseCase'),
+  GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase')
 }
 
 const Controllers = {
   AuthController: Symbol.for('AuthController'),
-  DownloadController: Symbol.for('DownloadController')
+  DownloadController: Symbol.for('DownloadController'),
+  FeedController: Symbol.for('FeedController')
 }
 
 const ContainerSymbols = {
