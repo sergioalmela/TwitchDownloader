@@ -4,30 +4,35 @@ import {AuthController} from './infrastructure/controllers/auth.controller'
 import {AuthVodUseCase} from './application/useCases/authVod.usecase'
 import {GetVodIdFromUrlUseCase} from './application/useCases/getVodIdFromUrl.usecase'
 import {IAuthRepository} from './domain/repository/authRepository.interface'
-import {AuthRepository} from './infrastructure/repositories/auth.repository'
-import {PathRepository} from './infrastructure/repositories/path.repository'
+import {ClipPathRepository} from './infrastructure/repositories/clipPath.repository'
 import {IPathRepository} from './domain/repository/pathRepository.interface'
 import {AuthClipUseCase} from './application/useCases/authClip.usecase'
-import {GetClipIdFromUrlUseCase} from "./application/useCases/getClipIdFromUrl.usecase";
-import {DownloaderController} from "./infrastructure/controllers/downloader.controller";
-import {DetectContentTypeUseCase} from "./application/useCases/detectContentType.usecase";
-import {ContentRepository} from "./infrastructure/repositories/content.repository";
+import {GetClipIdFromUrlUseCase} from './application/useCases/getClipIdFromUrl.usecase'
+import {DownloaderController} from './infrastructure/controllers/downloader.controller'
+import {DetectContentTypeUseCase} from './application/useCases/detectContentType.usecase'
+import {ContentRepository} from './infrastructure/repositories/content.repository'
+import {AuthClipRepository} from './infrastructure/repositories/authClip.repository'
+import {AuthVodRepository} from './infrastructure/repositories/authVod.repository'
 
 const container = new Container()
 
 // #region Repositories
 
 container
-  .bind<IAuthRepository>(ContainerSymbols.AuthRepository)
-  .to(AuthRepository)
+  .bind<IAuthRepository>(ContainerSymbols.AuthVodRepository)
+  .to(AuthVodRepository)
+
+container
+  .bind<IAuthRepository>(ContainerSymbols.AuthClipRepository)
+  .to(AuthClipRepository)
 
 container
   .bind<IPathRepository>(ContainerSymbols.PathRepository)
-  .to(PathRepository)
+  .to(ClipPathRepository)
 
 container
-    .bind<ContentRepository>(ContainerSymbols.ContentRepository)
-    .to(ContentRepository)
+  .bind<ContentRepository>(ContainerSymbols.ContentRepository)
+  .to(ContentRepository)
 
 // #endregion
 
@@ -46,12 +51,12 @@ container
   .to(GetVodIdFromUrlUseCase)
 
 container
-    .bind<GetClipIdFromUrlUseCase>(ContainerSymbols.GetClipIdFromUrlUseCase)
-    .to(GetClipIdFromUrlUseCase)
+  .bind<GetClipIdFromUrlUseCase>(ContainerSymbols.GetClipIdFromUrlUseCase)
+  .to(GetClipIdFromUrlUseCase)
 
 container
-    .bind<DetectContentTypeUseCase>(ContainerSymbols.DetectContentTypeUseCase)
-    .to(DetectContentTypeUseCase)
+  .bind<DetectContentTypeUseCase>(ContainerSymbols.DetectContentTypeUseCase)
+  .to(DetectContentTypeUseCase)
 
 // #endregion
 
@@ -62,8 +67,8 @@ container
   .to(AuthController)
 
 container
-    .bind<DownloaderController>(ContainerSymbols.DownloadController)
-    .to(DownloaderController)
+  .bind<DownloaderController>(ContainerSymbols.DownloadController)
+  .to(DownloaderController)
 
 // #endregion
 

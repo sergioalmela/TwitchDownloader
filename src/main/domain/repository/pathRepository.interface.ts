@@ -1,8 +1,6 @@
-import {IdVodVo} from '../valueObjects/idVod.vo'
-import {IdClipVo} from '../valueObjects/idClip.vo'
-import {UrlVo} from "../valueObjects/url.vo";
+import {UrlVo} from '../valueObjects/url.vo'
+import {Id} from '../valueObjects/id.vo'
 
 export interface IPathRepository {
-  getVodId: (url: UrlVo) => IdVodVo
-  getClipId: (url: UrlVo) => IdClipVo
+  getId: (url: UrlVo) => Id
 }

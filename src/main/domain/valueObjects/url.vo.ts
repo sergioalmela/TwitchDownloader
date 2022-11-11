@@ -18,11 +18,11 @@ export class UrlVo extends ValueObject<string> {
     }
   }
 
-  public isVod(): boolean {
+  public isVod (): boolean {
     return IS_VOD.test(this.value)
   }
 
-    public isClip(): boolean {
-      return !this.isVod()
-    }
+  public isClip (): boolean {
+    return !this.isVod()
+  }
 }

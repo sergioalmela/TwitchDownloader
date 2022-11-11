@@ -1,7 +1,7 @@
-import {ManifestVo} from "../valueObjects/manifest.vo";
-import {IdVodVo} from "../valueObjects/idVod.vo";
-import Credentials from "../../interfaces/Credentials";
+import {ManifestVo} from '../valueObjects/manifest.vo'
+import Credentials from '../../interfaces/Credentials'
+import {Id} from '../valueObjects/id.vo'
 
 export interface IFeedRepository {
-  getVodManifest: (id: IdVodVo, credentials: Credentials) => Promise<ManifestVo>
+  getVodManifest: (id: Id, credentials: Credentials) => Promise<ManifestVo>
 }

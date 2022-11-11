@@ -1,17 +1,17 @@
 import {inject, injectable} from 'inversify'
 import {ContainerSymbols} from '../../symbols'
-import {IAuthRepository} from '../../domain/repository/authRepository.interface'
-import {IdVodVo} from '../../domain/valueObjects/idVod.vo'
-import Credentials from "../../interfaces/Credentials";
+import Credentials from '../../interfaces/Credentials'
+import {Id} from '../../domain/valueObjects/id.vo'
+import {AuthVodRepository} from '../../infrastructure/repositories/authVod.repository'
 
 @injectable()
 export class AuthVodUseCase {
   constructor (
-    @inject(ContainerSymbols.AuthRepository)
-    private readonly authRepository: IAuthRepository
+    @inject(ContainerSymbols.AuthVodRepository)
+    private readonly authRepository: AuthVodRepository
   ) {}
 
-  async execute (id: IdVodVo): Promise<Credentials> {
-    return await this.authRepository.getAuthVod(id)
+  async execute (id: Id): Promise<Credentials> {
+    return await this.authRepository.auth(id)
   }
 }
