@@ -2,8 +2,8 @@
     Path to save into the system
  */
 
-import {ValueObject} from './valueObject'
-import {VOFormatException} from '../errors/voFormatException'
+import { ValueObject } from './valueObject'
+import { VOFormatException } from '../errors/voFormatException'
 
 const PATH_REGEX = /^([a-zA-Z]:)?(\\\\[^<>:"/\\\\|?*]+)+\\\\?$/i
 

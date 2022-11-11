@@ -1,8 +1,9 @@
-import {injectable} from 'inversify'
-import {ManifestVo} from '../../domain/valueObjects/manifest.vo'
-import {IFeedRepository} from '../../domain/repository/feedRepository.interface'
-import {EmptyFeedsException} from '../errors/emptyFeeds.exception'
-import {PlaylistVo} from '../../domain/valueObjects/playlist.vo'
+import { injectable } from 'inversify'
+import { ManifestVo } from '../../domain/valueObjects/manifest.vo'
+import { IFeedRepository } from '../../domain/repository/feedRepository.interface'
+import { EmptyFeedsException } from '../errors/emptyFeeds.exception'
+import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
+import { FeedVo } from '../../domain/valueObjects/feed.vo'
 
 const m3u8Parser = require('m3u8-parser')
 
@@ -28,6 +29,15 @@ export class FeedRepository implements IFeedRepository {
       feed.setVideo(playlist.attributes.VIDEO)
 
       return feed
+    })
+  }
+
+  parseFeed = (playlists: PlaylistVo[]): FeedVo[] => {
+    return playlists.map((playlist: PlaylistVo, index: number): FeedVo => {
+      return new FeedVo({
+        title: playlist.value.video === 'chunked' ? 'Original' : playlist.value.video,
+        value: index
+      })
     })
   }
 

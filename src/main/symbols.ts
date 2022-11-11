@@ -18,7 +18,8 @@ const UseCases = {
   DetectContentTypeUseCase: Symbol.for('DetectContentTypeUseCase'),
   GetVodManifestUseCase: Symbol.for('GetVodManifestUseCase'),
   GetClipManifestUseCase: Symbol.for('GetClipManifestUseCase'),
-  GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase')
+  GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase'),
+  ParseFeedUseCase: Symbol.for('ParseFeedUseCase')
 }
 
 const Controllers = {

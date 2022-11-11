@@ -1,25 +1,26 @@
-import {Container} from 'inversify'
-import {ContainerSymbols} from './symbols'
-import {AuthVodUseCase} from './application/useCases/authVod.usecase'
-import {GetVodIdFromUrlUseCase} from './application/useCases/getVodIdFromUrl.usecase'
-import {IAuthRepository} from './domain/repository/authRepository.interface'
-import {PathClipRepository} from './infrastructure/repositories/pathClip.repository'
-import {IPathRepository} from './domain/repository/pathRepository.interface'
-import {AuthClipUseCase} from './application/useCases/authClip.usecase'
-import {GetClipIdFromUrlUseCase} from './application/useCases/getClipIdFromUrl.usecase'
-import {FeedController} from './infrastructure/controllers/feed.controller'
-import {DetectContentTypeUseCase} from './application/useCases/detectContentType.usecase'
-import {ContentRepository} from './infrastructure/repositories/content.repository'
-import {AuthClipRepository} from './infrastructure/repositories/authClip.repository'
-import {AuthVodRepository} from './infrastructure/repositories/authVod.repository'
-import {IManifestRepository} from './domain/repository/manifestRepository.interface'
-import {ManifestVodRepository} from './infrastructure/repositories/manifestVod.repository'
-import {ManifestClipRepository} from './infrastructure/repositories/manifestClip.repository'
-import {GetVodManifestUseCase} from './application/useCases/getVodManifest.usecase'
-import {GetClipManifestUseCase} from './application/useCases/getClipManifest.usecase'
-import {GetFeedFromManifestUseCase} from './application/useCases/getFeedFromManifest.usecase'
-import {IFeedRepository} from './domain/repository/feedRepository.interface'
-import {FeedRepository} from './infrastructure/repositories/feed.repository'
+import { Container } from 'inversify'
+import { ContainerSymbols } from './symbols'
+import { AuthVodUseCase } from './application/useCases/authVod.usecase'
+import { GetVodIdFromUrlUseCase } from './application/useCases/getVodIdFromUrl.usecase'
+import { IAuthRepository } from './domain/repository/authRepository.interface'
+import { PathClipRepository } from './infrastructure/repositories/pathClip.repository'
+import { IPathRepository } from './domain/repository/pathRepository.interface'
+import { AuthClipUseCase } from './application/useCases/authClip.usecase'
+import { GetClipIdFromUrlUseCase } from './application/useCases/getClipIdFromUrl.usecase'
+import { FeedController } from './infrastructure/controllers/feed.controller'
+import { DetectContentTypeUseCase } from './application/useCases/detectContentType.usecase'
+import { ContentRepository } from './infrastructure/repositories/content.repository'
+import { AuthClipRepository } from './infrastructure/repositories/authClip.repository'
+import { AuthVodRepository } from './infrastructure/repositories/authVod.repository'
+import { IManifestRepository } from './domain/repository/manifestRepository.interface'
+import { ManifestVodRepository } from './infrastructure/repositories/manifestVod.repository'
+import { ManifestClipRepository } from './infrastructure/repositories/manifestClip.repository'
+import { GetVodManifestUseCase } from './application/useCases/getVodManifest.usecase'
+import { GetClipManifestUseCase } from './application/useCases/getClipManifest.usecase'
+import { GetFeedFromManifestUseCase } from './application/useCases/getFeedFromManifest.usecase'
+import { IFeedRepository } from './domain/repository/feedRepository.interface'
+import { FeedRepository } from './infrastructure/repositories/feed.repository'
+import { ParseFeedUseCase } from './application/useCases/parseFeed.usecase'
 
 const container = new Container()
 
@@ -88,6 +89,10 @@ container
 container
   .bind<GetFeedFromManifestUseCase>(ContainerSymbols.GetFeedFromManifestUseCase)
   .to(GetFeedFromManifestUseCase)
+
+container
+  .bind<ParseFeedUseCase>(ContainerSymbols.ParseFeedUseCase)
+  .to(ParseFeedUseCase)
 
 // #endregion
 

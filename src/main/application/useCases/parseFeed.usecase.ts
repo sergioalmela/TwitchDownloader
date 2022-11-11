@@ -1,17 +1,17 @@
 import { inject, injectable } from 'inversify'
 import { ContainerSymbols } from '../../symbols'
 import { IFeedRepository } from '../../domain/repository/feedRepository.interface'
-import { ManifestVo } from '../../domain/valueObjects/manifest.vo'
 import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
+import { FeedVo } from '../../domain/valueObjects/feed.vo'
 
 @injectable()
-export class GetFeedFromManifestUseCase {
+export class ParseFeedUseCase {
   constructor (
     @inject(ContainerSymbols.FeedRepository)
     private readonly feedRepository: IFeedRepository
   ) {}
 
-  execute (manifest: ManifestVo): PlaylistVo[] {
-    return this.feedRepository.getFeed(manifest)
+  execute (playlists: PlaylistVo[]): FeedVo[] {
+    return this.feedRepository.parseFeed(playlists)
   }
 }

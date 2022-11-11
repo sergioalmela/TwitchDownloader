@@ -2,8 +2,8 @@
     ID of the CLIP
  */
 
-import {ValueObject} from './valueObject'
-import {VOFormatException} from '../errors/voFormatException'
+import { ValueObject } from './valueObject'
+import { VOFormatException } from '../errors/voFormatException'
 
 export class IdVo extends ValueObject<string> {
   public equals (valueObject: IdVo) {

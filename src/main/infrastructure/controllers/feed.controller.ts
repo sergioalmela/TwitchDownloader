@@ -1,19 +1,20 @@
-import {inject, injectable} from 'inversify'
-import {ContainerSymbols} from '../../symbols'
-import {AuthVodUseCase} from '../../application/useCases/authVod.usecase'
-import {GetVodIdFromUrlUseCase} from '../../application/useCases/getVodIdFromUrl.usecase'
-import {AuthClipUseCase} from '../../application/useCases/authClip.usecase'
-import {GetClipIdFromUrlUseCase} from '../../application/useCases/getClipIdFromUrl.usecase'
+import { inject, injectable } from 'inversify'
+import { ContainerSymbols } from '../../symbols'
+import { AuthVodUseCase } from '../../application/useCases/authVod.usecase'
+import { GetVodIdFromUrlUseCase } from '../../application/useCases/getVodIdFromUrl.usecase'
+import { AuthClipUseCase } from '../../application/useCases/authClip.usecase'
+import { GetClipIdFromUrlUseCase } from '../../application/useCases/getClipIdFromUrl.usecase'
 import Credentials from '../../interfaces/Credentials'
-import {DetectContentTypeUseCase} from '../../application/useCases/detectContentType.usecase'
-import {ContentTypes} from '../../domain/constants/contentTypes.enum'
-import {UrlVo} from '../../domain/valueObjects/url.vo'
-import {IdVo} from '../../domain/valueObjects/id.vo'
-import {ManifestVo} from '../../domain/valueObjects/manifest.vo'
-import {GetVodManifestUseCase} from '../../application/useCases/getVodManifest.usecase'
-import {GetFeedFromManifestUseCase} from '../../application/useCases/getFeedFromManifest.usecase'
-import {PlaylistVo} from '../../domain/valueObjects/playlist.vo'
-import {FeedVo} from '../../domain/valueObjects/feed.vo'
+import { DetectContentTypeUseCase } from '../../application/useCases/detectContentType.usecase'
+import { ContentTypes } from '../../domain/constants/contentTypes.enum'
+import { UrlVo } from '../../domain/valueObjects/url.vo'
+import { IdVo } from '../../domain/valueObjects/id.vo'
+import { ManifestVo } from '../../domain/valueObjects/manifest.vo'
+import { GetVodManifestUseCase } from '../../application/useCases/getVodManifest.usecase'
+import { GetFeedFromManifestUseCase } from '../../application/useCases/getFeedFromManifest.usecase'
+import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
+import { FeedVo } from '../../domain/valueObjects/feed.vo'
+import { ParseFeedUseCase } from '../../application/useCases/parseFeed.usecase'
 
 @injectable()
 export class FeedController {
@@ -31,7 +32,9 @@ export class FeedController {
     @inject(ContainerSymbols.GetVodManifestUseCase)
     private readonly getVodManifestUseCase: GetVodManifestUseCase,
     @inject(ContainerSymbols.GetFeedFromManifestUseCase)
-    private readonly getFeedFromManifestUseCase: GetFeedFromManifestUseCase
+    private readonly getFeedFromManifestUseCase: GetFeedFromManifestUseCase,
+    @inject(ContainerSymbols.ParseFeedUseCase)
+    private readonly parseFeedUseCase: ParseFeedUseCase
   ) {}
 
   async getFeeds (url: UrlVo): Promise<PlaylistVo[]> {
@@ -49,11 +52,6 @@ export class FeedController {
   }
 
   parseFeeds (playlists: PlaylistVo[]): FeedVo[] {
-    return playlists.map((playlist: PlaylistVo, index: number): FeedVo => {
-      return new FeedVo({
-        title: playlist.value.video === 'chunked' ? 'Original' : playlist.value.video,
-        value: index
-      })
-    })
+    return this.parseFeedUseCase.execute(playlists)
   }
 }

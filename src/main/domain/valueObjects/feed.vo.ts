@@ -2,8 +2,8 @@
   M3U8 Manifest
  */
 
-import {ValueObject} from './valueObject'
-import {VOFormatException} from '../errors/voFormatException'
+import { ValueObject } from './valueObject'
+import { VOFormatException } from '../errors/voFormatException'
 import Feed from '../../infrastructure/types/Feed'
 
 export class FeedVo extends ValueObject<Feed> {
