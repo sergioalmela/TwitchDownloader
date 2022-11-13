@@ -1,6 +1,5 @@
 // Terminal options to download content from Twitch (No GUI)
 import 'reflect-metadata'
-import Menu from '../main/interfaces/prompt/Menu'
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
 import { FeedController } from '../main/infrastructure/controllers/feed.controller'
@@ -9,17 +8,21 @@ import { PlaylistVo } from '../main/domain/valueObjects/playlist.vo'
 import { FeedVo } from '../main/domain/valueObjects/feed.vo'
 import DownloadPath from '../main/infrastructure/types/prompt/DownloadPath'
 import ExportQuality from '../main/infrastructure/types/prompt/ExportQuality'
-import { PlaylistModel } from '../main/domain/models/playlist.model'
-import Playlist from '../main/infrastructure/types/Playlist'
+import { PathVo } from '../main/domain/valueObjects/path.vo'
+import { DownloadController } from '../main/infrastructure/controllers/download.controller'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
 )
 
+const downloadController = container.get<DownloadController>(
+  ContainerSymbols.DownloadController
+)
+
 export {}
 const prompts = require('prompts')
 
-const onCancel = prompt => {
+const onCancel = () => {
   process.exit()
 }
 
@@ -31,7 +34,7 @@ async function downloadVod (): Promise<any> {
     type: 'text',
     name: 'url',
     message: 'Enter the Twitch video URL'
-  })
+  }, { onCancel })
 
   const url: UrlVo = new UrlVo(response.url)
 
@@ -39,11 +42,13 @@ async function downloadVod (): Promise<any> {
 
   const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
 
-  const path: DownloadPath = await prompts({
+  const pathPrompt: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
     message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
   }, { onCancel })
+
+  const path = new PathVo(pathPrompt.downloadPath)
 
   const responseFeeds: ExportQuality = await prompts({
     type: 'select',
@@ -53,7 +58,9 @@ async function downloadVod (): Promise<any> {
     initial: 1
   }, { onCancel })
 
-  const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
+  const selectedFeed: PlaylistVo = feeds[responseFeeds.exportQuality]
 
-  // await download(selectedFeed, path.downloadPath)
+  const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
+
+  await downloadController.download(downloadUrl, path)
 }

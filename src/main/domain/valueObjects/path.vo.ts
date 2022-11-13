@@ -3,7 +3,6 @@
  */
 
 import { ValueObject } from './valueObject'
-import { VOFormatException } from '../errors/voFormatException'
 
 const PATH_REGEX = /^([a-zA-Z]:)?(\\\\[^<>:"/\\\\|?*]+)+\\\\?$/i
 
@@ -13,9 +12,6 @@ export class PathVo extends ValueObject<string> {
   }
 
   protected assertIsValid (value: string) {
-    // If is a valid path (windows, Linux, Mac)
-    if (!PATH_REGEX.test(value)) {
-      throw new VOFormatException(PathVo.name, value)
-    }
+
   }
 }

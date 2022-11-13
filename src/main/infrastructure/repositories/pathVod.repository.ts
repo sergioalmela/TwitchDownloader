@@ -10,7 +10,7 @@ export class PathVodRepository implements IPathRepository {
     const regex = /(?<=videos\/)(\d+)/g
     const id = url.value.match(regex)
 
-    if (!id) {
+    if (id == null) {
       throw new InvalidUrlException()
     }
 

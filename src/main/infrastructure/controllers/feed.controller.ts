@@ -15,6 +15,7 @@ import { GetFeedFromManifestUseCase } from '../../application/useCases/getFeedFr
 import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
 import { FeedVo } from '../../domain/valueObjects/feed.vo'
 import { ParseFeedUseCase } from '../../application/useCases/parseFeed.usecase'
+import { InvalidUrlException } from '../errors/invalidUrl.exception'
 
 @injectable()
 export class FeedController {
@@ -48,6 +49,10 @@ export class FeedController {
       const manifest: ManifestVo = await this.getVodManifestUseCase.execute(id, credentials)
 
       return this.getFeedFromManifestUseCase.execute(manifest)
+    } else if (type === ContentTypes.CLIP) {
+      // TODO: Add clip logic
+    } else {
+      throw new InvalidUrlException()
     }
   }
 

@@ -7,7 +7,8 @@ const Repositories = {
   PathRepository: Symbol.for('PathRepository'),
   ContentRepository: Symbol.for('ContentRepository'),
   ManifestRepository: Symbol.for('ManifestRepository'),
-  FeedRepository: Symbol.for('FeedRepository')
+  FeedRepository: Symbol.for('FeedRepository'),
+  DownloadRepository: Symbol.for('DownloadRepository')
 }
 
 const UseCases = {
@@ -19,7 +20,8 @@ const UseCases = {
   GetVodManifestUseCase: Symbol.for('GetVodManifestUseCase'),
   GetClipManifestUseCase: Symbol.for('GetClipManifestUseCase'),
   GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase'),
-  ParseFeedUseCase: Symbol.for('ParseFeedUseCase')
+  ParseFeedUseCase: Symbol.for('ParseFeedUseCase'),
+  DownloadFromFeedUseCase: Symbol.for('DownloadFromFeedUseCase')
 }
 
 const Controllers = {

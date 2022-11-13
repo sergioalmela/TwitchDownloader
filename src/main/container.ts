@@ -21,6 +21,10 @@ import { GetFeedFromManifestUseCase } from './application/useCases/getFeedFromMa
 import { IFeedRepository } from './domain/repository/feedRepository.interface'
 import { FeedRepository } from './infrastructure/repositories/feed.repository'
 import { ParseFeedUseCase } from './application/useCases/parseFeed.usecase'
+import { DownloadController } from './infrastructure/controllers/download.controller'
+import { DownloadFromFeedUseCase } from './application/useCases/downloadFromFeed.usecase'
+import { IDownloadRepository } from './domain/repository/downloadRepository.interface'
+import { DownloadRepository } from './infrastructure/repositories/download.repository'
 
 const container = new Container()
 
@@ -41,6 +45,10 @@ container
 container
   .bind<IFeedRepository>(ContainerSymbols.FeedRepository)
   .to(FeedRepository)
+
+container
+  .bind<IDownloadRepository>(ContainerSymbols.DownloadRepository)
+  .to(DownloadRepository)
 
 container
   .bind<ContentRepository>(ContainerSymbols.ContentRepository)
@@ -94,13 +102,17 @@ container
   .bind<ParseFeedUseCase>(ContainerSymbols.ParseFeedUseCase)
   .to(ParseFeedUseCase)
 
+container
+  .bind<DownloadFromFeedUseCase>(ContainerSymbols.DownloadFromFeedUseCase)
+  .to(DownloadFromFeedUseCase)
+
 // #endregion
 
 // #region Controllers
 
-/* container
-  .bind<FeedController>(ContainerSymbols.DownloadController)
-  .to(FeedController) */
+container
+  .bind<DownloadController>(ContainerSymbols.DownloadController)
+  .to(DownloadController)
 
 container
   .bind<FeedController>(ContainerSymbols.FeedController)

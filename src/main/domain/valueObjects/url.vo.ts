@@ -6,6 +6,7 @@ import { ValueObject } from './valueObject'
 import { VOFormatException } from '../errors/voFormatException'
 
 const IS_VOD = /videos\/\d+/i
+const IS_CLIP = /clip\//i
 
 export class UrlVo extends ValueObject<string> {
   public equals (valueObject: UrlVo) {
@@ -23,6 +24,6 @@ export class UrlVo extends ValueObject<string> {
   }
 
   public isClip (): boolean {
-    return !this.isVod()
+    return IS_CLIP.test(this.value)
   }
 }
