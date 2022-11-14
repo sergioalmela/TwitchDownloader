@@ -24,7 +24,8 @@ const UseCases = {
   GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase'),
   ParseFeedUseCase: Symbol.for('ParseFeedUseCase'),
   DownloadFromFeedUseCase: Symbol.for('DownloadFromFeedUseCase'),
-  GetFileFromPathUseCase: Symbol.for('GetFileFromPathUseCase')
+  GetFileFromPathUseCase: Symbol.for('GetFileFromPathUseCase'),
+  GetExtensionFromPlaylistUseCase: Symbol.for('GetExtensionFromPlaylistUseCase')
 }
 
 const Controllers = {

@@ -1,17 +1,17 @@
 // Terminal options to download content from Twitch (No GUI)
 import 'reflect-metadata'
 import container from '../main/container'
-import {ContainerSymbols} from '../main/symbols'
-import {FeedController} from '../main/infrastructure/controllers/feed.controller'
-import {UrlVo} from '../main/domain/valueObjects/url.vo'
-import {PlaylistVo} from '../main/domain/valueObjects/playlist.vo'
-import {FeedVo} from '../main/domain/valueObjects/feed.vo'
+import { ContainerSymbols } from '../main/symbols'
+import { FeedController } from '../main/infrastructure/controllers/feed.controller'
+import { UrlVo } from '../main/domain/valueObjects/url.vo'
+import { PlaylistVo } from '../main/domain/valueObjects/playlist.vo'
+import { FeedVo } from '../main/domain/valueObjects/feed.vo'
 import DownloadPath from '../main/infrastructure/types/prompt/DownloadPath'
 import ExportQuality from '../main/infrastructure/types/prompt/ExportQuality'
-import {PathVo} from '../main/domain/valueObjects/path.vo'
-import {DownloadController} from '../main/infrastructure/controllers/download.controller'
-import {FileVo} from '../main/domain/valueObjects/file.vo'
-import {FileController} from '../main/infrastructure/controllers/file.controller'
+import { PathVo } from '../main/domain/valueObjects/path.vo'
+import { DownloadController } from '../main/infrastructure/controllers/download.controller'
+import { FileVo } from '../main/domain/valueObjects/file.vo'
+import { FileController } from '../main/infrastructure/controllers/file.controller'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -68,7 +68,9 @@ async function downloadVod (): Promise<any> {
 
   const selectedFeed: PlaylistVo = feeds[responseFeeds.exportQuality]
 
+  const extension = fileController.getExtensionFromPlaylist(selectedFeed)
+
   const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
 
-  await downloadController.download(downloadUrl, path, file)
+  await downloadController.download(downloadUrl, path, file, extension)
 }
