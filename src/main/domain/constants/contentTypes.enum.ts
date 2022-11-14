@@ -1,5 +1,6 @@
 export enum ContentTypes {
   'VOD' = 'vod',
   'LIVE' = 'live',
-  'CLIP' = 'clip'
+  'CLIP' = 'clip',
+  'UNKNOWN' = 'unknown'
 }

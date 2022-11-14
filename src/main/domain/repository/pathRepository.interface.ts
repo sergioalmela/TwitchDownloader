@@ -1,6 +1,5 @@
-import { UrlVo } from '../valueObjects/url.vo'
-import { IdVo } from '../valueObjects/id.vo'
+import {FileVo} from '../valueObjects/file.vo'
 
 export interface IPathRepository {
-  getId: (url: UrlVo) => IdVo
+  getFileName: (path: string) => FileVo
 }

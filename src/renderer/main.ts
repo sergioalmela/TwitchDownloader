@@ -1,24 +1,25 @@
 const electron = require('electron')
 
-let controllers = null
+const controllers = null
 
 // Electron apps have two processes: a main process (node) runs first and starts
 // a renderer process (essentially a Chrome window). We're in the renderer process,
 // and this IPC channel receives from and sends messages to the main process
 const ipcRenderer = electron.ipcRenderer
 
-controllers = {
+/* controllers = {
   vod: () => {
-    const vodController = require('../main/controllers/vod.controller')
-    return new vodController()
+    //const vodController = require('../main/controllers/vod.controller')
+    //return new vodController()
+    return null
   }
-}
+} */
 
 setupIpc()
 
-const dispatchHandlers = {
+/* const dispatchHandlers = {
   getVod: (id) => controllers.vod().getVod(id)
-}
+} */
 
 function dispatch (action) {
   // Log dispatch calls, for debugging, but don't spam
@@ -26,13 +27,13 @@ function dispatch (action) {
     console.log('dispatch: %s', action)
   }
 
-  const handler = dispatchHandlers[action]
+  /* const handler = dispatchHandlers[action]
   if (handler) {
     const result = handler()
     console.log(`Result of ${action}: ${result}`)
   } else {
     console.error('Missing dispatch handler: ' + action)
-  }
+  } */
 
   // Update the virtual DOM, unless it's just a mouse move event
   /* if (action !== 'mediaMouseMoved' ||

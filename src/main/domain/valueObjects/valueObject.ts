@@ -1,5 +1,5 @@
 export abstract class ValueObject<T> {
-  constructor (public readonly value: T) {
+  constructor (public value: T) {
     this.assertIsValid(value)
   }
 

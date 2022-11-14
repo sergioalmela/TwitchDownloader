@@ -1,7 +1,8 @@
-import { injectable } from 'inversify'
-import { UrlVo } from '../../domain/valueObjects/url.vo'
-import { IDownloadRepository } from '../../domain/repository/downloadRepository.interface'
-import { PathVo } from '../../domain/valueObjects/path.vo'
+import {injectable} from 'inversify'
+import {UrlVo} from '../../domain/valueObjects/url.vo'
+import {IDownloadRepository} from '../../domain/repository/downloadRepository.interface'
+import {PathVo} from '../../domain/valueObjects/path.vo'
+import {FileVo} from '../../domain/valueObjects/file.vo'
 
 const fs = require('fs')
 const m3u8stream = require('m3u8stream')
@@ -10,10 +11,10 @@ const cliProgress = require('cli-progress')
 
 @injectable()
 export class DownloadRepository implements IDownloadRepository {
-  async download (url: UrlVo, path: PathVo): Promise<any> {
+  async download (url: UrlVo, path: PathVo, file: FileVo): Promise<any> {
     return await new Promise((resolve) => {
       const stream = m3u8stream(url.value)
-      stream.pipe(fs.createWriteStream(path.value))
+      stream.pipe(fs.createWriteStream(path.value + file.value))
 
       return stream
 

@@ -1,15 +1,17 @@
 // Terminal options to download content from Twitch (No GUI)
 import 'reflect-metadata'
 import container from '../main/container'
-import { ContainerSymbols } from '../main/symbols'
-import { FeedController } from '../main/infrastructure/controllers/feed.controller'
-import { UrlVo } from '../main/domain/valueObjects/url.vo'
-import { PlaylistVo } from '../main/domain/valueObjects/playlist.vo'
-import { FeedVo } from '../main/domain/valueObjects/feed.vo'
+import {ContainerSymbols} from '../main/symbols'
+import {FeedController} from '../main/infrastructure/controllers/feed.controller'
+import {UrlVo} from '../main/domain/valueObjects/url.vo'
+import {PlaylistVo} from '../main/domain/valueObjects/playlist.vo'
+import {FeedVo} from '../main/domain/valueObjects/feed.vo'
 import DownloadPath from '../main/infrastructure/types/prompt/DownloadPath'
 import ExportQuality from '../main/infrastructure/types/prompt/ExportQuality'
-import { PathVo } from '../main/domain/valueObjects/path.vo'
-import { DownloadController } from '../main/infrastructure/controllers/download.controller'
+import {PathVo} from '../main/domain/valueObjects/path.vo'
+import {DownloadController} from '../main/infrastructure/controllers/download.controller'
+import {FileVo} from '../main/domain/valueObjects/file.vo'
+import {FileController} from '../main/infrastructure/controllers/file.controller'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -17,6 +19,10 @@ const feedsController = container.get<FeedController>(
 
 const downloadController = container.get<DownloadController>(
   ContainerSymbols.DownloadController
+)
+
+const fileController = container.get<FileController>(
+  ContainerSymbols.FileController
 )
 
 export {}
@@ -50,6 +56,8 @@ async function downloadVod (): Promise<any> {
 
   const path = new PathVo(pathPrompt.downloadPath)
 
+  const file: FileVo = fileController.getFileNameFromPath(pathPrompt.downloadPath)
+
   const responseFeeds: ExportQuality = await prompts({
     type: 'select',
     name: 'exportQuality',
@@ -62,5 +70,5 @@ async function downloadVod (): Promise<any> {
 
   const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
 
-  await downloadController.download(downloadUrl, path)
+  await downloadController.download(downloadUrl, path, file)
 }

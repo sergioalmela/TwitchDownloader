@@ -1,5 +1,6 @@
 import Credentials from '../interfaces/Credentials'
 import axios from 'axios'
+import {InvalidUrlException} from '../infrastructure/errors/invalidUrl.exception'
 
 const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   const json: object = {
@@ -31,6 +32,7 @@ const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   if (status === 200 && (typeof data === 'object')) {
     return data.data.videoPlaybackAccessToken
   } else {
+    throw new Error('Error getting auth')
     // TODO: Return error
   }
 }
@@ -87,7 +89,12 @@ const getIdFromUrl = (url: string): string => {
   const regex = /(?<=videos\/)(\d+)/g
   const id = url.match(regex)
 
-  return (id != null) ? id[0] : null
+  // If id[0] exists, return it, else return null
+  if (id == null) {
+    throw new InvalidUrlException()
+  }
+
+  return id[0]
 }
 
 export {
