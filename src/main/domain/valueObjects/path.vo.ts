@@ -2,7 +2,7 @@
     Path to save into the system
  */
 
-import {ValueObject} from './valueObject'
+import { ValueObject } from './valueObject'
 
 const PATH_REGEX = /^([a-zA-Z]:)?(\\\\[^<>:"/\\\\|?*]+)+\\\\?$/i
 

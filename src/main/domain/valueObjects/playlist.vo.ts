@@ -1,5 +1,5 @@
-import {ValueObject} from './valueObject'
-import {VOFormatException} from '../errors/voFormatException'
+import { ValueObject } from './valueObject'
+import { VOFormatException } from '../errors/voFormatException'
 import Playlist from '../../infrastructure/types/Playlist'
 
 export class PlaylistVo extends ValueObject<Playlist> {

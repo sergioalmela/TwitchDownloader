@@ -1,6 +1,6 @@
 import Credentials from '../interfaces/Credentials'
 import axios from 'axios'
-import {InvalidUrlException} from '../infrastructure/errors/invalidUrl.exception'
+import { InvalidUrlException } from '../infrastructure/errors/invalidUrl.exception'
 
 const getAuth = async (id: string, isVod: Boolean): Promise<Credentials> => {
   const json: object = {

@@ -2,8 +2,8 @@
     Path to save into the system
  */
 
-import {ValueObject} from './valueObject'
-import {VOFormatException} from '../errors/voFormatException'
+import { ValueObject } from './valueObject'
+import { VOFormatException } from '../errors/voFormatException'
 
 const IS_VOD = /videos\/\d+/i
 const IS_CLIP = /clip\//i

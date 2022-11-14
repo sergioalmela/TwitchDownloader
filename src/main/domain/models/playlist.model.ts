@@ -1,4 +1,4 @@
-import {PlaylistVo} from '../valueObjects/playlist.vo'
+import { PlaylistVo } from '../valueObjects/playlist.vo'
 
 export class PlaylistModel {
   constructor (

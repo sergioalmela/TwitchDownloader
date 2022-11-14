@@ -1,8 +1,8 @@
-import {injectable} from 'inversify'
-import {InvalidUrlException} from '../errors/invalidUrl.exception'
-import {IUrlRepository} from '../../domain/repository/urlRepository.interface'
-import {UrlVo} from '../../domain/valueObjects/url.vo'
-import {IdVo} from '../../domain/valueObjects/id.vo'
+import { injectable } from 'inversify'
+import { InvalidUrlException } from '../errors/invalidUrl.exception'
+import { IUrlRepository } from '../../domain/repository/urlRepository.interface'
+import { UrlVo } from '../../domain/valueObjects/url.vo'
+import { IdVo } from '../../domain/valueObjects/id.vo'
 
 @injectable()
 export class UrlVodRepository implements IUrlRepository {
