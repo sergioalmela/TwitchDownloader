@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify'
 import { ContainerSymbols } from '../../symbols'
-import Credentials from '../../interfaces/Credentials'
 import { IdVo } from '../../domain/valueObjects/id.vo'
 import { AuthClipRepository } from '../../infrastructure/repositories/authClip.repository'
+import Credentials from '../../infrastructure/types/Credential'
 
 @injectable()
 export class AuthClipUseCase {

@@ -9,11 +9,11 @@ const IS_VOD = /videos\/\d+/i
 const IS_CLIP = /clip\//i
 
 export class UrlVo extends ValueObject<string> {
-  public equals (valueObject: UrlVo) {
+  public equals (valueObject: UrlVo): boolean {
     return this.value === valueObject.value
   }
 
-  protected assertIsValid (value: string) {
+  protected assertIsValid (value: string): void {
     if (value.length === 0) {
       throw new VOFormatException(UrlVo.name, value)
     }

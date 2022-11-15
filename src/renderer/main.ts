@@ -1,4 +1,4 @@
-const electron = require('electron')
+/* const electron = require('electron')
 
 const controllers = null
 
@@ -7,19 +7,19 @@ const controllers = null
 // and this IPC channel receives from and sends messages to the main process
 const ipcRenderer = electron.ipcRenderer
 
-/* controllers = {
+controllers = {
   vod: () => {
     //const vodController = require('../main/controllers/vod.controller')
     //return new vodController()
     return null
   }
-} */
+}
 
 setupIpc()
 
-/* const dispatchHandlers = {
+const dispatchHandlers = {
   getVod: (id) => controllers.vod().getVod(id)
-} */
+}
 
 function dispatch (action) {
   // Log dispatch calls, for debugging, but don't spam
@@ -27,19 +27,19 @@ function dispatch (action) {
     console.log('dispatch: %s', action)
   }
 
-  /* const handler = dispatchHandlers[action]
+  const handler = dispatchHandlers[action]
   if (handler) {
     const result = handler()
     console.log(`Result of ${action}: ${result}`)
   } else {
     console.error('Missing dispatch handler: ' + action)
-  } */
+  }
 
   // Update the virtual DOM, unless it's just a mouse move event
-  /* if (action !== 'mediaMouseMoved' ||
+  if (action !== 'mediaMouseMoved' ||
         controllers.playback().showOrHidePlayerControls()) {
       update()
-    } */
+    }
 }
 
 // Listen to events from the main and webtorrent processes
@@ -58,3 +58,4 @@ function setupIpc () {
 }
 
 dispatch('getVod')
+*/

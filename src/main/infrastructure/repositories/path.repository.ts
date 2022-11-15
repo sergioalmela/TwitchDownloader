@@ -9,7 +9,7 @@ import { FileExtensions } from '../../domain/constants/fileExtensions.enum'
 export class PathRepository implements IPathRepository {
   getFileName (path: string): FileVo {
     // Return file name from system path
-    return new FileVo(path.split('/').pop() || '')
+    return new FileVo(path.split('/')[path.split('/').length - 1])
   }
 
   getExtension (playlist: PlaylistVo): ExtensionVo {

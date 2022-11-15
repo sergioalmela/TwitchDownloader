@@ -4,8 +4,7 @@ import { IFeedRepository } from '../../domain/repository/feedRepository.interfac
 import { EmptyFeedsException } from '../errors/emptyFeeds.exception'
 import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
 import { FeedVo } from '../../domain/valueObjects/feed.vo'
-
-const m3u8Parser = require('m3u8-parser')
+import * as m3u8Parser from 'm3u8-parser'
 
 @injectable()
 export class FeedRepository implements IFeedRepository {
@@ -41,7 +40,7 @@ export class FeedRepository implements IFeedRepository {
     })
   }
 
-  private readonly getPlaylists = (manifest: ManifestVo) => {
+  private readonly getPlaylists = (manifest: ManifestVo): any[] => {
     const parser = new m3u8Parser.Parser()
     parser.addParser({
       expression: /^#VOD-FRAMERATE/,

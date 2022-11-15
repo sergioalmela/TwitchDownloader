@@ -4,7 +4,6 @@ import { AuthVodUseCase } from '../../application/useCases/authVod.usecase'
 import { GetVodIdFromUrlUseCase } from '../../application/useCases/getVodIdFromUrl.usecase'
 import { AuthClipUseCase } from '../../application/useCases/authClip.usecase'
 import { GetClipIdFromUrlUseCase } from '../../application/useCases/getClipIdFromUrl.usecase'
-import Credentials from '../../interfaces/Credentials'
 import { DetectContentTypeUseCase } from '../../application/useCases/detectContentType.usecase'
 import { ContentTypes } from '../../domain/constants/contentTypes.enum'
 import { UrlVo } from '../../domain/valueObjects/url.vo'
@@ -16,6 +15,7 @@ import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
 import { FeedVo } from '../../domain/valueObjects/feed.vo'
 import { ParseFeedUseCase } from '../../application/useCases/parseFeed.usecase'
 import { InvalidUrlException } from '../errors/invalidUrl.exception'
+import Credentials from '../types/Credential'
 
 @injectable()
 export class FeedController {

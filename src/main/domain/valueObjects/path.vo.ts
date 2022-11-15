@@ -4,14 +4,12 @@
 
 import { ValueObject } from './valueObject'
 
-const PATH_REGEX = /^([a-zA-Z]:)?(\\\\[^<>:"/\\\\|?*]+)+\\\\?$/i
-
 export class PathVo extends ValueObject<string> {
-  public equals (valueObject: PathVo) {
+  public equals (valueObject: PathVo): boolean {
     return this.value === valueObject.value
   }
 
-  protected assertIsValid (value: string) {
+  protected assertIsValid (value: string): void {
     // Remove file name and extension from path, first check if path has '/', and append '/' if doesn't have
     if (value.includes('/')) {
       value = value.substring(0, value.lastIndexOf('/')) + '/'

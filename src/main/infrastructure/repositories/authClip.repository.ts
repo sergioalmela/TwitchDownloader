@@ -1,9 +1,9 @@
 import { injectable } from 'inversify'
 import { IAuthRepository } from '../../domain/repository/authRepository.interface'
 import axios from 'axios'
-import Credentials from '../../interfaces/Credentials'
 import { IdVo } from '../../domain/valueObjects/id.vo'
 import { authHeaders } from '../../domain/constants/authHeaders'
+import Credentials from '../types/Credential'
 
 @injectable()
 export class AuthClipRepository implements IAuthRepository {

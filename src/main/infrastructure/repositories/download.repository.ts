@@ -3,13 +3,13 @@ import { UrlVo } from '../../domain/valueObjects/url.vo'
 import { IDownloadRepository } from '../../domain/repository/downloadRepository.interface'
 import { PathVo } from '../../domain/valueObjects/path.vo'
 import { FileVo } from '../../domain/valueObjects/file.vo'
-import Segment from '../../interfaces/Segment'
 import { ExtensionVo } from '../../domain/valueObjects/extension.vo'
 
-const fs = require('fs')
-const m3u8stream = require('m3u8stream')
-const mkdirp = require('mkdirp')
-const cliProgress = require('cli-progress')
+import { createWriteStream } from 'fs'
+import m3u8stream from 'm3u8stream'
+import { sync } from 'mkdirp'
+import * as cliProgress from 'cli-progress'
+import Segment from '../types/Segment'
 
 const barFormat = {
   format: 'Progress [{bar}] {percentage}% | ETA: {eta_formatted} | ET: {duration_formatted}'
@@ -21,9 +21,9 @@ export class DownloadRepository implements IDownloadRepository {
     return await new Promise((resolve) => {
       const stream = m3u8stream(url.value)
 
-      mkdirp.sync(path.value)
+      sync(path.value)
 
-      stream.pipe(fs.createWriteStream(path.value + file.value + extension.value))
+      stream.pipe(createWriteStream(path.value + file.value + extension.value))
 
       const progress = new cliProgress.SingleBar(barFormat, cliProgress.Presets.shades_classic)
       progress.start(100, 0)

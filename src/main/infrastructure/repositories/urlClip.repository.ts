@@ -11,7 +11,7 @@ export class UrlClipRepository implements IUrlRepository {
 
     const id = separatedUrl.length > 0 ? separatedUrl[separatedUrl.length - 1].split(/[?#]/)[0] : ''
 
-    if (!id) {
+    if (id === '') {
       throw new InvalidUrlException()
     }
 

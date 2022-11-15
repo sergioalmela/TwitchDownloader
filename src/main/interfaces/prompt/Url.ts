@@ -1,3 +1,0 @@
-interface Url {
-  url: string
-}

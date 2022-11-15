@@ -12,6 +12,8 @@ import { PathVo } from '../main/domain/valueObjects/path.vo'
 import { DownloadController } from '../main/infrastructure/controllers/download.controller'
 import { FileVo } from '../main/domain/valueObjects/file.vo'
 import { FileController } from '../main/infrastructure/controllers/file.controller'
+import prompts from 'prompts'
+import Url from '../main/infrastructure/types/prompt/Url'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -26,13 +28,12 @@ const fileController = container.get<FileController>(
 )
 
 export {}
-const prompts = require('prompts')
 
-const onCancel = () => {
+const onCancel = (): void => {
   process.exit()
 }
 
-downloadVod()
+downloadVod().catch(console.error)
 
 // TODO: Check if is valid twitch URL
 async function downloadVod (): Promise<any> {

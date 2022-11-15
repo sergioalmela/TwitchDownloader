@@ -1,4 +1,4 @@
-export default interface Credential {
+export default interface Credentials {
   signature: string
   value: string
 }
