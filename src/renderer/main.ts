@@ -1,6 +1,6 @@
-const electron = require('electron')
+/* const electron = require('electron')
 
-let controllers = null
+const controllers = null
 
 // Electron apps have two processes: a main process (node) runs first and starts
 // a renderer process (essentially a Chrome window). We're in the renderer process,
@@ -9,8 +9,9 @@ const ipcRenderer = electron.ipcRenderer
 
 controllers = {
   vod: () => {
-    const vodController = require('../main/controllers/vod.controller')
-    return new vodController()
+    //const vodController = require('../main/controllers/vod.controller')
+    //return new vodController()
+    return null
   }
 }
 
@@ -35,10 +36,10 @@ function dispatch (action) {
   }
 
   // Update the virtual DOM, unless it's just a mouse move event
-  /* if (action !== 'mediaMouseMoved' ||
+  if (action !== 'mediaMouseMoved' ||
         controllers.playback().showOrHidePlayerControls()) {
       update()
-    } */
+    }
 }
 
 // Listen to events from the main and webtorrent processes
@@ -57,3 +58,4 @@ function setupIpc () {
 }
 
 dispatch('getVod')
+*/

@@ -1,41 +1,39 @@
 // Terminal options to download content from Twitch (No GUI)
-import { getFeedOptions, getFeeds } from '../main/controllers/feed.controller'
-import FeedOption from '../main/interfaces/FeedOption'
-import Feed from '../main/interfaces/Feed'
-import Menu from '../main/interfaces/prompt/Menu'
-import DownloadPath from '../main/interfaces/prompt/DownloadPath'
-import ExportQuality from '../main/interfaces/prompt/ExportQuality'
-import Playlist from '../main/interfaces/Playlist'
-import { download } from '../main/controllers/vod.controller'
+import 'reflect-metadata'
+import container from '../main/container'
+import { ContainerSymbols } from '../main/symbols'
+import { FeedController } from '../main/infrastructure/controllers/feed.controller'
+import { UrlVo } from '../main/domain/valueObjects/url.vo'
+import { PlaylistVo } from '../main/domain/valueObjects/playlist.vo'
+import { FeedVo } from '../main/domain/valueObjects/feed.vo'
+import DownloadPath from '../main/infrastructure/types/prompt/DownloadPath'
+import ExportQuality from '../main/infrastructure/types/prompt/ExportQuality'
+import { PathVo } from '../main/domain/valueObjects/path.vo'
+import { DownloadController } from '../main/infrastructure/controllers/download.controller'
+import { FileVo } from '../main/domain/valueObjects/file.vo'
+import { FileController } from '../main/infrastructure/controllers/file.controller'
+import prompts from 'prompts'
+import Url from '../main/infrastructure/types/prompt/Url'
+
+const feedsController = container.get<FeedController>(
+  ContainerSymbols.FeedController
+)
+
+const downloadController = container.get<DownloadController>(
+  ContainerSymbols.DownloadController
+)
+
+const fileController = container.get<FileController>(
+  ContainerSymbols.FileController
+)
 
 export {}
-const prompts = require('prompts')
 
-const onCancel = prompt => {
+const onCancel = (): void => {
   process.exit()
 }
 
-async function main (): Promise<any> {
-  const response: Menu = await prompts({
-    type: 'text',
-    name: 'menu',
-    message: 'Menu:\n1. Download a stream (Unavailable)\n2. Download a clip (Unavailable)\n3. Download a video\nPlease enter the number of the option you want to select (number between 1-3)'
-  }, { onCancel })
-
-  if (response.menu === '1') {
-    console.log('Download a Stream')
-  } else if (response.menu === '2') {
-    console.log('Download a clip')
-  } else if (response.menu === '3') {
-    console.log('Download VOD')
-    downloadVod()
-  } else {
-    console.log('Invalid option')
-    main()
-  }
-}
-
-main()
+downloadVod().catch(console.error)
 
 // TODO: Check if is valid twitch URL
 async function downloadVod (): Promise<any> {
@@ -43,31 +41,41 @@ async function downloadVod (): Promise<any> {
     type: 'text',
     name: 'url',
     message: 'Enter the Twitch video URL'
-  })
+  }, { onCancel })
 
-  const url: string = response.url
+  const url: UrlVo = new UrlVo(response.url)
 
-  // TODO: Check if path has extension, if not, ask again
-  const path: DownloadPath = await prompts({
+  const feeds: PlaylistVo[] = await feedsController.getFeeds(url)
+
+  const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
+
+  const pathPrompt: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
     message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
   }, { onCancel })
 
-  const feeds: Feed = await getFeeds(url)
-  const feedOptions: FeedOption = await getFeedOptions(feeds)
+  const pathResponse = pathPrompt.downloadPath
+  const path = new PathVo(pathResponse)
 
-  // Iterate feeds, and promp user to download a feed showing video
+  const file: FileVo = fileController.getFileNameFromPath(path)
+  file.removeExtensionFromFileName()
+
+  path.removeFileFromPath()
+
   const responseFeeds: ExportQuality = await prompts({
     type: 'select',
     name: 'exportQuality',
     message: 'Select the export quality',
-    choices: feedOptions,
+    choices: feedOptions.map(a => a.value),
     initial: 1
   }, { onCancel })
 
-  const selectedFeed: Playlist = feeds[responseFeeds.exportQuality]
+  const selectedFeed: PlaylistVo = feeds[responseFeeds.exportQuality]
 
-  // TODO: Set error control in every iteration
-  await download(selectedFeed, path.downloadPath)
+  const extension = fileController.getExtensionFromPlaylist(selectedFeed)
+
+  const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
+
+  await downloadController.download(downloadUrl, path, file, extension)
 }

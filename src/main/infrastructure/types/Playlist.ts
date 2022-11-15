@@ -1,8 +1,8 @@
 export default interface Playlist {
   video: string
-  quality: string
+  quality: string | null
   url: string
-  framerate: number
+  framerate: number | null
   bandwidth: number
   codecs: string
 }
