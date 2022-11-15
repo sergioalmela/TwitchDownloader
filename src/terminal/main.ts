@@ -35,14 +35,14 @@ const onCancel = (): void => {
 }
 
 // TODO: Add restricted content logic
-downloadVod().catch(console.error)
+main().catch(console.error)
 
 // TODO: Check if is valid twitch URL
-async function downloadVod (): Promise<any> {
+async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
     name: 'url',
-    message: 'Enter the Twitch video URL'
+    message: 'Enter the Twitch URL (vod, clip, highlight)'
   }, { onCancel })
 
   const url: UrlVo = new UrlVo(response.url)
