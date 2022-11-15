@@ -37,7 +37,6 @@ const onCancel = (): void => {
 // TODO: Add restricted content logic
 main().catch(console.error)
 
-// TODO: Check if is valid twitch URL
 async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',

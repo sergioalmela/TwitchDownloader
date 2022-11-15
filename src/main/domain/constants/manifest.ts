@@ -2,7 +2,7 @@ import { QualityVo } from '../valueObjects/quality.vo'
 import Credentials from '../../infrastructure/types/Credential'
 
 const manifestHeaders = (): string => {
-  return '#EXTM3U\n #EXT-X-TWITCH-INFO:ORIGIN="s3",B="false",REGION="EU",USER-IP="185.74.243.1",SERVING-ID="ccd9bc3e453d48fb83584725c6703ed8",CLUSTER="cloudfront_vod",USER-COUNTRY="ES",MANIFEST-CLUSTER="cloudfront_vod"'
+  return '#EXTM3U\n #EXT-X-TWITCH-INFO:ORIGIN="s3",B="false",REGION="EU",USER-IP="",SERVING-ID="ccd9bc3e453d48fb83584725c6703ed8",CLUSTER="cloudfront_vod",USER-COUNTRY="",MANIFEST-CLUSTER="cloudfront_vod"'
 }
 
 const manifestContent = (qualities: QualityVo[], credentials: Credentials): string => {
