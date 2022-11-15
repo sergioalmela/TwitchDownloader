@@ -10,7 +10,8 @@ const Repositories = {
   ContentRepository: Symbol.for('ContentRepository'),
   ManifestRepository: Symbol.for('ManifestRepository'),
   FeedRepository: Symbol.for('FeedRepository'),
-  DownloadRepository: Symbol.for('DownloadRepository')
+  DownloadVodRepository: Symbol.for('DownloadVodRepository'),
+  DownloadClipRepository: Symbol.for('DownloadClipRepository')
 }
 
 const UseCases = {
@@ -23,7 +24,8 @@ const UseCases = {
   GetClipManifestUseCase: Symbol.for('GetClipManifestUseCase'),
   GetFeedFromManifestUseCase: Symbol.for('GetFeedFromManifestUseCase'),
   ParseFeedUseCase: Symbol.for('ParseFeedUseCase'),
-  DownloadFromFeedUseCase: Symbol.for('DownloadFromFeedUseCase'),
+  DownloadVodFromFeedUseCase: Symbol.for('DownloadVodFromFeedUseCase'),
+  DownloadClipFromFeedUseCase: Symbol.for('DownloadClipFromFeedUseCase'),
   GetFileFromPathUseCase: Symbol.for('GetFileFromPathUseCase'),
   GetExtensionFromPlaylistUseCase: Symbol.for('GetExtensionFromPlaylistUseCase')
 }

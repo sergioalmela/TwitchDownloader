@@ -21,9 +21,9 @@ import { IFeedRepository } from './domain/repository/feedRepository.interface'
 import { FeedRepository } from './infrastructure/repositories/feed.repository'
 import { ParseFeedUseCase } from './application/useCases/parseFeed.usecase'
 import { DownloadController } from './infrastructure/controllers/download.controller'
-import { DownloadFromFeedUseCase } from './application/useCases/downloadFromFeed.usecase'
+import { DownloadVodFromFeedUseCase } from './application/useCases/downloadVodFromFeed.usecase'
 import { IDownloadRepository } from './domain/repository/downloadRepository.interface'
-import { DownloadRepository } from './infrastructure/repositories/download.repository'
+import { DownloadVodRepository } from './infrastructure/repositories/downloadVod.repository'
 import { FileController } from './infrastructure/controllers/file.controller'
 import { GetFileFromPathUseCase } from './application/useCases/getFileFromPath.usecase'
 import { IPathRepository } from './domain/repository/pathRepository.interface'
@@ -31,6 +31,8 @@ import { UrlClipRepository } from './infrastructure/repositories/urlClip.reposit
 import { PathRepository } from './infrastructure/repositories/path.repository'
 import { UrlVodRepository } from './infrastructure/repositories/urlVod.repository'
 import { GetExtensionFromPlaylistUseCase } from './application/useCases/getExtensionFromPlaylist.usecase'
+import { DownloadClipFromFeedUseCase } from './application/useCases/downloadClipFromFeed.usecase'
+import { DownloadClipRepository } from './infrastructure/repositories/downloadClip.repository'
 
 const container = new Container()
 
@@ -57,8 +59,12 @@ container
   .to(FeedRepository)
 
 container
-  .bind<IDownloadRepository>(ContainerSymbols.DownloadRepository)
-  .to(DownloadRepository)
+  .bind<IDownloadRepository>(ContainerSymbols.DownloadClipRepository)
+  .to(DownloadClipRepository)
+
+container
+  .bind<IDownloadRepository>(ContainerSymbols.DownloadVodRepository)
+  .to(DownloadVodRepository)
 
 container
   .bind<ContentRepository>(ContainerSymbols.ContentRepository)
@@ -117,8 +123,12 @@ container
   .to(ParseFeedUseCase)
 
 container
-  .bind<DownloadFromFeedUseCase>(ContainerSymbols.DownloadFromFeedUseCase)
-  .to(DownloadFromFeedUseCase)
+  .bind<DownloadVodFromFeedUseCase>(ContainerSymbols.DownloadVodFromFeedUseCase)
+  .to(DownloadVodFromFeedUseCase)
+
+container
+  .bind<DownloadClipFromFeedUseCase>(ContainerSymbols.DownloadClipFromFeedUseCase)
+  .to(DownloadClipFromFeedUseCase)
 
 container
   .bind<GetFileFromPathUseCase>(ContainerSymbols.GetFileFromPathUseCase)

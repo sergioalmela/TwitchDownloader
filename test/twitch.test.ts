@@ -18,7 +18,7 @@ import { ParseFeedUseCase } from '../src/main/application/useCases/parseFeed.use
 import { GetFileFromPathUseCase } from '../src/main/application/useCases/getFileFromPath.usecase'
 import { FileVo } from '../src/main/domain/valueObjects/file.vo'
 import { PathVo } from '../src/main/domain/valueObjects/path.vo'
-import { DownloadFromFeedUseCase } from '../src/main/application/useCases/downloadFromFeed.usecase'
+import { DownloadVodFromFeedUseCase } from '../src/main/application/useCases/downloadVodFromFeed.usecase'
 import { FeedVo } from '../src/main/domain/valueObjects/feed.vo'
 import { FileExtensions } from '../src/main/domain/constants/fileExtensions.enum'
 import { ExtensionVo } from '../src/main/domain/valueObjects/extension.vo'
@@ -33,7 +33,7 @@ const getExtensionFromPlaylistUseCase = container.get<GetExtensionFromPlaylistUs
 const getFeedFromManifest = container.get<GetFeedFromManifestUseCase>(ContainerSymbols.GetFeedFromManifestUseCase)
 const parseFeedUseCase = container.get<ParseFeedUseCase>(ContainerSymbols.ParseFeedUseCase)
 const getFileFromPath = container.get<GetFileFromPathUseCase>(ContainerSymbols.GetFileFromPathUseCase)
-const downloadFromFeedUseCase = container.get<DownloadFromFeedUseCase>(ContainerSymbols.DownloadFromFeedUseCase)
+const downloadVodFromFeedUseCase = container.get<DownloadVodFromFeedUseCase>(ContainerSymbols.DownloadVodFromFeedUseCase)
 
 const urlVod: UrlVo = new UrlVo('https://www.twitch.tv/videos/839518098?filter=all&sort=time')
 const urlClip: UrlVo = new UrlVo('https://www.twitch.tv/twitch/clip/SavageNurturingTruffleKippa?filter=clips&range=all&sort=time')
@@ -168,8 +168,8 @@ describe('Parse Feed', async () => {
 })
 
 describe('Download feed', async () => {
-  await downloadFromFeedUseCase.execute(urlVod, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
-  await downloadFromFeedUseCase.execute(urlVod, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP3))
+  await downloadVodFromFeedUseCase.execute(urlVod, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
+  await downloadVodFromFeedUseCase.execute(urlVod, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP3))
 
   const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
   it('video should be present in tmp folder', () => {

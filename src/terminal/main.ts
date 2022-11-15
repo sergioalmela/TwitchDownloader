@@ -14,6 +14,7 @@ import { FileVo } from '../main/domain/valueObjects/file.vo'
 import { FileController } from '../main/infrastructure/controllers/file.controller'
 import prompts from 'prompts'
 import Url from '../main/infrastructure/types/prompt/Url'
+import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -33,6 +34,7 @@ const onCancel = (): void => {
   process.exit()
 }
 
+// TODO: Add restricted content logic
 downloadVod().catch(console.error)
 
 // TODO: Check if is valid twitch URL
@@ -45,7 +47,9 @@ async function downloadVod (): Promise<any> {
 
   const url: UrlVo = new UrlVo(response.url)
 
-  const feeds: PlaylistVo[] = await feedsController.getFeeds(url)
+  const type: ContentTypes = await feedsController.getContentType(url)
+
+  const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
 
   const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
 
@@ -77,5 +81,5 @@ async function downloadVod (): Promise<any> {
 
   const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
 
-  await downloadController.download(downloadUrl, path, file, extension)
+  await downloadController.download(type, downloadUrl, path, file, extension)
 }

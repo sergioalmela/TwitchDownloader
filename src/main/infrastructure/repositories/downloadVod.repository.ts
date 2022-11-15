@@ -16,7 +16,7 @@ const barFormat = {
 }
 
 @injectable()
-export class DownloadRepository implements IDownloadRepository {
+export class DownloadVodRepository implements IDownloadRepository {
   async download (url: UrlVo, path: PathVo, file: FileVo, extension: ExtensionVo): Promise<any> {
     return await new Promise((resolve) => {
       const stream = m3u8stream(url.value)

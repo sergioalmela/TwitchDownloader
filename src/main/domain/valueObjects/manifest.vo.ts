@@ -11,7 +11,7 @@ export class ManifestVo extends ValueObject<string> {
   }
 
   protected assertIsValid (value: string): void {
-    if (!value.includes('.m3u8')) {
+    if (!value.includes('http')) {
       throw new VOFormatException(ManifestVo.name, value)
     }
   }

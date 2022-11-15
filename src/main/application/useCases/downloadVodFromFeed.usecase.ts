@@ -7,9 +7,9 @@ import { FileVo } from '../../domain/valueObjects/file.vo'
 import { ExtensionVo } from '../../domain/valueObjects/extension.vo'
 
 @injectable()
-export class DownloadFromFeedUseCase {
+export class DownloadVodFromFeedUseCase {
   constructor (
-    @inject(ContainerSymbols.DownloadRepository)
+    @inject(ContainerSymbols.DownloadVodRepository)
     private readonly downloadRepository: IDownloadRepository
   ) {}
 

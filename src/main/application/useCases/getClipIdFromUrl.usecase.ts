@@ -7,7 +7,7 @@ import { IdVo } from '../../domain/valueObjects/id.vo'
 @injectable()
 export class GetClipIdFromUrlUseCase {
   constructor (
-    @inject(ContainerSymbols.PathRepository)
+    @inject(ContainerSymbols.UrlClipRepository)
     private readonly pathRepository: IUrlRepository
   ) {}
 

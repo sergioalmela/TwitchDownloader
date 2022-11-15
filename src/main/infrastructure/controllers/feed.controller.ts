@@ -16,6 +16,7 @@ import { FeedVo } from '../../domain/valueObjects/feed.vo'
 import { ParseFeedUseCase } from '../../application/useCases/parseFeed.usecase'
 import { InvalidUrlException } from '../errors/invalidUrl.exception'
 import Credentials from '../types/Credential'
+import { GetClipManifestUseCase } from '../../application/useCases/getClipManifest.usecase'
 
 @injectable()
 export class FeedController {
@@ -32,15 +33,15 @@ export class FeedController {
     private readonly detectContentTypeUseCase: DetectContentTypeUseCase,
     @inject(ContainerSymbols.GetVodManifestUseCase)
     private readonly getVodManifestUseCase: GetVodManifestUseCase,
+    @inject(ContainerSymbols.GetClipManifestUseCase)
+    private readonly getClipManifestUseCase: GetClipManifestUseCase,
     @inject(ContainerSymbols.GetFeedFromManifestUseCase)
     private readonly getFeedFromManifestUseCase: GetFeedFromManifestUseCase,
     @inject(ContainerSymbols.ParseFeedUseCase)
     private readonly parseFeedUseCase: ParseFeedUseCase
   ) {}
 
-  async getFeeds (url: UrlVo): Promise<PlaylistVo[]> {
-    const type: ContentTypes = this.detectContentTypeUseCase.execute(url)
-
+  async getFeeds (type: ContentTypes, url: UrlVo): Promise<PlaylistVo[]> {
     if (type === ContentTypes.VOD) {
       const id: IdVo = this.getVodIdFromUrlUseCase.execute(url)
 
@@ -50,8 +51,13 @@ export class FeedController {
 
       return this.getFeedFromManifestUseCase.execute(manifest)
     } else if (type === ContentTypes.CLIP) {
-      // TODO: Add clip logic
-      return []
+      const id: IdVo = this.getClipIdFromUrl.execute(url)
+
+      const credentials: Credentials = await this.authClipUseCase.execute(id)
+
+      const manifest: ManifestVo = await this.getClipManifestUseCase.execute(id, credentials)
+
+      return this.getFeedFromManifestUseCase.execute(manifest)
     } else {
       throw new InvalidUrlException()
     }
@@ -59,5 +65,9 @@ export class FeedController {
 
   parseFeeds (playlists: PlaylistVo[]): FeedVo[] {
     return this.parseFeedUseCase.execute(playlists)
+  }
+
+  getContentType (url: UrlVo): ContentTypes {
+    return this.detectContentTypeUseCase.execute(url)
   }
 }
