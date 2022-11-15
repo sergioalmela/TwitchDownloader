@@ -25,7 +25,7 @@ import { DownloadFromFeedUseCase } from './application/useCases/downloadFromFeed
 import { IDownloadRepository } from './domain/repository/downloadRepository.interface'
 import { DownloadRepository } from './infrastructure/repositories/download.repository'
 import { FileController } from './infrastructure/controllers/file.controller'
-import { GetFileFromPathUseCase } from './application/useCases/getFileFromUrl.usecase'
+import { GetFileFromPathUseCase } from './application/useCases/getFileFromPath.usecase'
 import { IPathRepository } from './domain/repository/pathRepository.interface'
 import { UrlClipRepository } from './infrastructure/repositories/urlClip.repository'
 import { PathRepository } from './infrastructure/repositories/path.repository'

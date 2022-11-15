@@ -55,9 +55,13 @@ async function downloadVod (): Promise<any> {
     message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
   }, { onCancel })
 
-  const path = new PathVo(pathPrompt.downloadPath)
+  const pathResponse = pathPrompt.downloadPath
+  const path = new PathVo(pathResponse)
 
-  const file: FileVo = fileController.getFileNameFromPath(pathPrompt.downloadPath)
+  const file: FileVo = fileController.getFileNameFromPath(path)
+  file.removeExtensionFromFileName()
+
+  path.removeFileFromPath()
 
   const responseFeeds: ExportQuality = await prompts({
     type: 'select',

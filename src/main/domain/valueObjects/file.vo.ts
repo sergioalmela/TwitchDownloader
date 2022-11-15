@@ -12,13 +12,19 @@ export class FileVo extends ValueObject<string> {
   }
 
   protected assertIsValid (value: string): void {
-    // Remove extension from file
-    if (value.includes('.')) {
-      this.value = value.substring(0, value.lastIndexOf('.'))
-    }
-
     if (value.length === 0) {
       this.value = DEFAULT_NAME
     }
+  }
+
+  public removeExtensionFromFileName(): void {
+    if (this.value.includes('.')) {
+      this.value = this.value.substring(0, this.value.lastIndexOf('.'))
+    }
+
+  }
+
+  public getDefaultValue(): string {
+    return DEFAULT_NAME
   }
 }
