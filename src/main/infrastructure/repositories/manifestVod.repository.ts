@@ -4,11 +4,10 @@ import axios from 'axios'
 import { IdVo } from '../../domain/valueObjects/id.vo'
 import { IManifestRepository } from '../../domain/repository/manifestRepository.interface'
 import Credentials from '../types/Credential'
-import {FetchFeedErrorException} from "../errors/fetchFeedError.exception";
-import {restrictedHeaders} from "../../domain/constants/restrictedHeaders";
-import {QualityVo} from "../../domain/valueObjects/quality.vo";
-import {manifestComplete} from "../../domain/constants/manifest";
-import {al} from "vitest/dist/types-f302dae9";
+import { FetchFeedErrorException } from '../errors/fetchFeedError.exception'
+import { restrictedHeaders } from '../../domain/constants/restrictedHeaders'
+import { QualityVo } from '../../domain/valueObjects/quality.vo'
+import { manifestComplete } from '../../domain/constants/manifest'
 
 @injectable()
 export class ManifestVodRepository implements IManifestRepository {
@@ -45,10 +44,8 @@ export class ManifestVodRepository implements IManifestRepository {
     const resolutions = responseFromRestricted.data.resolutions
     const framerates = responseFromRestricted.data.fps
 
-    let qualities: QualityVo[] = []
-    let response: string = ''
+    const qualities: QualityVo[] = []
     for (const alias in resolutions) {
-      const resolution = resolutions[alias]
       const framerate = framerates[alias]
 
       const quality = new QualityVo({

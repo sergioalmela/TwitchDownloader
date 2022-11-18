@@ -34,7 +34,6 @@ const onCancel = (): void => {
   process.exit()
 }
 
-// TODO: Add restricted content logic
 main().catch(console.error)
 
 async function main (): Promise<any> {
