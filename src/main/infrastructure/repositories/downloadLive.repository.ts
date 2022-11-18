@@ -8,7 +8,6 @@ import { ExtensionVo } from '../../domain/valueObjects/extension.vo'
 import { createWriteStream } from 'fs'
 import m3u8stream from 'm3u8stream'
 import { sync } from 'mkdirp'
-import Segment from '../types/Segment'
 
 @injectable()
 export class DownloadLiveRepository implements IDownloadRepository {
@@ -22,7 +21,7 @@ export class DownloadLiveRepository implements IDownloadRepository {
 
       console.log('Downloading live stream until it ends...')
 
-      stream.on('end', function (segment: Segment, totalSegments: number) {
+      stream.on('end', function () {
         resolve(true)
       })
 
