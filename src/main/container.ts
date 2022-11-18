@@ -33,6 +33,14 @@ import { UrlVodRepository } from './infrastructure/repositories/urlVod.repositor
 import { GetExtensionFromPlaylistUseCase } from './application/useCases/getExtensionFromPlaylist.usecase'
 import { DownloadClipFromFeedUseCase } from './application/useCases/downloadClipFromFeed.usecase'
 import { DownloadClipRepository } from './infrastructure/repositories/downloadClip.repository'
+import { GetLiveIdFromUrlUseCase } from './application/useCases/getLiveIdFromUrl.usecase'
+import { UrlLiveRepository } from './infrastructure/repositories/urlLive.repository'
+import { AuthLiveUseCase } from './application/useCases/authLive.usecase'
+import { AuthLiveRepository } from './infrastructure/repositories/authLive.repository'
+import { GetLiveManifestUseCase } from './application/useCases/getLiveManifest.usecase'
+import { ManifestLiveRepository } from './infrastructure/repositories/manifestLive.repository'
+import { DownloadLiveFromFeedUseCase } from './application/useCases/downloadLiveFromFeed.usecase'
+import { DownloadLiveRepository } from './infrastructure/repositories/downloadLive.repository'
 
 const container = new Container()
 
@@ -47,6 +55,10 @@ container
   .to(AuthClipRepository)
 
 container
+  .bind<IAuthRepository>(ContainerSymbols.AuthLiveRepository)
+  .to(AuthLiveRepository)
+
+container
   .bind<IUrlRepository>(ContainerSymbols.UrlClipRepository)
   .to(UrlClipRepository)
 
@@ -55,12 +67,20 @@ container
   .to(UrlVodRepository)
 
 container
+  .bind<IUrlRepository>(ContainerSymbols.UrlLiveRepository)
+  .to(UrlLiveRepository)
+
+container
   .bind<IFeedRepository>(ContainerSymbols.FeedRepository)
   .to(FeedRepository)
 
 container
   .bind<IDownloadRepository>(ContainerSymbols.DownloadClipRepository)
   .to(DownloadClipRepository)
+
+container
+  .bind<IDownloadRepository>(ContainerSymbols.DownloadLiveRepository)
+  .to(DownloadLiveRepository)
 
 container
   .bind<IDownloadRepository>(ContainerSymbols.DownloadVodRepository)
@@ -79,6 +99,10 @@ container
   .to(ManifestClipRepository)
 
 container
+  .bind<IManifestRepository>(ContainerSymbols.ManifestLiveRepository)
+  .to(ManifestLiveRepository)
+
+container
   .bind<IPathRepository>(ContainerSymbols.PathRepository)
   .to(PathRepository)
 
@@ -95,12 +119,20 @@ container
   .to(AuthClipUseCase)
 
 container
+  .bind<AuthLiveUseCase>(ContainerSymbols.AuthLiveUseCase)
+  .to(AuthLiveUseCase)
+
+container
   .bind<GetVodIdFromUrlUseCase>(ContainerSymbols.GetVodIdFromUrlUseCase)
   .to(GetVodIdFromUrlUseCase)
 
 container
   .bind<GetClipIdFromUrlUseCase>(ContainerSymbols.GetClipIdFromUrlUseCase)
   .to(GetClipIdFromUrlUseCase)
+
+container
+  .bind<GetLiveIdFromUrlUseCase>(ContainerSymbols.GetLiveIdFromUrlUseCase)
+  .to(GetLiveIdFromUrlUseCase)
 
 container
   .bind<DetectContentTypeUseCase>(ContainerSymbols.DetectContentTypeUseCase)
@@ -113,6 +145,10 @@ container
 container
   .bind<GetClipManifestUseCase>(ContainerSymbols.GetClipManifestUseCase)
   .to(GetClipManifestUseCase)
+
+container
+  .bind<GetLiveManifestUseCase>(ContainerSymbols.GetLiveManifestUseCase)
+  .to(GetLiveManifestUseCase)
 
 container
   .bind<GetFeedFromManifestUseCase>(ContainerSymbols.GetFeedFromManifestUseCase)
@@ -129,6 +165,10 @@ container
 container
   .bind<DownloadClipFromFeedUseCase>(ContainerSymbols.DownloadClipFromFeedUseCase)
   .to(DownloadClipFromFeedUseCase)
+
+container
+  .bind<DownloadLiveFromFeedUseCase>(ContainerSymbols.DownloadLiveFromFeedUseCase)
+  .to(DownloadLiveFromFeedUseCase)
 
 container
   .bind<GetFileFromPathUseCase>(ContainerSymbols.GetFileFromPathUseCase)

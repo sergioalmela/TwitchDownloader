@@ -40,7 +40,7 @@ async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
     name: 'url',
-    message: 'Enter the Twitch URL (vod, clip, highlight)'
+    message: 'Enter the Twitch URL (stream, vod, clip, highlight)'
   }, { onCancel })
 
   const url: UrlVo = new UrlVo(response.url)

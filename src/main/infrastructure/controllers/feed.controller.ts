@@ -17,6 +17,9 @@ import { ParseFeedUseCase } from '../../application/useCases/parseFeed.usecase'
 import { InvalidUrlException } from '../errors/invalidUrl.exception'
 import Credentials from '../types/Credential'
 import { GetClipManifestUseCase } from '../../application/useCases/getClipManifest.usecase'
+import { GetLiveIdFromUrlUseCase } from '../../application/useCases/getLiveIdFromUrl.usecase'
+import { AuthLiveUseCase } from '../../application/useCases/authLive.usecase'
+import { GetLiveManifestUseCase } from '../../application/useCases/getLiveManifest.usecase'
 
 @injectable()
 export class FeedController {
@@ -25,16 +28,22 @@ export class FeedController {
     private readonly authVodUseCase: AuthVodUseCase,
     @inject(ContainerSymbols.AuthClipUseCase)
     private readonly authClipUseCase: AuthClipUseCase,
+    @inject(ContainerSymbols.AuthLiveUseCase)
+    private readonly authLiveUseCase: AuthLiveUseCase,
     @inject(ContainerSymbols.GetVodIdFromUrlUseCase)
     private readonly getVodIdFromUrlUseCase: GetVodIdFromUrlUseCase,
     @inject(ContainerSymbols.GetClipIdFromUrlUseCase)
     private readonly getClipIdFromUrl: GetClipIdFromUrlUseCase,
+    @inject(ContainerSymbols.GetLiveIdFromUrlUseCase)
+    private readonly getLiveIdFromUrlUseCase: GetLiveIdFromUrlUseCase,
     @inject(ContainerSymbols.DetectContentTypeUseCase)
     private readonly detectContentTypeUseCase: DetectContentTypeUseCase,
     @inject(ContainerSymbols.GetVodManifestUseCase)
     private readonly getVodManifestUseCase: GetVodManifestUseCase,
     @inject(ContainerSymbols.GetClipManifestUseCase)
     private readonly getClipManifestUseCase: GetClipManifestUseCase,
+    @inject(ContainerSymbols.GetLiveManifestUseCase)
+    private readonly getLiveManifestUseCase: GetLiveManifestUseCase,
     @inject(ContainerSymbols.GetFeedFromManifestUseCase)
     private readonly getFeedFromManifestUseCase: GetFeedFromManifestUseCase,
     @inject(ContainerSymbols.ParseFeedUseCase)
@@ -54,8 +63,15 @@ export class FeedController {
       const id: IdVo = this.getClipIdFromUrl.execute(url)
 
       const credentials: Credentials = await this.authClipUseCase.execute(id)
-
       const manifest: ManifestVo = await this.getClipManifestUseCase.execute(id, credentials)
+
+      return this.getFeedFromManifestUseCase.execute(manifest)
+    } else if (type === ContentTypes.LIVE) {
+      const id: IdVo = this.getLiveIdFromUrlUseCase.execute(url)
+
+      const credentials: Credentials = await this.authLiveUseCase.execute(id)
+
+      const manifest: ManifestVo = await this.getLiveManifestUseCase.execute(id, credentials)
 
       return this.getFeedFromManifestUseCase.execute(manifest)
     } else {

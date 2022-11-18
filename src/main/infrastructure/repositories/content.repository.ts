@@ -6,10 +6,14 @@ import { UrlVo } from '../../domain/valueObjects/url.vo'
 export class ContentRepository {
   getContentType (url: UrlVo): ContentTypes {
     // Check if URL is vod, is clip or anything else
-    return url.isVod()
-      ? ContentTypes.VOD
-      : url.isClip()
-        ? ContentTypes.CLIP
-        : ContentTypes.UNKNOWN
+    if (url.isVod()) {
+      return ContentTypes.VOD
+    } else if (url.isClip()) {
+      return ContentTypes.CLIP
+    } else if (url.isLive()) {
+      return ContentTypes.LIVE
+    } else {
+      return ContentTypes.UNKNOWN
+    }
   }
 }

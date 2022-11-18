@@ -7,6 +7,7 @@ import { FileVo } from '../../domain/valueObjects/file.vo'
 import { ExtensionVo } from '../../domain/valueObjects/extension.vo'
 import { ContentTypes } from '../../domain/constants/contentTypes.enum'
 import { DownloadClipFromFeedUseCase } from '../../application/useCases/downloadClipFromFeed.usecase'
+import { DownloadLiveFromFeedUseCase } from '../../application/useCases/downloadLiveFromFeed.usecase'
 
 @injectable()
 export class DownloadController {
@@ -14,7 +15,9 @@ export class DownloadController {
     @inject(ContainerSymbols.DownloadVodFromFeedUseCase)
     private readonly downloadVodFromFeedUseCase: DownloadVodFromFeedUseCase,
     @inject(ContainerSymbols.DownloadClipFromFeedUseCase)
-    private readonly downloadClipFromFeedUseCase: DownloadClipFromFeedUseCase
+    private readonly downloadClipFromFeedUseCase: DownloadClipFromFeedUseCase,
+    @inject(ContainerSymbols.DownloadLiveFromFeedUseCase)
+    private readonly downloadLiveFromFeedUseCase: DownloadLiveFromFeedUseCase
   ) {}
 
   async download (type: ContentTypes, url: UrlVo, path: PathVo, file: FileVo, extension: ExtensionVo): Promise<any> {
@@ -22,6 +25,8 @@ export class DownloadController {
       await this.downloadVodFromFeedUseCase.execute(url, path, file, extension)
     } else if (type === ContentTypes.CLIP) {
       await this.downloadClipFromFeedUseCase.execute(url, path, file, extension)
+    } else if (type === ContentTypes.LIVE) {
+      await this.downloadLiveFromFeedUseCase.execute(url, path, file, extension)
     } else {
       throw new Error('Invalid content type')
     }

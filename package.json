@@ -1,6 +1,6 @@
 {
   "name": "twitch-downloader",
-  "version": "0.6",
+  "version": "0.7",
   "description": "Free tool to download Twitch content with GUI",
   "author": "Sergio Almela",
   "private": true,
