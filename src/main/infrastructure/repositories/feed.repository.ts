@@ -42,10 +42,6 @@ export class FeedRepository implements IFeedRepository {
 
   private readonly getPlaylists = (manifest: ManifestVo): any[] => {
     const parser = new m3u8Parser.Parser()
-    parser.addParser({
-      expression: /^#VOD-FRAMERATE/,
-      customType: 'framerate'
-    })
 
     parser.push(manifest.value)
     parser.end()

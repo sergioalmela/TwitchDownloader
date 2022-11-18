@@ -1,6 +1,6 @@
 export default interface Playlist {
   video: string
-  quality: string | null
+  quality: object | null
   url: string
   framerate: number | null
   bandwidth: number
