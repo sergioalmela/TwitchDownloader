@@ -13,7 +13,6 @@ import { manifestComplete } from '../../domain/constants/manifest'
 @injectable()
 export class ManifestClipRepository implements IManifestRepository {
   async getManifest (id: IdVo, credentials: Credentials): Promise<ManifestVo> {
-    // TODO: Maybe we can do the same as manifestLiveRepository to fetch the manifest and avoid doing it manually
     const data = await axios.post('https://gql.twitch.tv/gql', authConfigClip(id), authHeaders())
     const qualities: object[] = data.data.data.clip.videoQualities
 
