@@ -1,7 +1,9 @@
 # Twitch Downloader
+![Twitch Downloader Logo](logo.png?raw=true "Twitch Downloader Logo")
 
 ## About
-Twitch Downloader is a free utility made to download Twitch content (streams, videos, clips) including sub-only content.
+Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips) including sub-only content. 
+###Current version: 0.7
 
 ## Planned features:
   
@@ -25,7 +27,13 @@ npm install
 npm run start:terminal
 ```
 
-Feel free to contribute to the project by opening a pull request or by opening an issue.
+The terminal will ask you for the full URL of the content you want to download:
+- Step 1: Enter the full URL of the content you want to download, for example: ```https://www.twitch.tv/videos/365670422```
+- Step 2: Enter the path to download the video, it can be relative or absolute, and the file name. NOTE: It will always save it as .mp4. For example: ```/home/sergio/downloads/awesomeVideo.mp4```
+- Step 3: Enter the quality you want to download from the selector (use the arrows). For example: ```1080p60```
+- It will start downloading the video, and you will see the progress in the terminal.
+
+NOTE: If you put a live stream URL, it will download from the current time, and it will keep downloading until the stream ends. For example: ```https://www.twitch.tv/twitch```
 
 ## Technologies used
 - [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en/)
@@ -33,7 +41,16 @@ Feel free to contribute to the project by opening a pull request or by opening a
 - [![Electron.js](https://img.shields.io/badge/Electron-191970?style=for-the-badge&logo=Electron&logoColor=white)](https://electronjs.org/)
 - [![Vitest](https://img.shields.io/badge/Vitest-191970?style=for-the-badge&logo=Vite&logoColor=white)](https://vitest.dev/)
 
-## Thanks to
-This project is inspired by Twitch Recover, a similar tool made in Java
+##Issues
 
-<a href="https://github.com/TwitchRecover/TwitchRecover">Twitch Recover</a>
+Feel free to submit issues and enhancement requests here: [Report Issue](https://github.com/sergioalmela/TwitchDownloader/issues)
+
+##Contributing
+
+1. **Fork** the repo on GitHub
+2. **Clone** the project to your own machine
+3. **Commit** changes to your own branch
+4. **Push** your work back up to your fork
+5. Submit a **Pull request** so that we can review your changes
+
+NOTE: Be sure to merge the latest from "upstream" before making a pull request!

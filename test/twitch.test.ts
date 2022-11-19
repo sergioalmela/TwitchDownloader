@@ -87,7 +87,7 @@ const videoDownloadUrl: UrlVo = new UrlVo(videoFeed.value.url)
 const audioDownloadUrl: UrlVo = new UrlVo(audioFeed.value.url)
 const videoDownloadUrlRestricted: UrlVo = new UrlVo(videoFeedRestricted.value.url)
 
-// TODO: Add restricted tests, from id and url
+// TODO: Can't e2e live stream, need to find a way to find a random live stream
 describe('Auth from Twitch', async () => {
   credentialVod = await authVodUseCase.execute(idVod)
   credentialClip = await authClipUseCase.execute(idClip)
