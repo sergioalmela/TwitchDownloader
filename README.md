@@ -3,7 +3,7 @@
 
 ## About
 Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips) including sub-only content. 
-###Current version: 0.7
+### Current version: 0.7
 
 ## Planned features:
   
@@ -41,11 +41,11 @@ NOTE: If you put a live stream URL, it will download from the current time, and 
 - [![Electron.js](https://img.shields.io/badge/Electron-191970?style=for-the-badge&logo=Electron&logoColor=white)](https://electronjs.org/)
 - [![Vitest](https://img.shields.io/badge/Vitest-191970?style=for-the-badge&logo=Vite&logoColor=white)](https://vitest.dev/)
 
-##Issues
+## Issues
 
 Feel free to submit issues and enhancement requests here: [Report Issue](https://github.com/sergioalmela/TwitchDownloader/issues)
 
-##Contributing
+## Contributing
 
 1. **Fork** the repo on GitHub
 2. **Clone** the project to your own machine
