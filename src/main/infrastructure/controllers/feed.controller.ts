@@ -52,7 +52,7 @@ export class FeedController {
 
   async getFeeds (type: ContentTypes, url: UrlVo): Promise<PlaylistVo[]> {
     if (type === ContentTypes.VOD) {
-      const id: IdVo = this.getVodIdFromUrlUseCase.execute(url)
+      const id: IdVo = this.getId(type, url)
 
       const credentials: Credentials = await this.authVodUseCase.execute(id)
 
@@ -60,14 +60,14 @@ export class FeedController {
 
       return this.getFeedFromManifestUseCase.execute(manifest)
     } else if (type === ContentTypes.CLIP) {
-      const id: IdVo = this.getClipIdFromUrl.execute(url)
+      const id: IdVo = this.getId(type, url)
 
       const credentials: Credentials = await this.authClipUseCase.execute(id)
       const manifest: ManifestVo = await this.getClipManifestUseCase.execute(id, credentials)
 
       return this.getFeedFromManifestUseCase.execute(manifest)
     } else if (type === ContentTypes.LIVE) {
-      const id: IdVo = this.getLiveIdFromUrlUseCase.execute(url)
+      const id: IdVo = this.getId(type, url)
 
       const credentials: Credentials = await this.authLiveUseCase.execute(id)
 
@@ -85,5 +85,17 @@ export class FeedController {
 
   getContentType (url: UrlVo): ContentTypes {
     return this.detectContentTypeUseCase.execute(url)
+  }
+
+  getId (type: ContentTypes, url: UrlVo): IdVo {
+    if (type === ContentTypes.VOD) {
+      return this.getVodIdFromUrlUseCase.execute(url)
+    } else if (type === ContentTypes.CLIP) {
+      return this.getClipIdFromUrl.execute(url)
+    } else if (type === ContentTypes.LIVE) {
+      return this.getLiveIdFromUrlUseCase.execute(url)
+    } else {
+      throw new InvalidUrlException()
+    }
   }
 }

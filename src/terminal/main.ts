@@ -15,6 +15,7 @@ import { FileController } from '../main/infrastructure/controllers/file.controll
 import prompts from 'prompts'
 import Url from '../main/infrastructure/types/prompt/Url'
 import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
+import { IdVo } from '../main/domain/valueObjects/id.vo'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -36,8 +37,7 @@ const onCancel = (): void => {
 
 main().catch(console.error)
 
-// TODO: Set default download file name as the video ID
-// TODO: Show the video ID or name in the download path prompt
+// TODO: Testing
 async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
@@ -62,6 +62,8 @@ async function main (): Promise<any> {
 const downloadFromUrl = async (url: UrlVo): Promise<any> => {
   const type: ContentTypes = await feedsController.getContentType(url)
 
+  const id: IdVo = await feedsController.getId(type, url)
+
   const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
 
   const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
@@ -69,13 +71,14 @@ const downloadFromUrl = async (url: UrlVo): Promise<any> => {
   const pathPrompt: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
-    message: 'Enter the path to download the video (absolute or relative) Ex: /Videos/myDownload.mp4'
+    message: `Enter the path to download the video ${id.value} (absolute or relative) Ex: /Videos/myDownload.mp4`
   }, { onCancel })
 
   const pathResponse = pathPrompt.downloadPath
   const path = new PathVo(pathResponse)
 
   const file: FileVo = fileController.getFileNameFromPath(path)
+  file.setDefaultValue(id.value)
   file.removeExtensionFromFileName()
 
   path.removeFileFromPath()

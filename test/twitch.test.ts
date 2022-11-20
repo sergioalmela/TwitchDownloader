@@ -228,8 +228,8 @@ describe('Parse Feed', async () => {
 })
 
 describe('Download feed', async () => {
-  await downloadVodFromFeedUseCase.execute(videoDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
-  await downloadVodFromFeedUseCase.execute(audioDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP3))
+  const downloadVideoResult = await downloadVodFromFeedUseCase.execute(videoDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
+  const downloadAudioResult = await downloadVodFromFeedUseCase.execute(audioDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP3))
 
   const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
   const videoSize: number = statSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4).size
@@ -237,6 +237,7 @@ describe('Download feed', async () => {
   it('video should be present in tmp folder', () => {
     expect(videoExists).toBe(true)
     expect(videoSize).toBeGreaterThan(0)
+    expect(downloadVideoResult).toBe(true)
   })
 
   const audioExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP3)
@@ -245,11 +246,12 @@ describe('Download feed', async () => {
   it('audio should be present in tmp folder', () => {
     expect(audioExists).toBe(true)
     expect(audioSize).toBeGreaterThan(0)
+    expect(downloadAudioResult).toBe(true)
   })
 })
 
 describe('Download feed restricted', async () => {
-  await downloadVodFromFeedUseCase.execute(videoDownloadUrlRestricted, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
+  const downloadVideoResult = await downloadVodFromFeedUseCase.execute(videoDownloadUrlRestricted, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
 
   const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
   const videoSize: number = statSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4).size
@@ -257,5 +259,6 @@ describe('Download feed restricted', async () => {
   it('video restricted should be present in tmp folder', () => {
     expect(videoExists).toBe(true)
     expect(videoSize).toBeGreaterThan(0)
+    expect(downloadVideoResult).toBe(true)
   })
 })

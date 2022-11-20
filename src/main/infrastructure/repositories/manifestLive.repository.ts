@@ -14,7 +14,6 @@ export class ManifestLiveRepository implements IManifestRepository {
       const result = await axios.get(`https://usher.ttvnw.net/api/channel/hls/${id.value}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`)
       response = result.data
     } catch (error) {
-      console.log(error)
       throw new FetchFeedErrorException()
     }
 

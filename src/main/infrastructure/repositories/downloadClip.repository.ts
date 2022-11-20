@@ -18,40 +18,45 @@ const barFormat = {
 @injectable()
 export class DownloadClipRepository implements IDownloadRepository {
   async download (url: UrlVo, path: PathVo, file: FileVo, extension: ExtensionVo): Promise<any> {
-    const { data, headers } = await axios.get(url.value, {
-      responseType: 'stream'
-    })
+    return await new Promise((resolve, reject) => {
+      axios.get(url.value, {
+        responseType: 'stream'
+      }).then(({ data, headers }) => {
+        const totalSegments: number = headers['content-length'] !== null && typeof headers['content-length'] !== 'undefined' ? parseInt(headers['content-length']) : 0
+        let currentChunks: number = 0
 
-    const totalSegments: number = headers['content-length'] !== null && typeof headers['content-length'] !== 'undefined' ? parseInt(headers['content-length']) : 0
-    let currentChunks: number = 0
+        sync(path.value)
 
-    sync(path.value)
+        const writer = createWriteStream(path.value + file.value + extension.value)
 
-    const writer = createWriteStream(path.value + file.value + extension.value)
+        data.pipe(writer)
 
-    data.pipe(writer)
+        const progress = new cliProgress.SingleBar(barFormat, cliProgress.Presets.shades_classic)
+        progress.start(100, 0)
 
-    const progress = new cliProgress.SingleBar(barFormat, cliProgress.Presets.shades_classic)
-    progress.start(100, 0)
+        let previousPercentage: number = -1
+        data.on('data', function (chunk: string) {
+          const percentage: number = getDownloadPercentage(currentChunks, totalSegments)
+          currentChunks += chunk.length
 
-    let previousPercentage: number = -1
-    data.on('data', function (chunk: string) {
-      const percentage: number = getDownloadPercentage(currentChunks, totalSegments)
-      currentChunks += chunk.length
+          if (previousPercentage !== percentage) {
+            progress.update(percentage)
+          }
 
-      if (previousPercentage !== percentage) {
-        progress.update(percentage)
-      }
+          if (currentChunks === totalSegments) {
+            progress.stop()
+            resolve(true)
+          }
 
-      if (currentChunks === totalSegments) {
-        progress.stop()
-      }
+          previousPercentage = percentage
+        })
 
-      previousPercentage = percentage
-    })
-
-    data.on('error', function () {
-      throw new DownloadErrorException()
+        data.on('error', function () {
+          reject(new DownloadErrorException())
+        })
+      }).catch(() => {
+        reject(new DownloadErrorException())
+      })
     })
   }
 }

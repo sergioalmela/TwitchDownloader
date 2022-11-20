@@ -17,6 +17,10 @@ export class FileVo extends ValueObject<string> {
     }
   }
 
+  public setDefaultValue (value: string): void {
+    this.value = `${DEFAULT_NAME}_${value}`
+  }
+
   public removeExtensionFromFileName (): void {
     if (this.value.includes('.')) {
       this.value = this.value.substring(0, this.value.lastIndexOf('.'))
