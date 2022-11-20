@@ -41,6 +41,9 @@ import { GetLiveManifestUseCase } from './application/useCases/getLiveManifest.u
 import { ManifestLiveRepository } from './infrastructure/repositories/manifestLive.repository'
 import { DownloadLiveFromFeedUseCase } from './application/useCases/downloadLiveFromFeed.usecase'
 import { DownloadLiveRepository } from './infrastructure/repositories/downloadLive.repository'
+import { GetUrlsFromTxtFileUseCase } from './application/useCases/getUrlsFromTxtFile.usecase'
+import { IFileRepository } from './domain/repository/fileRepository.interface'
+import { FileTxtRepository } from './infrastructure/repositories/fileTxt.repository'
 
 const container = new Container()
 
@@ -105,6 +108,10 @@ container
 container
   .bind<IPathRepository>(ContainerSymbols.PathRepository)
   .to(PathRepository)
+
+container
+  .bind<IFileRepository>(ContainerSymbols.FileRepository)
+  .to(FileTxtRepository)
 
 // #endregion
 
@@ -177,6 +184,10 @@ container
 container
   .bind<GetExtensionFromPlaylistUseCase>(ContainerSymbols.GetExtensionFromPlaylistUseCase)
   .to(GetExtensionFromPlaylistUseCase)
+
+container
+  .bind<GetUrlsFromTxtFileUseCase>(ContainerSymbols.GetUrlsFromTxtFileUseCase)
+  .to(GetUrlsFromTxtFileUseCase)
 
 // #endregion
 

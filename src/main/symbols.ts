@@ -10,6 +10,7 @@ const Repositories = {
   ManifestClipRepository: Symbol.for('ManifestClipRepository'),
   ManifestLiveRepository: Symbol.for('ManifestLiveRepository'),
   PathRepository: Symbol.for('PathRepository'),
+  FileRepository: Symbol.for('FileRepository'),
   ContentRepository: Symbol.for('ContentRepository'),
   ManifestRepository: Symbol.for('ManifestRepository'),
   FeedRepository: Symbol.for('FeedRepository'),
@@ -35,7 +36,8 @@ const UseCases = {
   DownloadClipFromFeedUseCase: Symbol.for('DownloadClipFromFeedUseCase'),
   DownloadLiveFromFeedUseCase: Symbol.for('DownloadLiveFromFeedUseCase'),
   GetFileFromPathUseCase: Symbol.for('GetFileFromPathUseCase'),
-  GetExtensionFromPlaylistUseCase: Symbol.for('GetExtensionFromPlaylistUseCase')
+  GetExtensionFromPlaylistUseCase: Symbol.for('GetExtensionFromPlaylistUseCase'),
+  GetUrlsFromTxtFileUseCase: Symbol.for('GetUrlsFromTxtFileUseCase')
 }
 
 const Controllers = {

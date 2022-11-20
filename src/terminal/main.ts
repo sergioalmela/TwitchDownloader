@@ -36,15 +36,30 @@ const onCancel = (): void => {
 
 main().catch(console.error)
 
+// TODO: Set default download file name as the video ID
+// TODO: Show the video ID or name in the download path prompt
 async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
     name: 'url',
-    message: 'Enter the Twitch URL (stream, vod, clip, highlight)'
+    message: 'Enter the Twitch URL (stream, vod, clip, highlight), or enter a .txt file with a list of URLs (new line separated)'
   }, { onCancel })
 
-  const url: UrlVo = new UrlVo(response.url)
+  const url = new UrlVo(response.url)
 
+  // Mass download from txt if present
+  if (url.value.endsWith('.txt')) {
+    const filePath = new PathVo(url.value)
+    const urls: UrlVo[] = fileController.getUrlsFromFile(filePath)
+    for (const url of urls) {
+      await downloadFromUrl(url)
+    }
+  } else {
+    await downloadFromUrl(url)
+  }
+}
+
+const downloadFromUrl = async (url: UrlVo): Promise<any> => {
   const type: ContentTypes = await feedsController.getContentType(url)
 
   const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)

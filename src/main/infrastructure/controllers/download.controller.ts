@@ -22,11 +22,11 @@ export class DownloadController {
 
   async download (type: ContentTypes, url: UrlVo, path: PathVo, file: FileVo, extension: ExtensionVo): Promise<any> {
     if (type === ContentTypes.VOD) {
-      await this.downloadVodFromFeedUseCase.execute(url, path, file, extension)
+      return await this.downloadVodFromFeedUseCase.execute(url, path, file, extension)
     } else if (type === ContentTypes.CLIP) {
-      await this.downloadClipFromFeedUseCase.execute(url, path, file, extension)
+      return await this.downloadClipFromFeedUseCase.execute(url, path, file, extension)
     } else if (type === ContentTypes.LIVE) {
-      await this.downloadLiveFromFeedUseCase.execute(url, path, file, extension)
+      return await this.downloadLiveFromFeedUseCase.execute(url, path, file, extension)
     } else {
       throw new Error('Invalid content type')
     }
