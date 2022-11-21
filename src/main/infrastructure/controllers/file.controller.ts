@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify'
 import { ContainerSymbols } from '../../symbols'
 import { FileVo } from '../../domain/valueObjects/file.vo'
-import { GetFileFromPathUseCase } from '../../application/useCases/getFileFromPath.usecase'
 import { ExtensionVo } from '../../domain/valueObjects/extension.vo'
 import { PlaylistVo } from '../../domain/valueObjects/playlist.vo'
-import { GetExtensionFromPlaylistUseCase } from '../../application/useCases/getExtensionFromPlaylist.usecase'
 import { PathVo } from '../../domain/valueObjects/path.vo'
 import { UrlVo } from '../../domain/valueObjects/url.vo'
+import { GetFileFromPathUseCase } from '../../application/useCases/getFileFromPath.usecase'
+import { GetExtensionFromPlaylistUseCase } from '../../application/useCases/getExtensionFromPlaylist.usecase'
 import { GetUrlsFromTxtFileUseCase } from '../../application/useCases/getUrlsFromTxtFile.usecase'
 
 @injectable()

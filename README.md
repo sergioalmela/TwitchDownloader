@@ -34,7 +34,10 @@ NOTE: It will always save the file as .mp4. For example: ```/home/sergio/downloa
 - Step 3: Enter the quality you want to download from the selector (use the arrows). For example: ```1080p60```
 - It will start downloading the video, and you will see the progress in the terminal.
 
-NOTE: If you put a live stream URL, it will download from the current time, and it will keep downloading until the stream ends. For example: ```https://www.twitch.tv/twitch```
+**NOTE:** If you put a live stream URL, it will download from the current time, and it will keep downloading until the stream ends. For example: ```https://www.twitch.tv/twitch```. It may display a wrong progress because it's not possible to know the total size of the stream.
+
+**NOTE:**
+After entering a path to download the content, the directory structure will be created if it does not exist. Windows users: The absolute path must be for example: ```C:\Users\torre\Downloads\awesomeVideo.mp4``` 
 
 ## Technologies used
 - [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en/)

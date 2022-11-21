@@ -56,6 +56,7 @@ let manifestClip: ManifestVo
 const file: FileVo = new FileVo('downloadedFile.mp4')
 const fileEmpty: FileVo = new FileVo('')
 const path: PathVo = new PathVo('downloadedFile.mp4')
+const pathBackslashes: PathVo = new PathVo('test\\tmp\\downloadedFile.mp4')
 const pathEmpty: PathVo = new PathVo('test/tmp/')
 const massFilePath: PathVo = new PathVo('test/tmp/list.txt')
 
@@ -213,6 +214,10 @@ describe('Get Feed from Manifest', async () => {
 describe('Get file from Path', async () => {
   it('should return the file without extension', async () => {
     expect(getFileFromPath.execute(path)).toStrictEqual(file)
+  })
+
+  it('should return the backslashes file without extension', async () => {
+    expect(getFileFromPath.execute(pathBackslashes)).toStrictEqual(file)
   })
 
   it('should return the default value of empty file without extension', async () => {

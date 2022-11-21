@@ -37,8 +37,6 @@ const onCancel = (): void => {
 
 main().catch(console.error)
 
-// TODO: Add path validation for Windows (\)
-// TODO: Add path validation after writing it
 async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
