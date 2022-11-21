@@ -46,6 +46,11 @@ NOTE: If you put a live stream URL, it will download from the current time, and 
 
 Feel free to submit issues and enhancement requests here: [Report Issue](https://github.com/sergioalmela/TwitchDownloader/issues)
 
+Before posting an issue, be sure to include (if applicable):
+- URL of the content to download
+- Path to save the file
+- Resolution of the file to download
+
 ## Contributing
 
 1. **Fork** the repo on GitHub
