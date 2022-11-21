@@ -13,12 +13,20 @@ export class FileVo extends ValueObject<string> {
 
   protected assertIsValid (value: string): void {
     if (value.length === 0) {
-      this.value = DEFAULT_NAME
+      this.setDefaultValue()
     }
   }
 
-  public setDefaultValue (value: string): void {
-    this.value = `${DEFAULT_NAME}_${value}`
+  public getDefaultName (): string {
+    return DEFAULT_NAME
+  }
+
+  public setDefaultValue (): void {
+    this.value = `${DEFAULT_NAME}_${this.getCurrentDate()}`
+  }
+
+  private getCurrentDate (): string {
+    return Date.now().toString()
   }
 
   public removeExtensionFromFileName (): void {
@@ -27,7 +35,7 @@ export class FileVo extends ValueObject<string> {
     }
   }
 
-  public getDefaultValue (): string {
-    return DEFAULT_NAME
+  public getValue (): string {
+    return this.value
   }
 }

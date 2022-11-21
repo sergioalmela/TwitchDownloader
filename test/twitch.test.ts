@@ -21,6 +21,7 @@ import { GetFileFromPathUseCase } from '../src/main/application/useCases/getFile
 import { FileVo } from '../src/main/domain/valueObjects/file.vo'
 import { PathVo } from '../src/main/domain/valueObjects/path.vo'
 import { DownloadVodFromFeedUseCase } from '../src/main/application/useCases/downloadVodFromFeed.usecase'
+import {GetUrlsFromTxtFileUseCase} from "../src/main/application/useCases/getUrlsFromTxtFile.usecase"
 import { FeedVo } from '../src/main/domain/valueObjects/feed.vo'
 import { FileExtensions } from '../src/main/domain/constants/fileExtensions.enum'
 import { ExtensionVo } from '../src/main/domain/valueObjects/extension.vo'
@@ -39,6 +40,7 @@ const getFeedFromManifest = container.get<GetFeedFromManifestUseCase>(ContainerS
 const parseFeedUseCase = container.get<ParseFeedUseCase>(ContainerSymbols.ParseFeedUseCase)
 const getFileFromPath = container.get<GetFileFromPathUseCase>(ContainerSymbols.GetFileFromPathUseCase)
 const downloadVodFromFeedUseCase = container.get<DownloadVodFromFeedUseCase>(ContainerSymbols.DownloadVodFromFeedUseCase)
+const getUrlsFromTxtFileUseCase = container.get<GetUrlsFromTxtFileUseCase>(ContainerSymbols.GetUrlsFromTxtFileUseCase)
 
 const urlVod: UrlVo = new UrlVo('https://www.twitch.tv/videos/839518098?filter=all&sort=time')
 const urlClip: UrlVo = new UrlVo('https://www.twitch.tv/twitch/clip/SavageNurturingTruffleKippa?filter=clips&range=all&sort=time')
@@ -55,6 +57,7 @@ const file: FileVo = new FileVo('downloadedFile.mp4')
 const fileEmpty: FileVo = new FileVo('')
 const path: PathVo = new PathVo('downloadedFile.mp4')
 const pathEmpty: PathVo = new PathVo('test/tmp/')
+const massFilePath: PathVo = new PathVo('test/tmp/list.txt')
 
 const videoFeed: PlaylistVo = new PlaylistVo({
   video: '160p30',
@@ -213,7 +216,7 @@ describe('Get file from Path', async () => {
   })
 
   it('should return the default value of empty file without extension', async () => {
-    expect((getFileFromPath.execute(pathEmpty)).value).toStrictEqual(fileEmpty.getDefaultValue())
+    expect(getFileFromPath.execute(pathEmpty).value).toMatch(fileEmpty.getDefaultName())
   })
 })
 
@@ -227,22 +230,30 @@ describe('Parse Feed', async () => {
   })
 })
 
+describe('Read file', async () => {
+  it('should return the file content of txt file', async () => {
+    const urls: UrlVo[] = getUrlsFromTxtFileUseCase.execute(massFilePath)
+    expect(urls).not.toBe(null)
+    expect(urls.length).toBe(2)
+  })
+})
+
 describe('Download feed', async () => {
   const downloadVideoResult = await downloadVodFromFeedUseCase.execute(videoDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
   const downloadAudioResult = await downloadVodFromFeedUseCase.execute(audioDownloadUrl, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP3))
 
-  const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
-  const videoSize: number = statSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4).size
-  unlinkSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
+  const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4)
+  const videoSize: number = statSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4).size
+  unlinkSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4)
   it('video should be present in tmp folder', () => {
     expect(videoExists).toBe(true)
     expect(videoSize).toBeGreaterThan(0)
     expect(downloadVideoResult).toBe(true)
   })
 
-  const audioExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP3)
-  const audioSize: number = statSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP3).size
-  unlinkSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP3)
+  const audioExists: boolean = existsSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP3)
+  const audioSize: number = statSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP3).size
+  unlinkSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP3)
   it('audio should be present in tmp folder', () => {
     expect(audioExists).toBe(true)
     expect(audioSize).toBeGreaterThan(0)
@@ -253,9 +264,9 @@ describe('Download feed', async () => {
 describe('Download feed restricted', async () => {
   const downloadVideoResult = await downloadVodFromFeedUseCase.execute(videoDownloadUrlRestricted, pathEmpty, fileEmpty, new ExtensionVo(FileExtensions.MP4))
 
-  const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
-  const videoSize: number = statSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4).size
-  unlinkSync(pathEmpty.value + fileEmpty.getDefaultValue() + FileExtensions.MP4)
+  const videoExists: boolean = existsSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4)
+  const videoSize: number = statSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4).size
+  unlinkSync(pathEmpty.value + fileEmpty.getValue() + FileExtensions.MP4)
   it('video restricted should be present in tmp folder', () => {
     expect(videoExists).toBe(true)
     expect(videoSize).toBeGreaterThan(0)

@@ -37,7 +37,8 @@ const onCancel = (): void => {
 
 main().catch(console.error)
 
-// TODO: Testing
+// TODO: Add path validation for Windows (\)
+// TODO: Add path validation after writing it
 async function main (): Promise<any> {
   const response: Url = await prompts({
     type: 'text',
@@ -78,7 +79,6 @@ const downloadFromUrl = async (url: UrlVo): Promise<any> => {
   const path = new PathVo(pathResponse)
 
   const file: FileVo = fileController.getFileNameFromPath(path)
-  file.setDefaultValue(id.value)
   file.removeExtensionFromFileName()
 
   path.removeFileFromPath()
