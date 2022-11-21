@@ -12,7 +12,7 @@ export class PathVo extends ValueObject<string> {
   protected assertIsValid (value: string): void {
     // Replace all \ with / if exists for Windows paths
     if (value.includes('\\')) {
-        this.value = value.replace(/\\/g, '/')
+      this.value = value.replace(/\\/g, '/')
     }
   }
 

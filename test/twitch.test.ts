@@ -21,7 +21,7 @@ import { GetFileFromPathUseCase } from '../src/main/application/useCases/getFile
 import { FileVo } from '../src/main/domain/valueObjects/file.vo'
 import { PathVo } from '../src/main/domain/valueObjects/path.vo'
 import { DownloadVodFromFeedUseCase } from '../src/main/application/useCases/downloadVodFromFeed.usecase'
-import {GetUrlsFromTxtFileUseCase} from "../src/main/application/useCases/getUrlsFromTxtFile.usecase"
+import { GetUrlsFromTxtFileUseCase } from '../src/main/application/useCases/getUrlsFromTxtFile.usecase'
 import { FeedVo } from '../src/main/domain/valueObjects/feed.vo'
 import { FileExtensions } from '../src/main/domain/constants/fileExtensions.enum'
 import { ExtensionVo } from '../src/main/domain/valueObjects/extension.vo'
