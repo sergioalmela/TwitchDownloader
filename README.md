@@ -39,6 +39,11 @@ NOTE: It will always save the file as .mp4. For example: ```/home/sergio/downloa
 **NOTE:**
 After entering a path to download the content, the directory structure will be created if it does not exist. Windows users: The absolute path must be for example: ```C:\Users\torre\Downloads\awesomeVideo.mp4``` 
 
+### How to download massively
+- Create a .txt file with the URLs of the content you want to download, one per line (line break separator).
+- Enter the path of the .txt file in the first input of  the program. Then, it will ask the download path and resolution.
+- You can use the test/tmp/list.txt file as example.
+
 ## Technologies used
 - [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en/)
 - [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)](https://www.typescriptlang.org/)
