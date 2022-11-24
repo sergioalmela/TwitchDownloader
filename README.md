@@ -3,7 +3,7 @@
 
 ## About
 Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips) including sub-only content. 
-### Current version: 0.8
+### Current version: 0.9
 
 ## Planned features:
   

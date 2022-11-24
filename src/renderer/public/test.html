@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+    http-equiv="Content-Security-Policy"
+    content="script-src 'self' 'unsafe-inline'"
+  />
+    <link href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/renderer.js" defer></script>
+    <title>Twitch Downloader</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-center">
+
+        <img src="../../../logo.png" width="150" alt="Twitch Downloader Logo" />
+
+        <div class="mb-3 mt-3">
+          <label for="url" class="form-label">Twitch URL</label>
+          <input type="text" name="url" class="form-control" id="url" placeholder="https://www.twitch.tv/videos/839518098" />
+          <small>* You can also enter the local path of a .txt (see README)</small>
+        </div>
+
+        <div class="mb-3">
+          <div id="folder-container">
+            <img class="img mb-2" src="images/logo.svg" alt="folder icon" width="32" />
+            <br />
+            <span class="mt-2 leading-normal">Select a folder to save</span>
+          </div>
+          <small id="folder-name" class="hidden"></small>
+        </div>
+
+        <div class="mb-3">
+          <label for="file-name" class="form-label">File name</label>
+          <input class="form-control" name="file-name" id="file-name" placeholder="File name" />
+        </div>
+
+        <button class="btn btn-primary mb-3" id="btn-qualities">Get Qualities</button>
+
+        <div class="mb-3">
+          <label for="qualities" class="form-label">Select Quality</label>
+          <select id="qualities" class="form-control" name="qualities"></select>
+        </div>
+
+        <button class="btn btn-primary mb-3">Download</button>
+
+        <div class="mb-3">
+          <span id="download-progress">Downloading...</span>
+          <br />
+          <span id="download-another">Download another one</span>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>
