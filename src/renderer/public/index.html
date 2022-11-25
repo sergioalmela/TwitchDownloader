@@ -7,65 +7,53 @@
     http-equiv="Content-Security-Policy"
     content="script-src 'self' 'unsafe-inline'"
   />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="js/renderer.js" defer></script>
+    <link href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="../../../dist/src/renderer/public/js/renderer.js" defer></script>
     <title>Twitch Downloader</title>
   </head>
-  <body class="bg-zinc-600">
-    <div
-      class="max-w-xl m-auto h-screen flex flex-col align-center justify-center"
-    >
-      <div class="flex flex-col w-full items-center justify-center bg-grey-lighter">
-        <label
-          class="w-64 flex flex-col items-center px-4 py-7 bg-white text-gray-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:text-teal-800"
-        >
-          <img src="imagesogo.svg" width="32" />
-          <span class="mt-2 leading-normal">Select a folder to save</span>
-          <input id="folder" class="hidden" />
-        </label>
+  <body>
+    <div class="container">
+      <div class="text-center">
+
+        <img src="../../../logo.png" width="150" alt="Twitch Downloader Logo" />
+
+        <div class="mb-3 mt-3">
+          <label for="url" class="form-label">Twitch URL</label>
+          <input type="text" name="url" class="form-control" id="url" placeholder="https://www.twitch.tv/videos/839518098" />
+          <small>* You can also enter the local path of a .txt (see README)</small>
+        </div>
+
+        <div class="mb-3">
+          <div id="folder-container">
+            <img class="img mb-2" src="images/logo.svg" alt="folder icon" width="32" />
+            <br />
+            <span class="mt-2 leading-normal">Select a folder to save</span>
+          </div>
+          <small id="folder-name" class="hidden"></small>
+        </div>
+
+        <div class="mb-3">
+          <label for="file-name" class="form-label">File name</label>
+          <input class="form-control" name="file-name" id="file-name" placeholder="File name" />
+        </div>
+
+        <button class="btn btn-primary mb-3" id="btn-qualities">Get Qualities</button>
+
+        <div class="mb-3 hidden" id="qualities-container">
+          <label for="qualities" class="form-label">Select Quality</label>
+          <select id="qualities" class="form-control" name="qualities"></select>
+        </div>
+
+        <button class="btn btn-primary mb-3 hidden" id="btn-download">Download</button>
+
+        <div class="mb-3 hidden" id="download-finished-container">
+          <span id="download-progress">Downloading...</span>
+          <br />
+          <span id="download-another">Download another one</span>
+        </div>
+
       </div>
-
-      <!-- Form -->
-      <form id="img-form" class="hidden">
-        <div class="mt-4">
-          <label class="mt-1 block text-white text-center w-80 m-auto py-3 shadow-sm border-gray-300 rounded-md">Twitch URL</label>
-          <input
-                  type="text"
-                  name="url"
-                  id="url"
-                  class="mt-1 block w-80 m-auto p-3 shadow-sm border-gray-300 rounded-md"
-                  placeholder="Twitch URL"
-          />
-        </div>
-
-        <div class="mt-6">
-          <label class="mt-1 block text-white text-center w-80 m-auto py-3 shadow-sm border-gray-300 rounded-md">Folder name</label>
-          <input
-            type="text"
-            name="folder-name"
-            id="folder-name"
-            class="mt-1 block w-80 m-auto p-3 shadow-sm border-gray-300 rounded-md"
-            placeholder="Folder name"
-          />
-        </div>
-
-        <!-- Button -->
-        <div class="mt-6">
-          <button
-            type="submit"
-            class="w-80 m-auto flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Download
-          </button>
-
-      </form>
-
-      <p class="text-white text-lg text-center font-mono mt-6"><strong>File: </strong><span id="filename"></span></p>
-      <p class="text-white text-lg text-center font-mono mt-2"><strong>Output: </strong><span id="output-path"></span></p>
     </div>
   </body>
 </html>
