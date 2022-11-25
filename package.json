@@ -8,12 +8,8 @@
   "scripts": {
     "build": "npm run clean && tsc",
     "clean": "rimraf dist/",
-    "lint": "npm run lintts && npm run lintjs",
-    "lintjs": "standard",
-    "lintts": "ts-standard",
-    "lint:fix": "npm run lintts && npm run lintjs:fix",
-    "lintjs:fix": "standard --fix",
-    "lintts:fix": "ts-standard --fix",
+    "lint": "ts-standard",
+    "lint:fix": "ts-standard --fix",
     "rimraf": "./node_modules/rimraf/bin.js",
     "start": "npm run build && electron dist/src/renderer/index.js",
     "start:terminal": "npm run build && node dist/src/terminal/main.js",
@@ -25,7 +21,6 @@
     "@types/cli-progress": "^3.11.0",
     "@types/mkdirp": "^1.0.2",
     "electron": "^21.3.0",
-    "standard": "^17.0.0",
     "ts-standard": "^12.0.1",
     "typescript": "^4.9.3",
     "vitest": "^0.25.2"
@@ -41,11 +36,5 @@
     "mkdirp": "^1.0.4",
     "prompts": "^2.4.2",
     "reflect-metadata": "^0.1.13"
-  },
-  "ts-standard": {
-    "ignore": [
-      "dist",
-      "*.js"
-    ]
   }
 }
