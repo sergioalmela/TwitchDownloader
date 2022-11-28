@@ -43,7 +43,7 @@ let aboutWindow
 function createMainWindow () {
   mainWindow = new BrowserWindow({
     width: isDev ? 1000 : 500,
-    height: 600,
+    height: 700,
     icon: path.join(__dirname, '../../../logo.png'),
     resizable: isDev,
     webPreferences: {
@@ -141,31 +141,41 @@ ipcMain.on('dialog:folder', () => {
 
 let type: ContentTypes
 ipcMain.on('qualities:get', async (event, { url, downloadPath }) => {
-  url = new UrlVo(url)
-  downloadPath = new PathVo(downloadPath)
+  try {
+    url = new UrlVo(url)
+    downloadPath = new PathVo(downloadPath)
 
-  type = await feedsController.getContentType(url)
+    type = await feedsController.getContentType(url)
 
-  const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
+    const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
 
-  const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
+    const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
 
-  const file: FileVo = fileController.getFileNameFromPath(downloadPath)
-  file.removeExtensionFromFileName()
+    const file: FileVo = fileController.getFileNameFromPath(downloadPath)
+    file.removeExtensionFromFileName()
 
-  downloadPath.removeFileFromPath()
+    downloadPath.removeFileFromPath()
 
-  mainWindow.webContents.send('qualities:got', feedOptions)
+    mainWindow.webContents.send('qualities:got', feedOptions)
+  } catch (error) {
+    mainWindow.webContents.send('qualities:error', error.message)
+  }
 })
 
-ipcMain.on('download:start', async (event, { path, file, feed }) => {
+ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
+  downloadPath = new PathVo(downloadPath)
+  file = new FileVo(file)
+  feed = new FeedVo(feed)
+
   const selectedFeed: PlaylistVo = feed
 
   const extension = fileController.getExtensionFromPlaylist(selectedFeed)
 
   const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
 
-  await downloadController.download(type, downloadUrl, path, file, extension)
+  await downloadController.download(type, downloadUrl, downloadPath, file, extension)
+
+  mainWindow.webContents.send('download:finished')
 })
 
 // Quit when all windows are closed.

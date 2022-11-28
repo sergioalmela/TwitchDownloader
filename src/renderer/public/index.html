@@ -21,7 +21,6 @@
         <div class="mb-3 mt-3">
           <label for="url" class="form-label">Twitch URL</label>
           <input type="text" name="url" class="form-control" id="url" placeholder="https://www.twitch.tv/videos/839518098" />
-          <small>* You can also enter the local path of a .txt (see README)</small>
         </div>
 
         <div class="mb-3">
@@ -40,6 +39,12 @@
 
         <button class="btn btn-primary mb-3" id="btn-qualities">Get Qualities</button>
 
+        <div class="text-center hidden" id="qualities-loading-container">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
         <div class="mb-3 hidden" id="qualities-container">
           <label for="qualities" class="form-label">Select Quality</label>
           <select id="qualities" class="form-control" name="qualities"></select>
@@ -47,10 +52,17 @@
 
         <button class="btn btn-primary mb-3 hidden" id="btn-download">Download</button>
 
-        <div class="mb-3 hidden" id="download-finished-container">
-          <span id="download-progress">Downloading...</span>
+        <div class="text-center hidden" id="download-loading-container">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <div class="mb-3" id="download-finished-container">
+          <span id="download-progress" class="hidden">Downloading...</span>
           <br />
-          <span id="download-another">Download another one</span>
+          <br />
+          <button class="btn btn-outline-success hidden" id="download-another">Reset fields</button>
         </div>
 
       </div>
