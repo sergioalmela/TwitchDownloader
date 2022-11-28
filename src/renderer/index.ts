@@ -140,21 +140,15 @@ ipcMain.on('dialog:folder', () => {
 })
 
 let type: ContentTypes
-ipcMain.on('qualities:get', async (event, { url, downloadPath }) => {
+ipcMain.on('qualities:get', async (event, { url }) => {
   try {
     url = new UrlVo(url)
-    downloadPath = new PathVo(downloadPath)
 
     type = await feedsController.getContentType(url)
 
     const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
 
     const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
-
-    const file: FileVo = fileController.getFileNameFromPath(downloadPath)
-    file.removeExtensionFromFileName()
-
-    downloadPath.removeFileFromPath()
 
     mainWindow.webContents.send('qualities:got', feedOptions)
   } catch (error) {
@@ -166,6 +160,9 @@ ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
   downloadPath = new PathVo(downloadPath)
   file = new FileVo(file)
   feed = new FeedVo(feed)
+
+  file.removeExtensionFromFileName()
+  downloadPath.addTrailingSlash()
 
   const selectedFeed: PlaylistVo = feed
 

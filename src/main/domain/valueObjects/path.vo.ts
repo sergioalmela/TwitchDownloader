@@ -29,4 +29,10 @@ export class PathVo extends ValueObject<string> {
 
     this.value = value
   }
+
+  public addTrailingSlash (): void {
+    if (!this.value.endsWith('/')) {
+      this.value = this.value + '/'
+    }
+  }
 }

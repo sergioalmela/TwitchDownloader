@@ -1,6 +1,8 @@
 const form = document.querySelector('#img-form')
-const folder = document.querySelector('#folder-container')
+const folderContainer = document.querySelector('#folder-container')
 const folderName = document.querySelector<HTMLInputElement>('#folder-name')
+const folderNameInput = document.querySelector<HTMLInputElement>('#folder-name-input')
+const fileNameInput = document.querySelector<HTMLInputElement>('#file-name-input')
 const btnQualities = document.querySelector('#btn-qualities')
 const qualities = document.querySelector('#qualities')
 const qualitiesContainer = document.querySelector<HTMLInputElement>('#qualities-container')
@@ -9,8 +11,7 @@ const btnDownload = document.querySelector('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadProgress = document.querySelector('#download-progress')
 const downloadAnother = document.querySelector('#download-another')
-const url = 'https://www.twitch.tv/videos/839518098'
-const downloadPath = '/home/torre/Descargas/'
+const urlInput = document.querySelector<HTMLInputElement>('#url')
 const file = 'test.mp4'
 const feed = {
   video: '160p30',
@@ -27,20 +28,21 @@ function loadImage () {
 }
 
 function loadQualities () {
-  ipcRenderer.send('qualities:get', { url, downloadPath })
-  qualitiesLoadingContainer && (qualitiesLoadingContainer.classList.toggle("hidden"))
+  ipcRenderer.send('qualities:get', { url: urlInput && urlInput.value })
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
 }
 
 function downloadContent () {
-  ipcRenderer.send('download:start', { downloadPath, file, feed })
-  downloadProgress && (downloadProgress.classList.toggle("hidden"))
-  downloadLoadingContainer && (downloadLoadingContainer.classList.toggle("hidden"))
+  ipcRenderer.send('download:start', { downloadPath: folderNameInput && folderNameInput.value, file: fileNameInput && fileNameInput.value, feed })
+  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
+  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
 }
 
 // When done, show message
 ipcRenderer.on('folder:selected', function (folderPath) {
-  folderName && (folderName.textContent = folderPath.toString())
-  folderName && (folderName.style.display = 'block')
+  (folderName != null) && (folderName.textContent = folderPath.toString())
+  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString())
+  ;(folderName != null) && (folderName.style.display = 'block')
 })
 
 ipcRenderer.on('qualities:got', (feedOptions) => {
@@ -50,28 +52,27 @@ ipcRenderer.on('qualities:got', (feedOptions) => {
     const option = document.createElement('option')
     option.value = quality.value.title
     option.innerText = quality.value.title
-    qualities && (qualities.appendChild(option))
+    ;(qualities != null) && (qualities.appendChild(option))
   })
 
-  qualitiesLoadingContainer && (qualitiesLoadingContainer.classList.toggle("hidden"))
-  btnQualities && (btnQualities.classList.toggle("hidden"))
-  qualitiesContainer && (qualitiesContainer.classList.toggle("hidden"))
-  btnDownload && (btnDownload.classList.toggle("hidden"))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
 })
 
 ipcRenderer.on('qualities:error', (message) => {
   alertError(message)
-  qualitiesLoadingContainer && (qualitiesLoadingContainer.classList.toggle("hidden"))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
 })
 
 ipcRenderer.on('download:finished', () => {
-  // Set text of downloadProgress to "Download finished"
-  downloadLoadingContainer && (downloadLoadingContainer.classList.toggle("hidden"))
-  downloadProgress && (downloadProgress.textContent = 'Download finished')
-  downloadAnother && (downloadAnother.classList.toggle("hidden"))
+  (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
+  ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
+  ;(downloadAnother != null) && (downloadAnother.classList.toggle('hidden'))
 })
 
-function alertError(message) {
+function alertError (message) {
   Toastify.toast({
     text: message,
     duration: 5000,
@@ -79,12 +80,12 @@ function alertError(message) {
     style: {
       background: 'red',
       color: 'white',
-      textAlign: 'center',
-    },
-  });
+      textAlign: 'center'
+    }
+  })
 }
 
 // File select listener
-folder && folder.addEventListener('click', loadImage)
-btnQualities && btnQualities.addEventListener('click', loadQualities)
-btnDownload && btnDownload.addEventListener('click', downloadContent)
+;(folderContainer != null) && folderContainer.addEventListener('click', loadImage)
+;(btnQualities != null) && btnQualities.addEventListener('click', loadQualities)
+;(btnDownload != null) && btnDownload.addEventListener('click', downloadContent)
