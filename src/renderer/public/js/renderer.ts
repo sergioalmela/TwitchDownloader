@@ -83,6 +83,7 @@ ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
 // If qualities loading fails, show error message
 ipcRenderer.on('qualities:error', (message) => {
   alertError(message)
+  ;(btnQualities != null) && (btnQualities.disabled = false)
   ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
 })
 
