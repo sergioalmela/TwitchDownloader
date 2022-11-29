@@ -33,12 +33,13 @@ const fileController = container.get<FileController>(
   ContainerSymbols.FileController
 )
 
-const isDev = process.env.NODE_ENV !== 'production'
+const isDev = process.env.NODE_ENV === 'dev'
 const isMac = process.platform === 'darwin'
 
 let mainWindow
 let aboutWindow
 
+// TODO: Lint, forge, add 'open file in browser' option
 // Main Window
 function createMainWindow () {
   mainWindow = new BrowserWindow({
