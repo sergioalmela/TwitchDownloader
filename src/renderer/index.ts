@@ -3,7 +3,7 @@ import 'reflect-metadata'
 import path from 'path'
 import os from 'os'
 import fs from 'fs'
-import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain, dialog, shell } from 'electron'
 
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
@@ -66,8 +66,8 @@ function createAboutWindow () {
   aboutWindow = new BrowserWindow({
     width: 300,
     height: 300,
-    title: 'About Electron',
-    icon: `${__dirname}/assets/icons/Icon_256x256.png`
+    title: 'About Twitch Downloader',
+    icon: path.join(__dirname, '../../../logo.png')
   })
 
   aboutWindow.loadFile(path.join(__dirname, '../../../src/renderer/public/about.html'))
@@ -77,58 +77,65 @@ function createAboutWindow () {
 app.on('ready', () => {
   createMainWindow()
 
-  /* const mainMenu = Menu.buildFromTemplate(menu)
-    Menu.setApplicationMenu(mainMenu) */
+  const mainMenu = Menu.buildFromTemplate(menu)
+    Menu.setApplicationMenu(mainMenu)
 
   // Remove variable from memory
   mainWindow.on('closed', () => (mainWindow = null))
 })
 
 // Menu template
-/* const menu = [
-    ...(isMac
-        ? [
-            {
-                label: app.name,
-                submenu: [
-                    {
-                        label: 'About',
-                        click: createAboutWindow
-                    }
-                ]
-            }
-        ]
-        : []),
-    {
-        role: 'fileMenu'
+const menu: Electron.MenuItemConstructorOptions[] = [{
+  label: 'Edit',
+  submenu: [
+    { role: 'undo' },
+    { role: 'redo' },
+    { type: 'separator' },
+    { role: 'cut' },
+    { role: 'copy' },
+    { role: 'paste' },
+    { role: 'pasteAndMatchStyle' },
+    { role: 'delete' },
+    { role: 'selectAll' }
+  ]
+},
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  { role: 'window', submenu: [{ role: 'minimize' }, { role: 'close' }] },
+  {
+    role: 'help',
+    submenu: [
+        {
+      label: 'About',
+      click: createAboutWindow
     },
-    ...(!isMac
-        ? [
-            {
-                label: 'Help',
-                submenu: [
-                    {
-                        label: 'About',
-                        click: createAboutWindow
-                    }
-                ]
-            }
-        ]
-        : []),
-    ...(isDev
-        ? [
-            {
-                label: 'Developer',
-                submenu: [
-                    { role: 'reload' },
-                    { role: 'forcereload' },
-                    { type: 'separator' },
-                    { role: 'toggledevtools' }
-                ]
-            }
-        ]
-        : [])
-] */
+      {
+        label: 'Github',
+        click: async () => {
+          await shell.openExternal('https://github.com/sergioalmela/TwitchDownloader')
+        }
+      },
+      {
+        label: 'Donate',
+        click: async () => {
+            await shell.openExternal('https://www.paypal.me/SteamPlaytime')
+        }
+      }
+    ]
+  }
+]
 
 // Respond to the resize image event
 ipcMain.on('dialog:folder', () => {
