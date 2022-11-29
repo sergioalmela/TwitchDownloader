@@ -42,8 +42,8 @@ let aboutWindow
 // Main Window
 function createMainWindow () {
   mainWindow = new BrowserWindow({
-    width: isDev ? 1000 : 500,
-    height: 700,
+    width: isDev ? 1060 : 530,
+    height: 750,
     icon: path.join(__dirname, '../../../logo.png'),
     resizable: isDev,
     webPreferences: {

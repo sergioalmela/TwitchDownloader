@@ -10,7 +10,7 @@ const qualitiesLoadingContainer = document.querySelector('#qualities-loading-con
 const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadProgress = document.querySelector('#download-progress')
-const downloadAnother = document.querySelector('#download-another')
+const btnResetFields = document.querySelector('#reset-fields')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
 let selectedFeed
 let loadedFeeds
@@ -37,6 +37,20 @@ function downloadContent () {
   ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
 }
 
+function resetFields () {
+    ;(urlInput != null) && (urlInput.value = '')
+    ;(folderName != null) && (folderName.textContent = '')
+    ;(folderNameInput != null) && (folderNameInput.value = '')
+    ;(fileNameInput != null) && (fileNameInput.value = '')
+    ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
+    ;(btnQualities != null) && (btnQualities.disabled = false)
+    ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
+    ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
+    ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
+    ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
+    ;(btnResetFields != null) && (btnResetFields.classList.toggle('hidden'))
+}
+
 function alertError (message) {
   Toastify.toast({
     text: message,
@@ -48,6 +62,14 @@ function alertError (message) {
       textAlign: 'center'
     }
   })
+}
+
+// Remove select options to clear form
+function removeOptions(selectElement) {
+  let i, L = selectElement.options.length - 1;
+  for(i = L; i >= 0; i--) {
+    selectElement.remove(i);
+  }
 }
 
 // Select folder and show into input
@@ -72,7 +94,7 @@ ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
     ;(qualitiesSelect != null) && (qualitiesSelect.appendChild(option))
   })
 
-  selectedFeed = feeds[0]
+  selectedFeed = feeds[0].value
 
   ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
   ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
@@ -92,7 +114,7 @@ ipcRenderer.on('download:finished', () => {
   (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.disabled = false)
   ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
-  ;(downloadAnother != null) && (downloadAnother.classList.toggle('hidden'))
+  ;(btnResetFields != null) && (btnResetFields.classList.toggle('hidden'))
 })
 
 // If download fails, throw error
@@ -108,3 +130,4 @@ ipcRenderer.on('download:error', (message) => {
 ;(btnQualities != null) && btnQualities.addEventListener('click', loadQualities)
 ;(btnDownload != null) && btnDownload.addEventListener('click', downloadContent)
 ;(qualitiesSelect != null) && qualitiesSelect.addEventListener('change', changeQuality)
+;(btnResetFields != null) && btnResetFields.addEventListener('click', resetFields)
