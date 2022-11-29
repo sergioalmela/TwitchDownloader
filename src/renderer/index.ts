@@ -39,7 +39,9 @@ const isMac = process.platform === 'darwin'
 let mainWindow
 let aboutWindow
 
-// TODO: Lint, forge, add 'open file in browser' option
+if (require('electron-squirrel-startup')) app.quit()
+
+// TODO: Lint, forge, add 'open file in browser' option, cancel button
 // Main Window
 function createMainWindow () {
   mainWindow = new BrowserWindow({
