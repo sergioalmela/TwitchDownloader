@@ -3,74 +3,39 @@ const folderContainer = document.querySelector('#folder-container')
 const folderName = document.querySelector<HTMLInputElement>('#folder-name')
 const folderNameInput = document.querySelector<HTMLInputElement>('#folder-name-input')
 const fileNameInput = document.querySelector<HTMLInputElement>('#file-name-input')
-const btnQualities = document.querySelector('#btn-qualities')
-const qualities = document.querySelector('#qualities')
+const btnQualities = document.querySelector<HTMLButtonElement>('#btn-qualities')
+const qualitiesSelect = document.querySelector('#qualities-select')
 const qualitiesContainer = document.querySelector<HTMLInputElement>('#qualities-container')
 const qualitiesLoadingContainer = document.querySelector('#qualities-loading-container')
-const btnDownload = document.querySelector('#btn-download')
+const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadProgress = document.querySelector('#download-progress')
 const downloadAnother = document.querySelector('#download-another')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
-const file = 'test.mp4'
-const feed = {
-  video: '160p30',
-  quality: { width: 160, height: 120 },
-  url: 'https://d2nvs31859zcd8.cloudfront.net/497098a0678fbd887f14_twitch_40976239230_1608141314/160p30/index-dvr.m3u8',
-  framerate: 30,
-  bandwidth: 205123,
-  codecs: 'avc1.4d401f,mp4a.40.2'
-}
+let selectedFeed
+let loadedFeeds
 
-// Load image and show form
-function loadImage () {
+// Load folder dialog and show form
+function loadFolderDialog () {
   ipcRenderer.send('dialog:folder')
 }
 
 function loadQualities () {
   ipcRenderer.send('qualities:get', { url: urlInput && urlInput.value })
+  ;(btnQualities != null) && (btnQualities.disabled = true)
   ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+}
+
+function changeQuality () {
+  selectedFeed = loadedFeeds[this.value].value
 }
 
 function downloadContent () {
-  ipcRenderer.send('download:start', { downloadPath: folderNameInput && folderNameInput.value, file: fileNameInput && fileNameInput.value, feed })
+  ipcRenderer.send('download:start', { downloadPath: folderNameInput && folderNameInput.value, file: fileNameInput && fileNameInput.value, feed: selectedFeed })
+  ;(btnDownload != null) && (btnDownload.disabled = true)
   ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
   ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
 }
-
-// When done, show message
-ipcRenderer.on('folder:selected', function (folderPath) {
-  (folderName != null) && (folderName.textContent = folderPath.toString())
-  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString())
-  ;(folderName != null) && (folderName.style.display = 'block')
-})
-
-ipcRenderer.on('qualities:got', (feedOptions) => {
-  const feedOptionsArray: any = feedOptions
-  // Foreach quality, add a new select option inside qualities DOM variable
-  feedOptionsArray.forEach(quality => {
-    const option = document.createElement('option')
-    option.value = quality.value.title
-    option.innerText = quality.value.title
-    ;(qualities != null) && (qualities.appendChild(option))
-  })
-
-  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
-  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
-  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
-  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
-})
-
-ipcRenderer.on('qualities:error', (message) => {
-  alertError(message)
-  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
-})
-
-ipcRenderer.on('download:finished', () => {
-  (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
-  ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
-  ;(downloadAnother != null) && (downloadAnother.classList.toggle('hidden'))
-})
 
 function alertError (message) {
   Toastify.toast({
@@ -85,7 +50,60 @@ function alertError (message) {
   })
 }
 
-// File select listener
-;(folderContainer != null) && folderContainer.addEventListener('click', loadImage)
+// Select folder and show into input
+ipcRenderer.on('folder:selected', function (folderPath) {
+  (folderName != null) && (folderName.textContent = folderPath.toString())
+  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString())
+  ;(folderName != null) && (folderName.style.display = 'block')
+})
+
+// Once qualities are loaded, show them into select
+ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
+  ;(btnQualities != null) && (btnQualities.disabled = false)
+
+  // Set global variable to use it later
+  loadedFeeds = feeds
+
+  // Foreach quality, add a new select option inside qualities DOM variable
+  feedOptions.forEach((quality, index) => {
+    const option = document.createElement('option')
+    option.value = index
+    option.innerText = quality.value.title
+    ;(qualitiesSelect != null) && (qualitiesSelect.appendChild(option))
+  })
+
+  selectedFeed = feeds[0]
+
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
+})
+
+// If qualities loading fails, show error message
+ipcRenderer.on('qualities:error', (message) => {
+  alertError(message)
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+})
+
+// When download finishes, show download progress
+ipcRenderer.on('download:finished', () => {
+  (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
+  ;(btnDownload != null) && (btnDownload.disabled = false)
+  ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
+  ;(downloadAnother != null) && (downloadAnother.classList.toggle('hidden'))
+})
+
+// If download fails, throw error
+ipcRenderer.on('download:error', (message) => {
+  alertError(message)
+  ;(btnDownload != null) && (btnDownload.disabled = false)
+  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
+  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
+})
+
+// Listeners
+;(folderContainer != null) && folderContainer.addEventListener('click', loadFolderDialog)
 ;(btnQualities != null) && btnQualities.addEventListener('click', loadQualities)
 ;(btnDownload != null) && btnDownload.addEventListener('click', downloadContent)
+;(qualitiesSelect != null) && qualitiesSelect.addEventListener('change', changeQuality)

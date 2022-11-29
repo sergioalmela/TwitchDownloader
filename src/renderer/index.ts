@@ -150,29 +150,33 @@ ipcMain.on('qualities:get', async (event, { url }) => {
 
     const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
 
-    mainWindow.webContents.send('qualities:got', feedOptions)
+    mainWindow.webContents.send('qualities:got', feeds, feedOptions)
   } catch (error) {
     mainWindow.webContents.send('qualities:error', error.message)
   }
 })
 
 ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
-  downloadPath = new PathVo(downloadPath)
-  file = new FileVo(file)
-  feed = new FeedVo(feed)
+  try {
+    downloadPath = new PathVo(downloadPath)
+    file = new FileVo(file)
+    feed = new FeedVo(feed)
 
-  file.removeExtensionFromFileName()
-  downloadPath.addTrailingSlash()
+    file.removeExtensionFromFileName()
+    downloadPath.addTrailingSlash()
 
-  const selectedFeed: PlaylistVo = feed
+    const selectedFeed: PlaylistVo = feed
 
-  const extension = fileController.getExtensionFromPlaylist(selectedFeed)
+    const extension = fileController.getExtensionFromPlaylist(selectedFeed)
 
-  const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
+    const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
 
-  await downloadController.download(type, downloadUrl, downloadPath, file, extension)
+    await downloadController.download(type, downloadUrl, downloadPath, file, extension)
 
-  mainWindow.webContents.send('download:finished')
+    mainWindow.webContents.send('download:finished')
+  } catch (error) {
+    mainWindow.webContents.send('download:error', error.message)
+  }
 })
 
 // Quit when all windows are closed.
