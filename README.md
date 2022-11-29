@@ -22,6 +22,19 @@ Twitch Downloader is a free utility made to download Twitch content (streams, vi
 | Detailed wiki and video tutorials  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |  ✔  |
 
 ## How to execute
+
+### GUI
+
+```
+npm install
+npm run start
+```
+
+It will open a new window with the GUI. Enter the URL of the stream, video, highlight or clip you want to download. Then, select the folder, file name and click on Get Qualities button. Then,  select the quality you want to download and click on Download button.
+
+
+### Terminal
+
 ```
 npm install
 npm run start:terminal
