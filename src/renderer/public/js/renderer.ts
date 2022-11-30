@@ -1,4 +1,4 @@
-const form = document.querySelector('#img-form')
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
 const folderContainer = document.querySelector('#folder-container')
 const folderName = document.querySelector<HTMLInputElement>('#folder-name')
 const folderNameInput = document.querySelector<HTMLInputElement>('#folder-name-input')
@@ -19,46 +19,46 @@ let loadedFeeds
 let completeFolderPath
 
 // Load folder dialog and show form
-function loadFolderDialog () {
+function loadFolderDialog (): void {
   ipcRenderer.send('dialog:folder')
 }
 
-function loadQualities () {
-  ipcRenderer.send('qualities:get', { url: urlInput && urlInput.value })
+function loadQualities (): void {
+  ipcRenderer.send('qualities:get', { url: (urlInput != null) && urlInput.value })
   ;(btnQualities != null) && (btnQualities.disabled = true)
   ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
 }
 
-function changeQuality () {
+function changeQuality (): void {
   selectedFeed = loadedFeeds[this.value].value
 }
 
-function downloadContent () {
-  ipcRenderer.send('download:start', { downloadPath: folderNameInput && folderNameInput.value, file: fileNameInput && fileNameInput.value, feed: selectedFeed })
+function downloadContent (): void {
+  ipcRenderer.send('download:start', { downloadPath: (folderNameInput != null) && folderNameInput.value, file: (fileNameInput != null) && fileNameInput.value, feed: selectedFeed })
   ;(btnDownload != null) && (btnDownload.disabled = true)
   ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
   ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
 }
 
-function resetFields () {
-    ;(urlInput != null) && (urlInput.value = '')
-    ;(folderName != null) && (folderName.textContent = '')
-    ;(folderNameInput != null) && (folderNameInput.value = '')
-    ;(fileNameInput != null) && (fileNameInput.value = '')
-    ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
-    ;(btnQualities != null) && (btnQualities.disabled = false)
-    ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
-    ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
-    ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
-    ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
-    ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
+function resetFields (): void {
+  ;(urlInput != null) && (urlInput.value = '')
+  ;(folderName != null) && (folderName.textContent = '')
+  ;(folderNameInput != null) && (folderNameInput.value = '')
+  ;(fileNameInput != null) && (fileNameInput.value = '')
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
+  ;(btnQualities != null) && (btnQualities.disabled = false)
+  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
+  ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
+  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
+  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
 }
 
-function openFileFolder () {
-    ipcRenderer.send('folder:open', { completeFolderPath })
+function openFileFolder (): void {
+  ipcRenderer.send('folder:open', { completeFolderPath })
 }
 
-function alertError (message) {
+function alertError (message): void {
   Toastify.toast({
     text: message,
     duration: 5000,
@@ -72,17 +72,18 @@ function alertError (message) {
 }
 
 // Remove select options to clear form
-function removeOptions(selectElement) {
-  let i, L = selectElement.options.length - 1;
-  for(i = L; i >= 0; i--) {
-    selectElement.remove(i);
+function removeOptions (selectElement): void {
+  let i; const L = selectElement.options.length - 1
+  for (i = L; i >= 0; i--) {
+    selectElement.remove(i)
   }
 }
 
 // Select folder and show into input
-ipcRenderer.on('folder:selected', function (folderPath) {
-  (folderName != null) && (folderName.textContent = folderPath.toString())
-  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString())
+
+ipcRenderer.on('folder:selected', (folderPath) => {
+  ;(folderName != null) && (folderName.textContent = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
+  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
   ;(folderName != null) && (folderName.style.display = 'block')
 })
 
@@ -140,3 +141,4 @@ ipcRenderer.on('download:error', (message) => {
 ;(qualitiesSelect != null) && qualitiesSelect.addEventListener('change', changeQuality)
 ;(btnResetFields != null) && btnResetFields.addEventListener('click', resetFields)
 ;(btnOpenFileFolder != null) && btnOpenFileFolder.addEventListener('click', openFileFolder)
+/* eslint-enable @typescript-eslint/prefer-optional-chain */

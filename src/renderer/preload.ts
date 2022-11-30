@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { contextBridge, ipcRenderer } = require('electron')
 const Toastify = require('toastify-js')
 
@@ -10,3 +11,4 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 contextBridge.exposeInMainWorld('Toastify', {
   toast: (options) => Toastify(options).showToast()
 })
+/* eslint-enable @typescript-eslint/no-var-requires */
