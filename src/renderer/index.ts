@@ -41,7 +41,7 @@ let aboutWindow
 
 if (require('electron-squirrel-startup')) app.quit()
 
-// TODO: Lint, forge, add 'open file in browser' option, cancel button
+// TODO: Lint, cancel download button, add gif of GUI to README, create .deb, .rpm and .exe from forge with npm run make
 // Main Window
 function createMainWindow () {
   mainWindow = new BrowserWindow({
@@ -149,6 +149,15 @@ ipcMain.on('dialog:folder', () => {
   })
 })
 
+// Open file folder
+ipcMain.on('folder:open', (event, {completeFolderPath}) => {
+  try {
+    shell.showItemInFolder(completeFolderPath)
+  } catch (error) {
+    console.log(`${error} opening folder ${completeFolderPath}`)
+  }
+})
+
 let type: ContentTypes
 ipcMain.on('qualities:get', async (event, { url }) => {
   try {
@@ -183,7 +192,9 @@ ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
 
     await downloadController.download(type, downloadUrl, downloadPath, file, extension)
 
-    mainWindow.webContents.send('download:finished')
+    const completeFolderPath = (downloadPath.value || `${process.cwd()}/`) + file.value + extension.value
+
+    mainWindow.webContents.send('download:finished', completeFolderPath)
   } catch (error) {
     mainWindow.webContents.send('download:error', error.message)
   }

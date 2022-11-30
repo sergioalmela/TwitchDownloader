@@ -9,11 +9,14 @@ const qualitiesContainer = document.querySelector<HTMLInputElement>('#qualities-
 const qualitiesLoadingContainer = document.querySelector('#qualities-loading-container')
 const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
+const downloadFinishedButtons = document.querySelector('#download-finished-buttons')
 const downloadProgress = document.querySelector('#download-progress')
 const btnResetFields = document.querySelector('#reset-fields')
+const btnOpenFileFolder = document.querySelector('#open-file-folder-button')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
 let selectedFeed
 let loadedFeeds
+let completeFolderPath
 
 // Load folder dialog and show form
 function loadFolderDialog () {
@@ -48,7 +51,11 @@ function resetFields () {
     ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
     ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
     ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
-    ;(btnResetFields != null) && (btnResetFields.classList.toggle('hidden'))
+    ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
+}
+
+function openFileFolder () {
+    ipcRenderer.send('folder:open', { completeFolderPath })
 }
 
 function alertError (message) {
@@ -110,11 +117,12 @@ ipcRenderer.on('qualities:error', (message) => {
 })
 
 // When download finishes, show download progress
-ipcRenderer.on('download:finished', () => {
+ipcRenderer.on('download:finished', (folderPathWithFile) => {
   (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.disabled = false)
   ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
-  ;(btnResetFields != null) && (btnResetFields.classList.toggle('hidden'))
+  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
+  completeFolderPath = folderPathWithFile
 })
 
 // If download fails, throw error
@@ -131,3 +139,4 @@ ipcRenderer.on('download:error', (message) => {
 ;(btnDownload != null) && btnDownload.addEventListener('click', downloadContent)
 ;(qualitiesSelect != null) && qualitiesSelect.addEventListener('change', changeQuality)
 ;(btnResetFields != null) && btnResetFields.addEventListener('click', resetFields)
+;(btnOpenFileFolder != null) && btnOpenFileFolder.addEventListener('click', openFileFolder)
