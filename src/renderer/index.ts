@@ -37,7 +37,6 @@ if (require('electron-squirrel-startup') === true) {
   app.quit()
 }
 
-// TODO: Add gif of GUI to README, create .deb, .rpm and .exe from forge with npm run make
 // Main Window
 function createMainWindow (): void {
   mainWindow = new BrowserWindow({
