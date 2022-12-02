@@ -1,47 +1,47 @@
 module.exports = {
-  config: {
-    forge: {
-      makers: [
-        {
-          name: '@electron-forge/maker-deb',
-          config: {
-            options: {
-              icon: 'src/renderer/public/images/logo.png'
-            }
-          }
-        },
-        {
-          name: '@electron-forge/maker-rpm',
-          config: {
-            options: {
-              icon: 'src/renderer/public/images/logo.png'
-            }
-          }
-        }
-      ],
-      packagerConfig: {
-        icon: 'src/renderer/public/images/logo'
-      }
-    }
-  },
   packagerConfig: {},
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {}
+      config: {
+        iconUrl: "https://raw.githubusercontent.com/sergioalmela/TwitchDownloader/0.9/src/renderer/public/images/logo.ico",
+        setupIcon: "src/renderer/public/images/logo.ico",
+        name: "twitch-downloader"
+      }
     },
     {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin']
+      name: '@electron-forge/maker-zip'
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {}
+      config: {
+        options: {
+          productName: "Twitch Downloader",
+          icon: "src/renderer/public/images/logo.png",
+          genericName: "Twitch Downloader",
+          categories: [
+            "AudioVideo",
+            "Audio",
+            "Video"
+            ]
+        },
+      }
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {}
+      config: {
+        options: {
+          productName: "Twitch Downloader",
+          icon: "src/renderer/public/images/logo.png",
+          genericName: "Twitch Downloader",
+          categories: [
+            "AudioVideo",
+            "Audio",
+            "Video"
+          ]
+        },
+      }
     }
   ]
 }
