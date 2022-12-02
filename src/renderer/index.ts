@@ -151,7 +151,9 @@ ipcMain.on('dialog:folder', () => {
 // Open file folder
 ipcMain.on('folder:open', (event, { completeFolderPath }) => {
   try {
-    shell.showItemInFolder(completeFolderPath)
+    // Windows escape backslashes if any
+    const folderPath = completeFolderPath.replace(/\\/g, '\\\\')
+    shell.showItemInFolder(folderPath)
   } catch (error) {
     console.log(`${error.message} opening folder ${completeFolderPath}`) // eslint-disable-line @typescript-eslint/restrict-template-expressions
   }
