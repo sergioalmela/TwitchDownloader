@@ -1,0 +1,27 @@
+{
+	"Edit": "Edit",
+	"Select All": "Select All",
+	"Undo": "Undo",
+	"Redo": "Redo",
+	"Cut": "Cut",
+	"Copy": "Copy",
+	"Paste": "Paste",
+	"Delete": "Delete",
+	"Reload": "Reload",
+	"Force Reload": "Force Reload",
+	"Toggle DevTools": "Toggle DevTools",
+	"Reset Zoom": "Reset Zoom",
+	"Zoom In": "Zoom In",
+	"Zoom Out": "Zoom Out",
+	"Toggle Full Screen": "Toggle Full Screen",
+	"Minimize": "Minimize",
+	"Close": "Close",
+	"About": "About",
+	"Donate": "Donate",
+	"Separator": "Separator",
+	"View": "View",
+	"Window": "Window",
+	"Help": "Help",
+
+	"Select a folder to save": "Select a folder to save"
+}

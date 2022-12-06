@@ -15,6 +15,8 @@ import { FileVo } from '../main/domain/valueObjects/file.vo'
 import { FileController } from '../main/infrastructure/controllers/file.controller'
 import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
+import i18n from '../../i18n.config'
+
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
 )
@@ -85,49 +87,56 @@ app.on('ready', () => {
 // Menu template
 /* eslint-disable @typescript-eslint/no-misused-promises */
 const menu: Electron.MenuItemConstructorOptions[] = [{
-  label: 'Edit',
+  label: i18n.__('Edit'),
   submenu: [
-    { role: 'undo' },
-    { role: 'redo' },
+    { role: 'undo', label: i18n.__('Undo') },
+    { role: 'redo', label: i18n.__('Redo') },
     { type: 'separator' },
-    { role: 'cut' },
-    { role: 'copy' },
-    { role: 'paste' },
-    { role: 'pasteAndMatchStyle' },
-    { role: 'delete' },
-    { role: 'selectAll' }
+    { role: 'cut', label: i18n.__('Cut') },
+    { role: 'copy', label: i18n.__('Copy') },
+    { role: 'paste', label: i18n.__('Paste') },
+    { role: 'delete', label: i18n.__('Delete') },
+    { role: 'selectAll', label: i18n.__('Select All') }
   ]
 },
 {
-  label: 'View',
+  label: i18n.__('View'),
   submenu: [
-    { role: 'reload' },
-    { role: 'forceReload' },
-    { role: 'toggleDevTools' },
-    { type: 'separator' },
-    { role: 'resetZoom' },
-    { role: 'zoomIn' },
-    { role: 'zoomOut' },
-    { type: 'separator' },
-    { role: 'togglefullscreen' }
+    { role: 'reload', label: i18n.__('Reload') },
+    { role: 'forceReload', label: i18n.__('Force Reload') },
+    { role: 'toggleDevTools', label: i18n.__('Toggle DevTools') },
+    { type: 'separator', label: i18n.__('Separator') },
+    { role: 'resetZoom', label: i18n.__('Reset Zoom') },
+    { role: 'zoomIn', label: i18n.__('Zoom In') },
+    { role: 'zoomOut', label: i18n.__('Zoom Out') },
+    { type: 'separator', label: i18n.__('Separator') },
+    { role: 'togglefullscreen', label: i18n.__('Toggle Full Screen') }
   ]
 },
-{ role: 'window', submenu: [{ role: 'minimize' }, { role: 'close' }] },
 {
+  label: i18n.__('Window'),
+  role: 'window',
+  submenu: [
+    { role: 'minimize', label: i18n.__('Minimize') },
+    { role: 'close', label: i18n.__('Close') }
+  ]
+},
+{
+  label: i18n.__('Help'),
   role: 'help',
   submenu: [
     {
-      label: 'About',
+      label: i18n.__('About'),
       click: createAboutWindow
     },
     {
-      label: 'Github',
+      label: 'GitHub',
       click: async () => {
         await shell.openExternal('https://github.com/sergioalmela/TwitchDownloader')
       }
     },
     {
-      label: 'Donate',
+      label: i18n.__('Donate'),
       click: async () => {
         await shell.openExternal('https://www.paypal.me/SteamPlaytime')
       }

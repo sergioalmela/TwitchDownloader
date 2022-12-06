@@ -5,7 +5,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        iconUrl: "https://raw.githubusercontent.com/sergioalmela/TwitchDownloader/0.9/src/renderer/public/images/logo.ico",
+        iconUrl: "https://raw.githubusercontent.com/sergioalmela/TwitchDownloader/master/src/renderer/public/images/logo.ico",
         setupIcon: "src/renderer/public/images/logo.ico",
         name: "twitch-downloader"
       }

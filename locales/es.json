@@ -1,0 +1,27 @@
+{
+	"Edit": "Editar",
+	"Select All": "Seleccionar todo",
+	"Undo": "Deshacer",
+	"Redo": "Rehacer",
+	"Cut": "Cortar",
+	"Copy": "Copiar",
+	"Paste": "Pegar",
+	"Delete": "Eliminar",
+	"Reload": "Recargar",
+	"Force Reload": "Forzar recarga",
+	"Toggle DevTools": "Alternar herramientas de desarrollo",
+	"Reset Zoom": "Restablecer zoom",
+	"Zoom In": "Acercar",
+	"Zoom Out": "Alejar",
+	"Toggle Full Screen": "Alternar pantalla completa",
+	"Minimize": "Minimizar",
+	"Close": "Cerrar",
+	"About": "Acerca de",
+	"Donate": "Donar",
+	"Separator": "Separator",
+	"View": "Vista",
+	"Window": "Ventana",
+	"Help": "Ayuda",
+
+	"Select a folder to save": "Selecciona una carpeta para guardar"
+}

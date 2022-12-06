@@ -9,7 +9,9 @@
   />
     <link href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
+    <script>var exports = {};</script>
     <script src="../../../dist/src/renderer/public/js/renderer.js" defer></script>
+    <script src="../../../dist/src/renderer/public/js/translation.js" type="module" defer></script>
     <title>Twitch Downloader</title>
   </head>
   <body>
@@ -27,7 +29,7 @@
           <div id="folder-container">
             <img class="img mb-2" src="images/folder.svg" alt="folder icon" width="32" />
             <br />
-            <span class="mt-2 leading-normal">Select a folder to save</span>
+            <span class="mt-2 leading-normal" id="select-folder-trans">Select a folder to save</span>
           </div>
           <small id="folder-name" class="hidden"></small>
           <input type="hidden" id="folder-name-input" />
