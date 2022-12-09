@@ -26,7 +26,7 @@ import { FeedVo } from '../src/main/domain/valueObjects/feed.vo'
 import { FileExtensions } from '../src/main/domain/constants/fileExtensions.enum'
 import { ExtensionVo } from '../src/main/domain/valueObjects/extension.vo'
 
-import { existsSync, unlinkSync, statSync } from 'fs'
+import { existsSync, statSync, unlinkSync } from 'fs'
 
 const authVodUseCase = container.get<AuthVodUseCase>(ContainerSymbols.AuthVodUseCase)
 const authClipUseCase = container.get<AuthVodUseCase>(ContainerSymbols.AuthClipUseCase)

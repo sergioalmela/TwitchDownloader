@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { contextBridge, ipcRenderer } = require('electron')
 const Toastify = require('toastify-js')
-const i18n = require('../../i18n.config').default
+const { i18n } = require('../../config/i18n.config')
 
 contextBridge.exposeInMainWorld('ipcRenderer', {
   send: (channel, data) => ipcRenderer.send(channel, data),

@@ -22,6 +22,8 @@
 	"View": "View",
 	"Window": "Window",
 	"Help": "Help",
-
-	"Select a folder to save": "Select a folder to save"
+	"Select a folder to save": "Select a folder to save",
+	"Language": "Language",
+	"English": "English",
+	"Spanish": "Spanish"
 }

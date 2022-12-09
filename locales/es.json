@@ -22,6 +22,8 @@
 	"View": "Vista",
 	"Window": "Ventana",
 	"Help": "Ayuda",
-
-	"Select a folder to save": "Selecciona una carpeta para guardar"
+	"Select a folder to save": "Selecciona una carpeta para guardar",
+	"Language": "Idioma",
+	"English": "English",
+	"Spanish": "Spanish"
 }

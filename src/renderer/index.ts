@@ -15,7 +15,7 @@ import { FileVo } from '../main/domain/valueObjects/file.vo'
 import { FileController } from '../main/infrastructure/controllers/file.controller'
 import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
-import i18n from '../../i18n.config'
+import { i18n, setLocale } from '../../config/i18n.config'
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -73,6 +73,28 @@ function createAboutWindow (): void {
   aboutWindow.loadFile(path.join(__dirname, '../../../src/renderer/public/about.html'))
 }
 
+// Handle change locale
+function handleChangeLocale (locale: string): void {
+  setLocale(locale)
+  const options = {
+    type: 'info',
+    buttons: ['Cancel', 'Restart'],
+    defaultId: 2,
+    title: 'Restart required',
+    message: 'You should restart the app to apply the changes'
+  }
+
+  // Restart the app if the user press Restart button
+  dialog.showMessageBox(mainWindow, options).then((result) => {
+    if (result.response === 1) {
+      app.relaunch()
+      app.exit()
+    }
+  }).catch((error) => {
+    console.error(error)
+  })
+}
+
 // When the app is ready, create the window
 app.on('ready', () => {
   createMainWindow()
@@ -119,6 +141,13 @@ const menu: Electron.MenuItemConstructorOptions[] = [{
   submenu: [
     { role: 'minimize', label: i18n.__('Minimize') },
     { role: 'close', label: i18n.__('Close') }
+  ]
+},
+{
+  label: i18n.__('Language'),
+  submenu: [
+    { label: i18n.__('English'), click: () => handleChangeLocale('en') },
+    { label: i18n.__('Spanish'), click: () => handleChangeLocale('es') }
   ]
 },
 {

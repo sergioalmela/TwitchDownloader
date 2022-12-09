@@ -5,9 +5,9 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        iconUrl: "https://raw.githubusercontent.com/sergioalmela/TwitchDownloader/master/src/renderer/public/images/logo.ico",
-        setupIcon: "src/renderer/public/images/logo.ico",
-        name: "twitch-downloader"
+        iconUrl: 'https://raw.githubusercontent.com/sergioalmela/TwitchDownloader/master/src/renderer/public/images/logo.ico',
+        setupIcon: 'src/renderer/public/images/logo.ico',
+        name: 'twitch-downloader'
       }
     },
     {
@@ -17,30 +17,30 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       config: {
         options: {
-          productName: "Twitch Downloader",
-          icon: "src/renderer/public/images/logo.png",
-          genericName: "Twitch Downloader",
+          productName: 'Twitch Downloader',
+          icon: 'src/renderer/public/images/logo.png',
+          genericName: 'Twitch Downloader',
           categories: [
-            "AudioVideo",
-            "Audio",
-            "Video"
-            ]
-        },
+            'AudioVideo',
+            'Audio',
+            'Video'
+          ]
+        }
       }
     },
     {
       name: '@electron-forge/maker-rpm',
       config: {
         options: {
-          productName: "Twitch Downloader",
-          icon: "src/renderer/public/images/logo.png",
-          genericName: "Twitch Downloader",
+          productName: 'Twitch Downloader',
+          icon: 'src/renderer/public/images/logo.png',
+          genericName: 'Twitch Downloader',
           categories: [
-            "AudioVideo",
-            "Audio",
-            "Video"
+            'AudioVideo',
+            'Audio',
+            'Video'
           ]
-        },
+        }
       }
     }
   ]
