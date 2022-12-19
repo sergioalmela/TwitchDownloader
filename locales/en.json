@@ -22,8 +22,18 @@
 	"View": "View",
 	"Window": "Window",
 	"Help": "Help",
-	"Select a folder to save": "Select a folder to save",
 	"Language": "Language",
 	"English": "English",
-	"Spanish": "Spanish"
+	"Spanish": "Spanish",
+	"Select a folder to save": "Select a folder to save",
+	"File name": "File name",
+	"Get Qualities": "Get Qualities",
+	"Select Quality": "Select Quality",
+	"Download": "Download",
+	"Downloading": "Downloading",
+	"Download finished": "Download finished",
+	"Reset fields": "Reset fields",
+	"Open file folder": "Open file folder",
+	"Get qualities": "Get qualities",
+	"Select quality": "Select quality"
 }

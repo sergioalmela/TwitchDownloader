@@ -11,6 +11,7 @@ const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadFinishedButtons = document.querySelector('#download-finished-buttons')
 const downloadProgress = document.querySelector('#download-progress')
+const downloadFinished = document.querySelector('#download-finished')
 const btnResetFields = document.querySelector('#reset-fields')
 const btnOpenFileFolder = document.querySelector('#open-file-folder-button')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
@@ -52,6 +53,7 @@ function resetFields (): void {
   ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
   ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
+  ;(downloadProgress != null) && (downloadProgress.textContent = 'Downloading...')
 }
 
 function openFileFolder (): void {

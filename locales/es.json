@@ -22,8 +22,16 @@
 	"View": "Vista",
 	"Window": "Ventana",
 	"Help": "Ayuda",
-	"Select a folder to save": "Selecciona una carpeta para guardar",
 	"Language": "Idioma",
 	"English": "English",
-	"Spanish": "Spanish"
+	"Spanish": "Spanish",
+	"Select a folder to save": "Selecciona una carpeta para guardar",
+	"File name": "Nombre del archivo",
+	"Get Qualities": "Obtener calidades",
+	"Select Quality": "Seleccionar calidad",
+	"Download": "Descargar",
+	"Downloading": "Descargando",
+	"Download finished": "Descarga finalizada",
+	"Reset fields": "Restablecer campos",
+	"Open file folder": "Abrir carpeta de archivos"
 }
