@@ -2,6 +2,7 @@ import 'reflect-metadata'
 
 import path from 'path'
 import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from 'electron'
+import preferences from '../../config/user.preferences'
 
 import container from '../main/container'
 import { ContainerSymbols } from '../main/symbols'
@@ -15,7 +16,12 @@ import { FileVo } from '../main/domain/valueObjects/file.vo'
 import { FileController } from '../main/infrastructure/controllers/file.controller'
 import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
-import { i18n, setLocale } from '../../config/i18n.config'
+import { i18n } from '../../config/i18n.config'
+
+i18n.configure({
+  directory: 'locales',
+  defaultLocale: preferences.value('global.language')
+})
 
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
@@ -75,7 +81,9 @@ function createAboutWindow (): void {
 
 // Handle change locale
 function handleChangeLocale (locale: string): void {
-  setLocale(locale)
+  // setLocale(locale)
+  preferences.value('global.language', locale)
+
   const options = {
     type: 'info',
     buttons: ['Cancel', 'Restart'],
@@ -101,7 +109,6 @@ app.on('ready', () => {
 
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
-
   // Remove variable from memory
   mainWindow.on('closed', () => (mainWindow = null))
 })
@@ -148,6 +155,12 @@ const menu: Electron.MenuItemConstructorOptions[] = [{
   submenu: [
     { label: i18n.__('English'), click: () => handleChangeLocale('en') },
     { label: i18n.__('Spanish'), click: () => handleChangeLocale('es') }
+  ]
+},
+{
+  label: i18n.__('Settings'),
+  submenu: [
+    { label: i18n.__('Preferences'), click: () => preferences.show() }
   ]
 },
 {

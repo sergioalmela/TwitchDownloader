@@ -11,7 +11,6 @@ const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadFinishedButtons = document.querySelector('#download-finished-buttons')
 const downloadProgress = document.querySelector('#download-progress')
-const downloadFinished = document.querySelector('#download-finished')
 const btnResetFields = document.querySelector('#reset-fields')
 const btnOpenFileFolder = document.querySelector('#open-file-folder-button')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
@@ -123,7 +122,6 @@ ipcRenderer.on('qualities:error', (message) => {
 ipcRenderer.on('download:finished', (folderPathWithFile) => {
   (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.disabled = false)
-  ;(downloadProgress != null) && (downloadProgress.textContent = 'Download finished')
   ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
   completeFolderPath = folderPathWithFile
 })
