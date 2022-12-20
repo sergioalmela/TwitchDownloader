@@ -64,15 +64,6 @@ const preferences = new ElectronPreferences({
                 ]
               },
               {
-                label: i18n.__('Open folder on download'),
-                key: 'openFolderOnDownload',
-                type: 'dropdown',
-                options: [
-                  { label: i18n.__('Open folder'), value: true },
-                  { label: i18n.__('Dont open folder'), value: false }
-                ]
-              },
-              {
                 label: i18n.__('Restart'),
                 key: 'resetButton',
                 type: 'button',
@@ -102,6 +93,15 @@ const preferences = new ElectronPreferences({
                 noResolveAliases: false,
                 treatPackageAsDirectory: false,
                 dontAddToRecent: true
+              },
+              {
+                label: i18n.__('Open folder on download'),
+                key: 'openFolderOnDownload',
+                type: 'dropdown',
+                options: [
+                  { label: i18n.__('Open folder'), value: true },
+                  { label: i18n.__('Dont open folder'), value: false }
+                ]
               }
             ]
           }

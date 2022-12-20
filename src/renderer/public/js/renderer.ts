@@ -19,6 +19,15 @@ let selectedFeed
 let loadedFeeds
 let completeFolderPath
 
+const preferences = ipcRenderer.sendSync('getPreferences')
+
+try {
+  const defaultDownloadFolder = preferences?.downloader?.defaultDownloadFolder
+  ;(folderName != null) && (folderName.textContent = defaultDownloadFolder.toString())
+} catch (error) {
+  console.log(error)
+}
+
 // Load folder dialog and show form
 function loadFolderDialog (): void {
   ipcRenderer.send('dialog:folder')
@@ -43,6 +52,7 @@ function downloadContent (): void {
 
 function resetFields (): void {
   ;(urlInput != null) && (urlInput.value = '')
+  // Consider set default download folder instead of empty
   ;(folderName != null) && (folderName.textContent = '')
   ;(folderNameInput != null) && (folderNameInput.value = '')
   ;(fileNameInput != null) && (fileNameInput.value = '')
@@ -85,7 +95,6 @@ function removeOptions (selectElement): void {
 ipcRenderer.on('folder:selected', (folderPath) => {
   ;(folderName != null) && (folderName.textContent = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
   ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
-  ;(folderName != null) && (folderName.style.display = 'block')
 })
 
 // Once qualities are loaded, show them into select
