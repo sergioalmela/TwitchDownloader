@@ -35,5 +35,20 @@
 	"Reset fields": "Reset fields",
 	"Open file folder": "Open file folder",
 	"Settings": "Settings",
-	"Preferences": "Preferences"
+	"Preferences": "Preferences",
+	"General": "General",
+	"Open folder on download": "Open folder on download",
+	"Open folder": "Open folder",
+	"Dont open folder": "Dont open folder",
+	"Restart": "Restart",
+	"Click to restart": "Click to restart",
+	"Restart is required to apply the changes": "Restart is required to apply the changes",
+	"Downloads": "Downloads",
+	"Default download folder": "Default download folder",
+	"The location where your downloads will be saved": "The location where your downloads will be saved",
+	"Appearance": "Appearance",
+	"Theme": "Theme",
+	"Light": "Light",
+	"Dark": "Dark",
+	"Twitch Downloader Preferences": "Twitch Downloader Preferences"
 }
