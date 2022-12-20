@@ -11,6 +11,7 @@ const btnDownload = document.querySelector<HTMLButtonElement>('#btn-download')
 const downloadLoadingContainer = document.querySelector('#download-loading-container')
 const downloadFinishedButtons = document.querySelector('#download-finished-buttons')
 const downloadProgress = document.querySelector('#download-progress')
+const downloadFinished = document.getElementById('download-finished')
 const btnResetFields = document.querySelector('#reset-fields')
 const btnOpenFileFolder = document.querySelector('#open-file-folder-button')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
@@ -49,10 +50,9 @@ function resetFields (): void {
   ;(btnQualities != null) && (btnQualities.disabled = false)
   ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
   ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
-  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
   ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
-  ;(downloadProgress != null) && (downloadProgress.textContent = 'Downloading...')
+  ;(downloadFinished != null) && (downloadFinished.classList.toggle('hidden'))
 }
 
 function openFileFolder (): void {
@@ -123,6 +123,8 @@ ipcRenderer.on('download:finished', (folderPathWithFile) => {
   (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
   ;(btnDownload != null) && (btnDownload.disabled = false)
   ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
+  ;(downloadProgress != null && downloadProgress.classList.toggle('hidden'))
+  ;(downloadFinished != null) && downloadFinished.classList.toggle('hidden')
   completeFolderPath = folderPathWithFile
 })
 

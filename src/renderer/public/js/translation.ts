@@ -1,7 +1,6 @@
 const selectFolderSave = document.getElementById('select-folder-span')
 const fileNameLabel = document.getElementById('file-name-label')
 const selectQualityLabel = document.getElementById('select-quality-label')
-const downloadFinished = document.getElementById('download-finished')
 
 const preferences = ipcRenderer.sendSync('getPreferences')
 
