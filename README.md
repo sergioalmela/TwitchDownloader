@@ -19,7 +19,6 @@ Twitch Downloader is a free utility made to download Twitch content (streams, vi
 | Mass download option  | ❌  | ❌  | ❌  | ✔  |  ✔  |  ✔  |  ✔  |
 | User preferences  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |  ✔  |
 | Multi language support  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |  ✔  |
-| Detailed wiki and video tutorials  | ❌  | ❌  | ❌  | ❌  |  ❌  |  ✔  |  ✔  |
 
 ## How to execute
 
