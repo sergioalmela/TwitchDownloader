@@ -3,7 +3,7 @@ import fs from 'fs'
 import { app, Menu } from 'electron'
 import ElectronPreferences from 'electron-preferences'
 import { i18n } from './i18n.config'
-import { preferencesPath } from './config'
+import { preferencesPath, languages } from './config'
 
 let defaultLanguage = 'en'
 try {
@@ -59,8 +59,13 @@ const preferences = new ElectronPreferences({
                 key: 'language',
                 type: 'dropdown',
                 options: [
-                  { label: i18n.__('English'), value: 'en' },
-                  { label: i18n.__('Spanish'), value: 'es' }
+                  // Iterate languages object and set label and value
+                  ...Object.keys(languages).map((key) => {
+                    return {
+                      label: i18n.__(languages[key].name),
+                      value: languages[key].iso2
+                    }
+                  })
                 ]
               },
               {

@@ -23,8 +23,6 @@
 	"Window": "Window",
 	"Help": "Help",
 	"Language": "Language",
-	"English": "English",
-	"Spanish": "Spanish",
 	"Select a folder to save": "Select a folder to save",
 	"File name": "File name",
 	"Get Qualities": "Get Qualities",
@@ -50,5 +48,10 @@
 	"Theme": "Theme",
 	"Light": "Light",
 	"Dark": "Dark",
-	"Twitch Downloader Preferences": "Twitch Downloader Preferences"
+	"Twitch Downloader Preferences": "Twitch Downloader Preferences",
+	"French": "French",
+	"Italian": "Italian",
+	"German": "German",
+	"English": "English",
+	"Spanish": "Spanish"
 }

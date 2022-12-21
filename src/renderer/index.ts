@@ -17,6 +17,7 @@ import { FileController } from '../main/infrastructure/controllers/file.controll
 import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
 import { i18n } from '../../config/i18n.config'
+import { languages } from '../../config/config'
 
 i18n.configure({
   directory: 'locales',
@@ -170,8 +171,13 @@ const menu: Electron.MenuItemConstructorOptions[] = [{
 {
   label: i18n.__('Language'),
   submenu: [
-    { label: i18n.__('English'), click: () => handleChangeLocale('en') },
-    { label: i18n.__('Spanish'), click: () => handleChangeLocale('es') }
+    // Iterate languages variable and set label and click
+    ...Object.keys(languages).map((key) => {
+      return {
+        label: i18n.__(languages[key].name),
+        click: () => handleChangeLocale(languages[key].iso2)
+      }
+    })
   ]
 },
 {

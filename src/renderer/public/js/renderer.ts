@@ -40,7 +40,7 @@ try {
     document.head.appendChild(link)
   }
 } catch (error) {
-    console.log(error)
+  console.log(error)
 }
 
 // Load folder dialog and show form
