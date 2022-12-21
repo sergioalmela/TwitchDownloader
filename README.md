@@ -32,7 +32,7 @@ npm run start
 
 It will open a new window with the GUI. Enter the URL of the stream, video, highlight or clip you want to download. Then, select the folder, file name and click on Get Qualities button. Then,  select the quality you want to download and click on Download button.
 
-![How to use the GUI](how_to_use.gif)
+![How to use the GUI](misc/how_to_use.gif)
 
 
 ### Terminal
