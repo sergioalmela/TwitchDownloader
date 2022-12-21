@@ -21,12 +21,26 @@ let completeFolderPath
 
 const preferences = ipcRenderer.sendSync('getPreferences')
 
+// Add default folder to input
 try {
   const defaultDownloadFolder = preferences?.downloader?.defaultDownloadFolder
   ;(folderName != null) && (folderName.textContent = defaultDownloadFolder.toString())
   ;(folderNameInput != null) && (folderNameInput.value = defaultDownloadFolder.toString())
 } catch (error) {
   console.log(error)
+}
+
+// Add CSS if dark mode is enabled
+try {
+  const darkMode = Boolean(preferences?.ui?.darkMode)
+  if (darkMode) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = 'css/dark.css'
+    document.head.appendChild(link)
+  }
+} catch (error) {
+    console.log(error)
 }
 
 // Load folder dialog and show form
