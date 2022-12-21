@@ -56,7 +56,7 @@ if (require('electron-squirrel-startup') === true) {
 function createMainWindow (): void {
   mainWindow = new BrowserWindow({
     width: isDev ? 1060 : 530,
-    height: 750,
+    height: 760,
     icon: path.join(__dirname, '../../../logo.png'),
     resizable: isDev,
     webPreferences: {
