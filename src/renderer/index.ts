@@ -23,6 +23,13 @@ i18n.configure({
   defaultLocale: preferences.value('global.language')
 })
 
+let openFolderOnDownload: boolean
+try {
+  openFolderOnDownload = Boolean(preferences.value('downloader.openFolderOnDownload'))
+} catch (ignored) {
+  openFolderOnDownload = false
+}
+
 const feedsController = container.get<FeedController>(
   ContainerSymbols.FeedController
 )
@@ -101,6 +108,16 @@ function handleChangeLocale (locale: string): void {
   }).catch((error) => {
     console.error(error)
   })
+}
+
+function handleOpenFolder (completeFolderPath): void {
+  try {
+    // Windows escape backslashes if any
+    const folderPath = completeFolderPath.replace(/\\/g, '\\\\')
+    shell.showItemInFolder(folderPath)
+  } catch (error) {
+    console.log(`${error.message} opening folder ${completeFolderPath}`) // eslint-disable-line @typescript-eslint/restrict-template-expressions
+  }
 }
 
 // When the app is ready, create the window
@@ -201,13 +218,7 @@ ipcMain.on('dialog:folder', () => {
 
 // Open file folder
 ipcMain.on('folder:open', (event, { completeFolderPath }) => {
-  try {
-    // Windows escape backslashes if any
-    const folderPath = completeFolderPath.replace(/\\/g, '\\\\')
-    shell.showItemInFolder(folderPath)
-  } catch (error) {
-    console.log(`${error.message} opening folder ${completeFolderPath}`) // eslint-disable-line @typescript-eslint/restrict-template-expressions
-  }
+  handleOpenFolder(completeFolderPath)
 })
 
 let type: ContentTypes
@@ -247,6 +258,10 @@ ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
 
     const pathFolder: string = (downloadPath.value === '' ? `${process.cwd()}/` : downloadPath.value)
     const completeFolderPath: string = `${pathFolder}${file.value}${extension.value}` // eslint-disable-line @typescript-eslint/restrict-template-expressions
+
+    if (openFolderOnDownload) {
+      handleOpenFolder(completeFolderPath)
+    }
 
     mainWindow.webContents.send('download:finished', completeFolderPath)
   } catch (error) {

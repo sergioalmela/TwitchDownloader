@@ -24,6 +24,7 @@ const preferences = ipcRenderer.sendSync('getPreferences')
 try {
   const defaultDownloadFolder = preferences?.downloader?.defaultDownloadFolder
   ;(folderName != null) && (folderName.textContent = defaultDownloadFolder.toString())
+  ;(folderNameInput != null) && (folderNameInput.value = defaultDownloadFolder.toString())
 } catch (error) {
   console.log(error)
 }
