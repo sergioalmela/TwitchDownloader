@@ -3,12 +3,12 @@ const fileNameLabel = document.getElementById('file-name-label')
 const selectQualityLabel = document.getElementById('select-quality-label')
 
 try {
-i18n.configure({
-  directory: 'locales',
-  defaultLocale: preferences.global.language
-})
+  i18n.configure({
+    directory: 'locales',
+    defaultLocale: preferences.global.language
+  })
 } catch (error) {
-    console.error(error)
+  console.error(error)
 }
 
 ;(selectFolderSave != null) && (selectFolderSave.textContent = i18n.__('Select a folder to save'))
