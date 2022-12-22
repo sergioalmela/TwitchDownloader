@@ -4,7 +4,7 @@ const selectQualityLabel = document.getElementById('select-quality-label')
 
 try {
   i18n.configure({
-    directory: 'locales',
+    directory: path.join(path.__dirname, '../../../locales'),
     defaultLocale: preferences.global.language
   })
 } catch (error) {

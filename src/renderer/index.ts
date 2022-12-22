@@ -20,7 +20,7 @@ import { i18n } from '../../config/i18n.config'
 import { languages } from '../../config/config'
 
 i18n.configure({
-  directory: 'locales',
+  directory: path.join(__dirname, '../../locales'),
   defaultLocale: preferences.value('global.language')
 })
 

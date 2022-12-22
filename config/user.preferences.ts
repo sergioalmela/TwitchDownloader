@@ -14,7 +14,7 @@ try {
 
 // We don't have the preferences yet, so we need to set the default language
 i18n.configure({
-  directory: 'locales',
+  directory: path.join(__dirname, '..', 'locales'),
   defaultLocale: defaultLanguage
 })
 
