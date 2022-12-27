@@ -58,6 +58,11 @@ After entering a path to download the content, the directory structure will be c
 - Enter the path of the .txt file in the first input of  the program. Then, it will ask the download path and resolution.
 - You can use the test/tmp/list.txt file as example.
 
+## Donate
+If you want to support the project, you can buy me a coffee. Thanks!
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/sergioalmela)
+
 ## Technologies used
 - [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en/)
 - [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)](https://www.typescriptlang.org/)

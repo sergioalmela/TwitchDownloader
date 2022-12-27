@@ -203,7 +203,7 @@ const menu: Electron.MenuItemConstructorOptions[] = [{
     {
       label: i18n.__('Donate'),
       click: async () => {
-        await shell.openExternal('https://www.paypal.me/SteamPlaytime')
+        await shell.openExternal('https://www.buymeacoffee.com/sergioalmela')
       }
     }
   ]
