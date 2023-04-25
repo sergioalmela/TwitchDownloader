@@ -2,7 +2,7 @@
 ![Twitch Downloader Logo](logo.png?raw=true "Twitch Downloader Logo")
 
 ## About
-Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips) including sub-only content. 
+Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips).
 ### Current version: 1.0.1
 
 ## Planned features:
@@ -57,6 +57,8 @@ After entering a path to download the content, the directory structure will be c
 - Create a .txt file with the URLs of the content you want to download, one per line (line break separator).
 - Enter the path of the .txt file in the first input of  the program. Then, it will ask the download path and resolution.
 - You can use the test/tmp/list.txt file as example.
+
+Note: Since March 2023, Twitch has retired the old API, so it's not possible to get sub-only content. All the other features will work as expected.
 
 ## Donate
 If you want to support the project, you can buy me a coffee. Thanks!

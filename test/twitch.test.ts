@@ -51,7 +51,6 @@ let credentialVodRestricted: Credentials
 let credentialClip: Credentials
 const idClip: IdVo = new IdVo('SavageNurturingTruffleKippa')
 let manifestVod: ManifestVo
-let manifestVodRestricted: ManifestVo
 let manifestClip: ManifestVo
 const file: FileVo = new FileVo('downloadedFile.mp4')
 const fileEmpty: FileVo = new FileVo('')
@@ -165,12 +164,6 @@ describe('Get Manifest', async () => {
     expect(manifestVod).toBeTypeOf('object')
   })
 
-  it('should return the VOD restricted manifest', async () => {
-    manifestVodRestricted = await getVodManifestUseCase.execute(idVodRestricted, credentialVodRestricted)
-    expect(manifestVodRestricted).not.toBe(null)
-    expect(manifestVodRestricted).toBeTypeOf('object')
-  })
-
   it('should return the Clip manifest', async () => {
     manifestClip = await getClipManifestUseCase.execute(idClip, credentialClip)
     expect(manifestClip).not.toBe(null)
@@ -191,13 +184,6 @@ describe('Get Extension', async () => {
 describe('Get Feed from Manifest', async () => {
   it('should return the VOD feed', async () => {
     const feed: PlaylistVo[] = getFeedFromManifest.execute(manifestVod)
-    expect(feed).not.toBe(null)
-    expect(feed[0].value).toHaveProperty('video')
-    expect(feed[0].value).toHaveProperty('url')
-  })
-
-  it('should return the VOD restricted feed', async () => {
-    const feed: PlaylistVo[] = getFeedFromManifest.execute(manifestVodRestricted)
     expect(feed).not.toBe(null)
     expect(feed[0].value).toHaveProperty('video')
     expect(feed[0].value).toHaveProperty('url')
