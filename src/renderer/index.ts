@@ -274,6 +274,41 @@ ipcMain.on('download:start', async (event, { downloadPath, file, feed }) => {
     mainWindow.webContents.send('download:error', error.message)
   }
 })
+
+ipcMain.on('downloadNotStartedLive:start', async (event, { downloadPath, file, url }) => {
+  try {
+    downloadPath = new PathVo(downloadPath)
+    file = new FileVo(file)
+
+    url = new UrlVo(url)
+
+    const type = ContentTypes.LIVE
+
+    file.removeExtensionFromFileName()
+    downloadPath.addTrailingSlash()
+
+    const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
+
+    const selectedFeed: PlaylistVo = feeds[0]
+
+    const extension = fileController.getExtensionFromPlaylist(selectedFeed)
+
+    const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
+
+    await downloadController.download(type, downloadUrl, downloadPath, file, extension)
+
+    const pathFolder: string = (downloadPath.value === '' ? `${process.cwd()}/` : downloadPath.value)
+    const completeFolderPath: string = `${pathFolder}${file.value}${extension.value}` // eslint-disable-line @typescript-eslint/restrict-template-expressions
+
+    if (openFolderOnDownload) {
+      handleOpenFolder(completeFolderPath)
+    }
+
+    mainWindow.webContents.send('download:finished', completeFolderPath)
+  } catch (error) {
+    mainWindow.webContents.send('download:error', error.message)
+  }
+})
 /* eslint-enable @typescript-eslint/no-misused-promises */
 
 // Quit when all windows are closed.

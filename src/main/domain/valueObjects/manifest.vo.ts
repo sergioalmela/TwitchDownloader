@@ -11,8 +11,12 @@ export class ManifestVo extends ValueObject<string> {
   }
 
   protected assertIsValid (value: string): void {
-    if (!value.includes('http')) {
+    if (value !== '' && !value.includes('http')) {
       throw new VOFormatException(ManifestVo.name, value)
     }
+  }
+
+  public isEmpty (): boolean {
+    return this.value === ''
   }
 }

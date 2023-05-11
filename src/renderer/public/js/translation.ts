@@ -1,6 +1,7 @@
 const selectFolderSave = document.getElementById('select-folder-span')
 const fileNameLabel = document.getElementById('file-name-label')
 const selectQualityLabel = document.getElementById('select-quality-label')
+const liveNotStarted = document.getElementById('live-not-started-span')
 
 try {
   i18n.configure({
@@ -21,3 +22,4 @@ try {
 ;(btnOpenFileFolder != null) && (btnOpenFileFolder.textContent = i18n.__('Open file folder'))
 ;(downloadProgress != null) && (downloadProgress.innerHTML = i18n.__('Downloading'))
 ;(downloadFinished != null) && (downloadFinished.innerHTML = i18n.__('Download finished'))
+;(liveNotStarted != null) && (liveNotStarted.textContent = i18n.__('Run until live stream starts'))

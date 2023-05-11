@@ -3,7 +3,7 @@
 
 ## About
 Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips).
-### Current version: 1.0.1
+### Current version: 1.1.0
 
 ## Planned features:
   
@@ -43,6 +43,7 @@ npm run start:terminal
 
 The terminal will ask you for the full URL of the content you want to download:
 - Step 1: Enter the full URL of the content you want to download, for example: ```https://www.twitch.tv/videos/365670422```
+- Step 1.5: If the entered URL is a live stream, it will ask you to download it when it starts or not. This means that if you press yes, it will automatically download it when it starts, with the original quality. If no, then it will ask you for the quality you want to download when it starts, but if the live ended before you set the quality, it will not download it.
 - Step 2: Enter the path to download the video, it can be relative or absolute, and the file name. If no filename is passed, the default name will be the video ID. 
 NOTE: It will always save the file as .mp4. For example: ```/home/sergio/downloads/awesomeVideo.mp4```
 - Step 3: Enter the quality you want to download from the selector (use the arrows). For example: ```1080p60```

@@ -15,6 +15,7 @@ const downloadFinished = document.getElementById('download-finished')
 const btnResetFields = document.querySelector('#reset-fields')
 const btnOpenFileFolder = document.querySelector('#open-file-folder-button')
 const urlInput = document.querySelector<HTMLInputElement>('#url')
+const liveNotStartedCheckbox = document.querySelector<HTMLInputElement>('#live-not-started')
 let selectedFeed
 let loadedFeeds
 let completeFolderPath
@@ -51,7 +52,7 @@ function loadFolderDialog (): void {
 function loadQualities (): void {
   ipcRenderer.send('qualities:get', { url: (urlInput != null) && urlInput.value })
   ;(btnQualities != null) && (btnQualities.disabled = true)
-  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.remove('hidden'))
 }
 
 function changeQuality (): void {
@@ -59,10 +60,26 @@ function changeQuality (): void {
 }
 
 function downloadContent (): void {
-  ipcRenderer.send('download:start', { downloadPath: (folderNameInput != null) && folderNameInput.value, file: (fileNameInput != null) && fileNameInput.value, feed: selectedFeed })
+  const isLive = (liveNotStartedCheckbox != null) && (liveNotStartedCheckbox.checked)
+
+  if (isLive) {
+    ipcRenderer.send('downloadNotStartedLive:start', {
+      downloadPath: (folderNameInput != null) && folderNameInput.value,
+      file: (fileNameInput != null) && fileNameInput.value,
+      feed: selectedFeed,
+      url: (urlInput != null) && urlInput.value
+    })
+  } else {
+    ipcRenderer.send('download:start', {
+      downloadPath: (folderNameInput != null) && folderNameInput.value,
+      file: (fileNameInput != null) && fileNameInput.value,
+      feed: selectedFeed
+    })
+  }
+
   ;(btnDownload != null) && (btnDownload.disabled = true)
-  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
-  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
+  ;(downloadProgress != null) && (downloadProgress.classList.remove('hidden'))
+  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.remove('hidden'))
 }
 
 function resetFields (): void {
@@ -71,17 +88,40 @@ function resetFields (): void {
   ;(folderName != null) && (folderName.textContent = '')
   ;(folderNameInput != null) && (folderNameInput.value = '')
   ;(fileNameInput != null) && (fileNameInput.value = '')
-  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.add('hidden'))
   ;(btnQualities != null) && (btnQualities.disabled = false)
-  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.remove('hidden'))
   ;(qualitiesSelect != null) && (removeOptions(qualitiesSelect))
-  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
-  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
-  ;(downloadFinished != null) && (downloadFinished.classList.toggle('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.add('hidden'))
+  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.add('hidden'))
+  ;(downloadFinished != null) && (downloadFinished.classList.add('hidden'))
+  ;(liveNotStartedCheckbox != null) && (liveNotStartedCheckbox.checked = false)
 }
 
 function openFileFolder (): void {
   ipcRenderer.send('folder:open', { completeFolderPath })
+}
+
+// Change download button depending on content type
+function changeContentType (): void {
+  const isLive = (liveNotStartedCheckbox != null) && (liveNotStartedCheckbox.checked)
+  isLive && (urlInput != null && /\.tv\/[\w]*/i.test(urlInput.value)) ? changeLayoutLiveUrl() : changeLayoutVodUrl()
+}
+
+function changeLayoutLiveUrl (): void {
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.add('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.add('hidden'))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.add('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.remove('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.add('hidden'))
+}
+
+function changeLayoutVodUrl (): void {
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.remove('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.remove('hidden'))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.add('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.add('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.add('hidden'))
 }
 
 function alertError (message): void {
@@ -105,17 +145,8 @@ function removeOptions (selectElement): void {
   }
 }
 
-// Select folder and show into input
-
-ipcRenderer.on('folder:selected', (folderPath) => {
-  ;(folderName != null) && (folderName.textContent = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
-  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
-})
-
-// Once qualities are loaded, show them into select
-ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
-  ;(btnQualities != null) && (btnQualities.disabled = false)
-
+// Set feed options into select
+function setFeedOptions (feeds, feedOptions): void {
   // Set global variable to use it later
   loadedFeeds = feeds
 
@@ -128,27 +159,40 @@ ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
   })
 
   selectedFeed = feeds[0].value
+}
 
-  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
-  ;(btnQualities != null) && (btnQualities.classList.toggle('hidden'))
-  ;(qualitiesContainer != null) && (qualitiesContainer.classList.toggle('hidden'))
-  ;(btnDownload != null) && (btnDownload.classList.toggle('hidden'))
+// Select folder and show into input
+ipcRenderer.on('folder:selected', (folderPath) => {
+  ;(folderName != null) && (folderName.textContent = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
+  ;(folderNameInput != null) && (folderNameInput.value = folderPath.toString()) // eslint-disable-line @typescript-eslint/no-base-to-string
+})
+
+// Once qualities are loaded, show them into select
+ipcRenderer.on('qualities:got', (feeds, feedOptions) => {
+  ;(btnQualities != null) && (btnQualities.disabled = false)
+
+  setFeedOptions(feeds, feedOptions)
+
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.add('hidden'))
+  ;(btnQualities != null) && (btnQualities.classList.add('hidden'))
+  ;(qualitiesContainer != null) && (qualitiesContainer.classList.remove('hidden'))
+  ;(btnDownload != null) && (btnDownload.classList.remove('hidden'))
 })
 
 // If qualities loading fails, show error message
 ipcRenderer.on('qualities:error', (message) => {
   alertError(message)
   ;(btnQualities != null) && (btnQualities.disabled = false)
-  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.toggle('hidden'))
+  ;(qualitiesLoadingContainer != null) && (qualitiesLoadingContainer.classList.add('hidden'))
 })
 
 // When download finishes, show download progress
 ipcRenderer.on('download:finished', (folderPathWithFile) => {
-  (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
+  (downloadLoadingContainer != null) && (downloadLoadingContainer.classList.add('hidden'))
   ;(btnDownload != null) && (btnDownload.disabled = false)
-  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.toggle('hidden'))
-  ;(downloadProgress != null && downloadProgress.classList.toggle('hidden'))
-  ;(downloadFinished != null) && downloadFinished.classList.toggle('hidden')
+  ;(downloadFinishedButtons != null) && (downloadFinishedButtons.classList.remove('hidden'))
+  ;(downloadProgress != null && downloadProgress.classList.add('hidden'))
+  ;(downloadFinished != null) && downloadFinished.classList.remove('hidden')
   completeFolderPath = folderPathWithFile
 })
 
@@ -156,8 +200,8 @@ ipcRenderer.on('download:finished', (folderPathWithFile) => {
 ipcRenderer.on('download:error', (message) => {
   alertError(message)
   ;(btnDownload != null) && (btnDownload.disabled = false)
-  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.toggle('hidden'))
-  ;(downloadProgress != null) && (downloadProgress.classList.toggle('hidden'))
+  ;(downloadLoadingContainer != null) && (downloadLoadingContainer.classList.add('hidden'))
+  ;(downloadProgress != null) && (downloadProgress.classList.add('hidden'))
 })
 
 // Listeners
@@ -167,4 +211,5 @@ ipcRenderer.on('download:error', (message) => {
 ;(qualitiesSelect != null) && qualitiesSelect.addEventListener('change', changeQuality)
 ;(btnResetFields != null) && btnResetFields.addEventListener('click', resetFields)
 ;(btnOpenFileFolder != null) && btnOpenFileFolder.addEventListener('click', openFileFolder)
+;(liveNotStartedCheckbox != null) && liveNotStartedCheckbox.addEventListener('change', changeContentType)
 /* eslint-enable @typescript-eslint/prefer-optional-chain */

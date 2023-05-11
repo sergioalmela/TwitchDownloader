@@ -4,6 +4,7 @@ import { IdVo } from '../../domain/valueObjects/id.vo'
 import { IManifestRepository } from '../../domain/repository/manifestRepository.interface'
 import { ManifestVo } from '../../domain/valueObjects/manifest.vo'
 import Credentials from '../../infrastructure/types/Credential'
+import { downloadLiveRetrySeconds } from '../../domain/constants/downloadOptions'
 
 @injectable()
 export class GetLiveManifestUseCase {
@@ -13,6 +14,15 @@ export class GetLiveManifestUseCase {
   ) {}
 
   async execute (id: IdVo, credentials: Credentials): Promise<ManifestVo> {
-    return await this.manifestRepository.getManifest(id, credentials)
+    let manifest
+
+    manifest = await this.manifestRepository.getManifest(id, credentials)
+
+    while (manifest.isEmpty() === true) {
+      await new Promise(resolve => setTimeout(resolve, downloadLiveRetrySeconds * 1000))
+      manifest = await this.manifestRepository.getManifest(id, credentials)
+    }
+
+    return manifest
   }
 }

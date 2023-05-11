@@ -63,14 +63,58 @@ const downloadFromUrl = async (url: UrlVo): Promise<any> => {
 
   const id: IdVo = await feedsController.getId(type, url)
 
+  let path, file, responseFeeds
+
+  // Ask if we should download the stream when it's live (qualities will not be available)
+  let downloadLiveNotStarted = false
+  if (type === ContentTypes.LIVE) {
+    const notStartedPrompt = await prompts({
+      type: 'confirm',
+      name: 'downloadSteamNotStarted',
+      message: `The stream ${id.value} is not live, do you want to download it when it starts?`
+    })
+
+    downloadLiveNotStarted = notStartedPrompt.downloadSteamNotStarted
+  }
+
+  // If it's a live stream, we can only download the original quality
+  if (downloadLiveNotStarted) {
+    const response = await askForDownloadPathAndQuality(id, [
+      new FeedVo({
+        title: 'Original',
+        value: 0
+      })
+    ])
+    path = response.path
+    file = response.file
+    responseFeeds = response.responseFeeds
+  }
+
   const feeds: PlaylistVo[] = await feedsController.getFeeds(type, url)
 
   const feedOptions: FeedVo[] = feedsController.parseFeeds(feeds)
 
+  if (!downloadLiveNotStarted) {
+    const response = await askForDownloadPathAndQuality(id, feedOptions)
+    path = response.path
+    file = response.file
+    responseFeeds = response.responseFeeds
+  }
+
+  const selectedFeed: PlaylistVo = feeds[responseFeeds.exportQuality]
+
+  const extension = fileController.getExtensionFromPlaylist(selectedFeed)
+
+  const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
+
+  await downloadController.download(type, downloadUrl, path, file, extension)
+}
+
+const askForDownloadPathAndQuality = async (id: IdVo, feedOptions: FeedVo[]): Promise<any> => {
   const pathPrompt: DownloadPath = await prompts({
     type: 'text',
     name: 'downloadPath',
-    message: `Enter the path to download the video ${id.value} (absolute or relative) Ex: /Videos/myDownload.mp4`
+    message: `Enter the path to download the video ${id.value.toString()} (absolute or relative) Ex: /Videos/myDownload.mp4`
   }, { onCancel })
 
   const pathResponse = pathPrompt.downloadPath
@@ -86,14 +130,8 @@ const downloadFromUrl = async (url: UrlVo): Promise<any> => {
     name: 'exportQuality',
     message: 'Select the export quality',
     choices: feedOptions.map(a => a.value),
-    initial: 1
+    initial: 0
   }, { onCancel })
 
-  const selectedFeed: PlaylistVo = feeds[responseFeeds.exportQuality]
-
-  const extension = fileController.getExtensionFromPlaylist(selectedFeed)
-
-  const downloadUrl: UrlVo = new UrlVo(selectedFeed.value.url)
-
-  await downloadController.download(type, downloadUrl, path, file, extension)
+  return { path, file, responseFeeds }
 }
