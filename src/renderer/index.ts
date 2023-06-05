@@ -18,6 +18,7 @@ import { ContentTypes } from '../main/domain/constants/contentTypes.enum'
 
 import { i18n } from '../../config/i18n.config'
 import { languages } from '../../config/config'
+import MessageBoxOptions = Electron.MessageBoxOptions;
 
 i18n.configure({
   directory: path.join(__dirname, '../../locales'),
@@ -92,7 +93,7 @@ function handleChangeLocale (locale: string): void {
   // setLocale(locale)
   preferences.value('global.language', locale)
 
-  const options = {
+  const options: MessageBoxOptions = {
     type: 'info',
     buttons: ['Cancel', 'Restart'],
     defaultId: 2,
