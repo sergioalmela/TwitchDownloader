@@ -3068,8 +3068,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "twitchDownloader"
-version = "0.0.0"
+name = "twitch-downloader"
+version = "2.0.0"
 dependencies = [
  "serde",
  "serde_json",

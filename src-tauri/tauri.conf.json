@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "twitchDownloader",
+    "productName": "twitch-downloader",
     "version": "0.0.0"
   },
   "tauri": {
@@ -37,7 +37,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "twitchDownloader",
+        "title": "Twitch Downloader",
         "width": 800,
         "height": 600
       }

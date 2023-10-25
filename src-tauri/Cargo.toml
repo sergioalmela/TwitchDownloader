@@ -1,10 +1,10 @@
 [package]
-name = "twitchDownloader"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "twitch-downloader"
+version = "2.0.0"
+description = "Twitch Downloader"
+authors = ["Sergio Almela"]
 license = ""
-repository = ""
+repository = "https://github.com/sergioalmela/TwitchDownloader"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
