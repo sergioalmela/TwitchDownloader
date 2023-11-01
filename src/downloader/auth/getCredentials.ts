@@ -3,7 +3,7 @@ import { getAuthHeaders } from './getAuthHeaders.ts'
 import { ContentId } from '../getContentId.ts'
 import { getVodVariables } from './getAuthVariables.ts'
 
-type Credentials = {
+export type Credentials = {
   signature: string
   value: string
 }
@@ -20,11 +20,13 @@ export const getCredentials = async (id: ContentId): Promise<Credentials> => {
   const data = (await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     timeout: 30,
-    body: Body.json({
-      data: getVodVariables(id)
-    }),
+    body: Body.json(
+      // TODO: Pass ContentType as parameter
+      getVodVariables(id)
+    ),
     headers: getAuthHeaders()
   })) as ApiResponse
+  console.log(data)
 
   return data.data.data.videoPlaybackAccessToken
 }

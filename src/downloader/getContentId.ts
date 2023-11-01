@@ -3,7 +3,7 @@ import { ContentTypes } from './detectContentType.ts'
 export const getContentIdFromUrl = (
   contentType: ContentTypes,
   url: string
-): string | null => {
+): ContentId | null => {
   if (contentType === ContentTypes.LIVE) return getContentIdFromLive(url)
   if (contentType === ContentTypes.VOD) return getContentIdFromVod(url)
   if (contentType === ContentTypes.CLIP) return getContentIdFromClip(url)
