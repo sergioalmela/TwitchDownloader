@@ -12,10 +12,11 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
+      "all": true,
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://gql.twitch.tv/gql"]
       }
     },
     "bundle": {
