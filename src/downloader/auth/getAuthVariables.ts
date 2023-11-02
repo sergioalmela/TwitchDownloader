@@ -1,4 +1,5 @@
 import { ContentId } from '../getContentId.ts'
+import { ContentTypes } from '../detectContentType.ts'
 
 interface AuthVariables {
   operationName: string
@@ -18,7 +19,17 @@ interface AuthVariables {
   }
 }
 
-export const getLiveVariables = (id: ContentId): AuthVariables => {
+export const getAuthVariables = (
+  contentType: ContentTypes,
+  id: ContentId
+): AuthVariables => {
+  if (contentType === ContentTypes.LIVE) return getLiveVariables(id)
+  if (contentType === ContentTypes.VOD) return getVodVariables(id)
+  if (contentType === ContentTypes.CLIP) return getClipVariables(id)
+  throw new Error('Unknown content type')
+}
+
+const getLiveVariables = (id: ContentId): AuthVariables => {
   return {
     operationName: 'PlaybackAccessToken',
     variables: {
@@ -37,7 +48,7 @@ export const getLiveVariables = (id: ContentId): AuthVariables => {
     }
   }
 }
-export const getVodVariables = (id: ContentId): AuthVariables => {
+const getVodVariables = (id: ContentId): AuthVariables => {
   return {
     operationName: 'PlaybackAccessToken',
     variables: {
@@ -57,7 +68,7 @@ export const getVodVariables = (id: ContentId): AuthVariables => {
   }
 }
 
-export const getClipVariables = (id: ContentId): AuthVariables => {
+const getClipVariables = (id: ContentId): AuthVariables => {
   return {
     operationName: 'VideoAccessToken_Clip',
     variables: {

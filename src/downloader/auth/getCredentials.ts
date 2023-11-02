@@ -1,32 +1,37 @@
 import { Body, fetch } from '@tauri-apps/api/http'
 import { getAuthHeaders } from './getAuthHeaders.ts'
 import { ContentId } from '../getContentId.ts'
-import { getVodVariables } from './getAuthVariables.ts'
+import { getAuthVariables } from './getAuthVariables.ts'
+import { ContentTypes } from '../detectContentType.ts'
 
 export type Credentials = {
   signature: string
   value: string
 }
 
-type ApiResponse = {
-  data: {
-    data: {
-      videoPlaybackAccessToken: Credentials
-    }
-  }
-}
-
-export const getCredentials = async (id: ContentId): Promise<Credentials> => {
-  const data = (await fetch('https://gql.twitch.tv/gql', {
+export const getCredentials = async (
+  contentType: ContentTypes,
+  id: ContentId
+): Promise<Credentials> => {
+  const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     timeout: 30,
-    body: Body.json(
-      // TODO: Pass ContentType as parameter
-      getVodVariables(id)
-    ),
+    body: Body.json(getAuthVariables(contentType, id)),
     headers: getAuthHeaders()
-  })) as ApiResponse
-  console.log(data)
+  })
 
-  return data.data.data.videoPlaybackAccessToken
+  return getAccessTokenFromResponse(contentType, response)
+}
+
+const getAccessTokenFromResponse = (
+  contentType: ContentTypes,
+  response: any
+): Credentials => {
+  if (contentType === ContentTypes.VOD) {
+    return response.data.data.data.videoPlaybackAccessToken
+  } else if (contentType === ContentTypes.CLIP) {
+    return response.data.data.clip.playbackAccessToken
+  } else {
+    return response.data.data.data.streamPlaybackAccessToken
+  }
 }
