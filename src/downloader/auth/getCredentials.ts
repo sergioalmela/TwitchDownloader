@@ -28,7 +28,7 @@ const getAccessTokenFromResponse = (
   response: any
 ): Credentials => {
   if (contentType === ContentTypes.VOD) {
-    return response.data.data.data.videoPlaybackAccessToken
+    return response.data.data.videoPlaybackAccessToken
   } else if (contentType === ContentTypes.CLIP) {
     return response.data.data.clip.playbackAccessToken
   } else {

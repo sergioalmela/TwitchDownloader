@@ -17,11 +17,25 @@ type VideoQuality = {
   isAudioOnly: boolean
 }
 
-type ApiResponse = {
+type ApiClipResponse = {
   data: {
     data: {
       clip: {
         videoQualities: VideoQuality[]
+      }
+    }
+  }
+}
+
+type ApiVodResponse = {
+  data: string
+}
+
+type ApiLiveReponse = {
+  data: {
+    data: {
+      data: {
+        streamPlaybackAccessToken: VideoQuality[]
       }
     }
   }
@@ -32,27 +46,59 @@ export const getManifest = async (
   id: ContentId,
   credentials: Credentials
 ) => {
-  /*if (contentType === ContentTypes.LIVE)
+  if (contentType === ContentTypes.LIVE)
     return getManifestFromLive(id, credentials)
   if (contentType === ContentTypes.VOD)
-    return getManifestFromVod(id, credentials)*/
+    return getManifestFromVod(id, credentials)
   if (contentType === ContentTypes.CLIP)
     return getManifestFromClip(id, credentials)
   return null
+}
+
+const getManifestFromLive = async (
+  id: ContentId,
+  credentials: Credentials
+): Promise<string | null> => {
+  const response = (await fetch('https://gql.twitch.tv/gql', {
+    method: 'POST',
+    timeout: 30,
+    body: Body.json(getAuthVariables(ContentTypes.LIVE, id)),
+    headers: getAuthHeaders()
+  })) as ApiLiveReponse
+
+  const qualities = response.data.data.data.streamPlaybackAccessToken
+
+  return completeManifest(qualities, credentials)
+}
+
+const getManifestFromVod = async (
+  id: ContentId,
+  credentials: Credentials
+): Promise<string | null> => {
+  const response = (await fetch(
+    `https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
+    {
+      method: 'GET',
+      timeout: 30,
+      responseType: 2
+    }
+  )) as ApiVodResponse
+
+  return response.data
 }
 
 const getManifestFromClip = async (
   id: ContentId,
   credentials: Credentials
 ): Promise<string | null> => {
-  const data = (await fetch('https://gql.twitch.tv/gql', {
+  const response = (await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     timeout: 30,
     body: Body.json(getAuthVariables(ContentTypes.CLIP, id)),
     headers: getAuthHeaders()
-  })) as ApiResponse
+  })) as ApiClipResponse
 
-  const qualities = data.data.data.clip.videoQualities
+  const qualities = response.data.data.clip.videoQualities
 
   qualities.forEach((quality: VideoQuality) => {
     if (!quality.quality.endsWith('p')) {
