@@ -32,6 +32,6 @@ const getAccessTokenFromResponse = (
   } else if (contentType === ContentTypes.CLIP) {
     return response.data.data.clip.playbackAccessToken
   } else {
-    return response.data.data.data.streamPlaybackAccessToken
+    return response.data.data.streamPlaybackAccessToken
   }
 }

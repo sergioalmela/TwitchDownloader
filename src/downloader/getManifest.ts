@@ -31,14 +31,8 @@ type ApiVodResponse = {
   data: string
 }
 
-type ApiLiveReponse = {
-  data: {
-    data: {
-      data: {
-        streamPlaybackAccessToken: VideoQuality[]
-      }
-    }
-  }
+type ApiLiveResponse = {
+  data: string
 }
 
 export const getManifest = async (
@@ -59,16 +53,16 @@ const getManifestFromLive = async (
   id: ContentId,
   credentials: Credentials
 ): Promise<string | null> => {
-  const response = (await fetch('https://gql.twitch.tv/gql', {
-    method: 'POST',
-    timeout: 30,
-    body: Body.json(getAuthVariables(ContentTypes.LIVE, id)),
-    headers: getAuthHeaders()
-  })) as ApiLiveReponse
+  const response = (await fetch(
+    `https://usher.ttvnw.net/api/channel/hls/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
+    {
+      method: 'GET',
+      timeout: 30,
+      responseType: 2
+    }
+  )) as ApiLiveResponse
 
-  const qualities = response.data.data.data.streamPlaybackAccessToken
-
-  return completeManifest(qualities, credentials)
+  return response.data
 }
 
 const getManifestFromVod = async (
