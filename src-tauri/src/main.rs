@@ -9,6 +9,25 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn download(m3u8: &str) {
+    let mut child = std::process::Command::new("ffmpeg")
+        .args(&[
+            "-i",
+            m3u8,
+            "-y",
+            "-c",
+            "copy",
+            "-bsf:a",
+            "aac_adtstoasc",
+            "/home/torre/Descargas/output.mp4",
+        ])
+        .spawn()
+        .expect("failed to execute process");
+    let ecode = child.wait().expect("failed to wait on child");
+    println!("ecode: {}", ecode);
+}
+
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -19,7 +38,7 @@ fn main() {
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_submenu(submenu);
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, download])
         .menu(menu)
         .on_menu_event(|event| {
             match event.menu_item_id() {
