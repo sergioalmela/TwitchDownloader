@@ -39,8 +39,8 @@
         "fullscreen": false,
         "resizable": true,
         "title": "Twitch Downloader",
-        "width": 800,
-        "height": 600
+        "width": 530,
+        "height": 760
       }
     ]
   }
