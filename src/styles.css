@@ -35,7 +35,6 @@
 }
 
 .row {
-  display: flex;
   justify-content: center;
 }
 
@@ -67,6 +66,14 @@ button {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
+.input-form {
+  margin-left: 10px;
+}
+
+label {
+  margin: 8px 0;
+}
+
 button {
   cursor: pointer;
 }
@@ -86,6 +93,89 @@ button {
 
 #greet-input {
   margin-right: 5px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.input-form input[type="url"],
+.input-form input[type="text"],
+.input-form input[type="file"],
+.input-form select {
+  width: 80%;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-form input[type="file"] {
+  cursor: pointer;
+}
+
+.input-form input[type="file"]:hover {
+}
+
+.input-form select {
+  cursor: pointer;
+}
+
+.input-form button {
+  width: 80%;
+  padding: 0.6em 1.2em;
+  margin-top: 10px;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-form button:hover {
+  background-color: #535bf2;
+}
+
+.folder-button {
+  width: 80%;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: inline-block !important;
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: dark) {
