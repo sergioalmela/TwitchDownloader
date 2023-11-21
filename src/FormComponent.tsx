@@ -4,11 +4,13 @@ import { getContentIdFromUrl } from './downloader/getContentId.ts'
 import { getCredentials } from './downloader/auth/getCredentials.ts'
 import { getManifest } from './downloader/getManifest.ts'
 import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
+import { invoke } from '@tauri-apps/api/tauri'
 
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
   const [playlists, setPlaylists] = useState<Playlist[]>([])
+  const [selectedPlaylistUrl, setSelectedPlaylistUrl] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -55,6 +57,7 @@ const FormComponent = () => {
         }
 
         setPlaylists(playlists)
+        setSelectedPlaylistUrl(playlists[0].url)
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -66,9 +69,27 @@ const FormComponent = () => {
     setShowQualities(true)
   }
 
+  const handleSelectChange = (event: Event) => {
+    const target = event.target as HTMLSelectElement
+    setSelectedPlaylistUrl(target.value)
+  }
+
+  const handleSubmit = async (event: Event) => {
+    event.preventDefault()
+    if (selectedPlaylistUrl) {
+      try {
+        const m3u8 = selectedPlaylistUrl
+        const result = await invoke('download', { m3u8 })
+        console.log(result)
+      } catch (error) {
+        // Handle any errors here
+      }
+    }
+  }
+
   return (
     <div className="input-form">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="twitchUrl">Twitch URL:</label>
           <input
@@ -112,7 +133,11 @@ const FormComponent = () => {
           <>
             <div className="form-group">
               <label htmlFor="selectQuality">Select Quality:</label>
-              <select id="selectQuality" name="selectQuality">
+              <select
+                id="selectQuality"
+                name="selectQuality"
+                onChange={handleSelectChange}
+              >
                 {playlists.map((playlist) => (
                   <option value={playlist.url}>{playlist.video}</option>
                 ))}
