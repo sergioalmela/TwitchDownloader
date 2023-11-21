@@ -5,12 +5,14 @@ import { getCredentials } from './downloader/auth/getCredentials.ts'
 import { getManifest } from './downloader/getManifest.ts'
 import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
 import { invoke } from '@tauri-apps/api/tauri'
+import { open } from '@tauri-apps/api/dialog'
 
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [selectedPlaylistUrl, setSelectedPlaylistUrl] = useState('')
+  const [folder, setFolder] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -19,6 +21,23 @@ const FormComponent = () => {
     const target = event.target as HTMLInputElement
     setUrl(target.value)
     setError('')
+  }
+
+  const selectFolder = async () => {
+    try {
+      const selectedFolder = await open({
+        directory: true,
+        multiple: false
+      })
+
+      if (selectedFolder) {
+        setFolder(
+          Array.isArray(selectedFolder) ? selectedFolder[0] : selectedFolder
+        )
+      }
+    } catch (error) {
+      console.error('Error selecting folder:', error)
+    }
   }
 
   const handleGetQualities = async () => {
@@ -81,8 +100,10 @@ const FormComponent = () => {
         const m3u8 = selectedPlaylistUrl
         const result = await invoke('download', { m3u8 })
         console.log(result)
-      } catch (error) {
-        // Handle any errors here
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message)
+        }
       }
     }
   }
@@ -102,23 +123,20 @@ const FormComponent = () => {
         </div>
 
         <div className="form-group">
-          <input
-            type="file"
-            id="fileUpload"
-            name="fileUpload"
-            style="display: none;"
-            multiple
-            required
-          />
+          <button onClick={selectFolder}>Select Folder</button>
 
-          <label htmlFor="fileUpload" className="folder-button">
-            Select a folder to save
-          </label>
+          <label>{folder}</label>
         </div>
 
         <div className="form-group">
           <label htmlFor="fileName">File Name:</label>
-          <input type="text" id="fileName" name="fileName" required />
+          <input
+            type="text"
+            id="fileName"
+            name="fileName"
+            value="download.mp4"
+            required
+          />
         </div>
 
         {error && <div className="error-message">{error}</div>}
