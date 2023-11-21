@@ -8,13 +8,22 @@ import { getPlaylist } from './downloader/getPlaylist.ts'
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleUrlChange = (event: Event) => {
     const target = event.target as HTMLInputElement
     setUrl(target.value)
+    setError('')
   }
 
   const handleGetQualities = async () => {
+    setIsLoading(true)
+
+    if (url === '') {
+      setError('URL is required')
+    }
+
     const contentType = detectContentType(url)
 
     if (contentType === null) {
@@ -40,6 +49,7 @@ const FormComponent = () => {
       //await downloadContent(playlist[0].url)
     }
 
+    setIsLoading(false)
     setShowQualities(true)
   }
 
@@ -77,6 +87,8 @@ const FormComponent = () => {
           <input type="text" id="fileName" name="fileName" required />
         </div>
 
+        {error && <div className="error-message">{error}</div>}
+
         <div className="form-group">
           <button type="button" onClick={handleGetQualities}>
             Get Qualities
@@ -94,10 +106,15 @@ const FormComponent = () => {
               </select>
             </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Download</button>
           </>
         )}
       </form>
+      {isLoading && (
+        <div className="spinner-container">
+          <div id="loader" />
+        </div>
+      )}
     </div>
   )
 }
