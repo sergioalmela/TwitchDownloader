@@ -3,11 +3,13 @@ import { detectContentType } from './downloader/detectContentType.ts'
 import { getContentIdFromUrl } from './downloader/getContentId.ts'
 import { getCredentials } from './downloader/auth/getCredentials.ts'
 import { getManifest } from './downloader/getManifest.ts'
-import { getPlaylist } from './downloader/getPlaylist.ts'
+import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
 
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,33 +22,44 @@ const FormComponent = () => {
   const handleGetQualities = async () => {
     setIsLoading(true)
 
-    if (url === '') {
-      setError('URL is required')
-    }
+    try {
+      if (url === '') {
+        setError('URL is required')
+        return
+      }
 
-    const contentType = detectContentType(url)
+      const contentType = detectContentType(url)
 
-    if (contentType === null) {
-      console.log('Content type not supported')
-      return
-    }
+      if (contentType === null) {
+        setError('Content type not supported')
+        return
+      }
 
-    const id = getContentIdFromUrl(contentType, url)
+      const id = getContentIdFromUrl(contentType, url)
 
-    if (id === null) {
-      console.log('Failed to get content id')
-      return
-    }
+      if (id === null) {
+        setError('Failed to get content id')
+        return
+      }
 
-    const credentials = await getCredentials(contentType, id)
+      const credentials = await getCredentials(contentType, id)
 
-    const manifest = await getManifest(contentType, id, credentials)
+      const manifest = await getManifest(contentType, id, credentials)
 
-    if (manifest) {
-      const playlist = getPlaylist(manifest)
-      console.log(playlist[0].url)
+      if (manifest) {
+        const playlists = getPlaylist(manifest)
 
-      //await downloadContent(playlist[0].url)
+        if (playlists.length === 0) {
+          setError('Failed to get playlists')
+          return
+        }
+
+        setPlaylists(playlists)
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message)
+      }
     }
 
     setIsLoading(false)
@@ -95,14 +108,14 @@ const FormComponent = () => {
           </button>
         </div>
 
-        {showQualities && (
+        {showQualities && playlists.length && (
           <>
             <div className="form-group">
               <label htmlFor="selectQuality">Select Quality:</label>
               <select id="selectQuality" name="selectQuality">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                {playlists.map((playlist) => (
+                  <option value={playlist.url}>{playlist.video}</option>
+                ))}
               </select>
             </div>
 

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Parser } from 'm3u8-parser'
 
-type Playlist = {
+export type Playlist = {
   video: string
   quality: string
   url: string
