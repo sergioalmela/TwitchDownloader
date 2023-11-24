@@ -40,26 +40,31 @@ const FormComponent = () => {
     }
   }
 
+  const handleError = (error: string) => {
+    setError(error)
+    setIsLoading(false)
+  }
+
   const handleGetQualities = async () => {
     setIsLoading(true)
 
     try {
       if (url === '') {
-        setError('URL is required')
+        handleError('URL is empty')
         return
       }
 
       const contentType = detectContentType(url)
 
       if (contentType === null) {
-        setError('Content type not supported')
+        handleError('Failed to detect content type')
         return
       }
 
       const id = getContentIdFromUrl(contentType, url)
 
       if (id === null) {
-        setError('Failed to get content id')
+        handleError('Failed to get content id')
         return
       }
 
@@ -71,16 +76,19 @@ const FormComponent = () => {
         const playlists = getPlaylist(manifest)
 
         if (playlists.length === 0) {
-          setError('Failed to get playlists')
+          handleError('Failed to get playlists')
           return
         }
 
         setPlaylists(playlists)
         setSelectedPlaylistUrl(playlists[0].url)
+      } else {
+        handleError('Failed to get video content')
+        return
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setError(error.message)
+        handleError(error.message)
       }
     }
 
