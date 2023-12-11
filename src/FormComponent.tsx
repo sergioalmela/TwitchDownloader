@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { detectContentType } from './downloader/detectContentType.ts'
 import { getContentIdFromUrl } from './downloader/getContentId.ts'
 import { getCredentials } from './downloader/auth/getCredentials.ts'
@@ -6,6 +6,7 @@ import { getManifest } from './downloader/getManifest.ts'
 import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
 import { invoke } from '@tauri-apps/api/tauri'
 import { open } from '@tauri-apps/api/dialog'
+import { listen } from '@tauri-apps/api/event'
 
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
@@ -16,6 +17,22 @@ const FormComponent = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const [downloadProgress, setDownloadProgress] = useState(0)
+
+  useEffect(() => {
+    const unlisten = listen('download-progress', (event) => {
+      console.log(`Received event: ${event.payload}`) // Check if event is received
+      if (typeof event.payload === 'number') {
+        console.log(`Download progress: ${event.payload}%`)
+        setDownloadProgress(event.payload)
+      }
+    })
+
+    return () => {
+      unlisten.then((fn) => fn())
+    }
+  }, [])
 
   const handleUrlChange = (event: Event) => {
     const target = event.target as HTMLInputElement
@@ -96,7 +113,7 @@ const FormComponent = () => {
     setShowQualities(true)
   }
 
-  const handleSelectChange = (event: Event) => {
+  const handleQualityChange = (event: Event) => {
     const target = event.target as HTMLSelectElement
     setSelectedPlaylistUrl(target.value)
   }
@@ -105,8 +122,7 @@ const FormComponent = () => {
     event.preventDefault()
     if (selectedPlaylistUrl) {
       try {
-        const m3u8 = selectedPlaylistUrl
-        const result = await invoke('download', { m3u8 })
+        const result = await invoke('download')
         console.log(result)
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -117,52 +133,81 @@ const FormComponent = () => {
   }
 
   return (
-    <div className="input-form">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="twitchUrl">Twitch URL:</label>
+    <div class="max-w-lg mx-auto p-4 w-4/5">
+      <form onSubmit={handleSubmit} class="space-y-6">
+        <div>
+          <label
+            htmlFor="twitchUrl"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Twitch URL:
+          </label>
           <input
             type="url"
             id="twitchUrl"
             name="twitchUrl"
             value={url}
             onChange={handleUrlChange}
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
-        <div className="form-group">
-          <button onClick={selectFolder}>Select Folder</button>
-
-          <label>{folder}</label>
+        <div className="flex flex-col items-center space-y-2 w-full">
+          <button
+            onClick={selectFolder}
+            type="button"
+            className="py-2 px-4 w-full border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          >
+            Select Folder
+          </button>
+          {folder && (
+            <span class="text-sm text-gray-500 text-center">{folder}</span>
+          )}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="fileName">File Name:</label>
+        <div>
+          <label
+            htmlFor="fileName"
+            class="block text-sm font-medium text-gray-700"
+          >
+            File Name:
+          </label>
           <input
             type="text"
             id="fileName"
             name="fileName"
             value="download.mp4"
             required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message text-red-500">{error}</div>}
 
-        <div className="form-group">
-          <button type="button" onClick={handleGetQualities}>
+        <div>
+          <button
+            type="button"
+            onClick={handleGetQualities}
+            class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
             Get Qualities
           </button>
         </div>
 
         {showQualities && playlists.length && (
           <>
-            <div className="form-group">
-              <label htmlFor="selectQuality">Select Quality:</label>
+            <div>
+              <label
+                htmlFor="selectQuality"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Select Quality:
+              </label>
               <select
                 id="selectQuality"
                 name="selectQuality"
-                onChange={handleSelectChange}
+                onChange={handleQualityChange}
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 {playlists.map((playlist) => (
                   <option value={playlist.url}>{playlist.video}</option>
@@ -170,15 +215,28 @@ const FormComponent = () => {
               </select>
             </div>
 
-            <button type="submit">Download</button>
+            <button
+              type="submit"
+              class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Download
+            </button>
           </>
         )}
       </form>
       {isLoading && (
-        <div className="spinner-container">
-          <div id="loader" />
+        <div className="flex justify-center mt-4">
+          <div
+            className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500"
+            role="status"
+            aria-label="loading"
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       )}
+
+      <p>Download Progress: {downloadProgress}%</p>
     </div>
   )
 }
