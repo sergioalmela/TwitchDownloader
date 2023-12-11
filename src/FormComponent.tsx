@@ -20,9 +20,11 @@ const FormComponent = () => {
 
   const [downloadProgress, setDownloadProgress] = useState(0)
 
+  const [fileName, setFileName] = useState('download.mp4')
+
   useEffect(() => {
     const unlisten = listen('download-progress', (event) => {
-      console.log(`Received event: ${event.payload}`) // Check if event is received
+      console.log(`Received event: ${event.payload}`)
       if (typeof event.payload === 'number') {
         console.log(`Download progress: ${event.payload}%`)
         setDownloadProgress(event.payload)
@@ -118,17 +120,34 @@ const FormComponent = () => {
     setSelectedPlaylistUrl(target.value)
   }
 
-  const handleSubmit = async (event: Event) => {
+  const handleFileNameChange = (event: any) => {
+    setFileName(event.target.value)
+  }
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
-    if (selectedPlaylistUrl) {
+    if (selectedPlaylistUrl && fileName) {
       try {
-        const result = await invoke('download')
+        const downloadData = {
+          args: {
+            m3u8_url: selectedPlaylistUrl,
+            download_path: folder,
+            file_name: fileName
+          }
+        }
+
+        const result = await invoke('download', downloadData)
         console.log(result)
-      } catch (error: unknown) {
+      } catch (error) {
+        console.log(error)
         if (error instanceof Error) {
           setError(error.message)
+        } else if (typeof error === 'string') {
+          setError(error)
         }
       }
+    } else {
+      setError('Please fill in all fields.')
     }
   }
 
@@ -176,7 +195,8 @@ const FormComponent = () => {
             type="text"
             id="fileName"
             name="fileName"
-            value="download.mp4"
+            value={fileName}
+            onChange={handleFileNameChange}
             required
             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />

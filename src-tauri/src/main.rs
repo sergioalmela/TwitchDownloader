@@ -25,18 +25,21 @@ impl From<std::io::Error> for DownloadError {
 }
 
 
+#[derive(serde::Deserialize)]
+struct DownloadArgs {
+    m3u8_url: String,
+    download_path: String,
+    file_name: String,
+}
+
 #[tauri::command]
-async fn download(window: Window) -> Result<(), String> {
-    println!("Download command invoked");
+async fn download(args: DownloadArgs, window: Window) -> Result<(), String> {
+    println!("Download command invoked with URL: {}", args.m3u8_url);
 
-    let download_path = "/home/torre/Descargas";
-    let url = "https://d1m7jfoe9zdc1j.cloudfront.net/a5090b708df0bad748a2_hey_drunni_82278794733_7591534627/160p30/highlight-1157039239.m3u8";
+    // Use args.m3u8_url, args.download_path, and args.file_name in your logic
+    let output_file = Path::new(&args.download_path).join(args.file_name);
 
-    let output_file = Path::new(&download_path).join("output.mp4");
-
-    println!("Download path: {:?}", download_path);
-
-    match download_and_concatenate_m3u8(&window, &url, &download_path, &output_file).await {
+    match download_and_concatenate_m3u8(&window, &args.m3u8_url, &args.download_path, &output_file).await {
         Ok(()) => Ok(()),
         Err(e) => Err(format!("Download failed: {:?}", e)),
     }
