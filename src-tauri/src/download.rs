@@ -1,0 +1,136 @@
+use tauri::Window;
+use std::path::{Path};
+use std::fs::File;
+use std::io::Write;
+use reqwest;
+use std::collections::HashSet;
+use std::sync::{Arc, Mutex};
+
+#[derive(Debug)]
+enum DownloadError {
+    Request(reqwest::Error),
+    Io(std::io::Error),
+}
+
+impl From<reqwest::Error> for DownloadError {
+    fn from(err: reqwest::Error) -> Self {
+        DownloadError::Request(err)
+    }
+}
+
+impl From<std::io::Error> for DownloadError {
+    fn from(err: std::io::Error) -> Self {
+        DownloadError::Io(err)
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct DownloadArgs {
+    m3u8_url: String,
+    download_path: String,
+    file_name: String,
+}
+
+#[tauri::command]
+pub async fn download(args: DownloadArgs, window: Window) -> Result<(), String> {
+    println!("Download command invoked with URL: {}", args.m3u8_url);
+    let output_file = Path::new(&args.download_path).join(args.file_name);
+
+    let window_arc = Arc::new(Mutex::new(window));
+
+    match download_and_concatenate_m3u8(window_arc, &args.m3u8_url, &args.download_path, &output_file).await {
+        Ok(()) => Ok(()),
+        Err(e) => Err(format!("Download failed: {:?}", e)),
+    }
+}
+
+async fn download_and_concatenate_m3u8(window_arc: Arc<Mutex<Window>>, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+    let mut downloaded_segments = HashSet::new();
+    let mut output = File::create(output_file)?;
+
+    loop {
+        let response = reqwest::get(url).await?.text().await?;
+
+        // Print the response
+        println!("Response: {}", response);
+        let segment_lines: Vec<&str> = response.lines()
+            .filter(|line| line.contains(".ts"))
+            .map(|line| line.split('?').next().unwrap_or(line))
+            .collect();
+
+
+        if segment_lines.is_empty() {
+            // Handle the case where there are no segments (possibly end of stream)
+            break;
+        }
+
+        for line in &segment_lines {
+            if downloaded_segments.contains(&line.to_string()) {
+                continue;
+            }
+
+            let segment_url = if line.starts_with("http") {
+                line.to_string()
+            } else {
+                format!("{}/{}", url, line)
+            };
+
+            let content = reqwest::get(&segment_url).await?.bytes().await?;
+            output.write_all(&content)?;
+
+            // Update the downloaded segments set
+            downloaded_segments.insert(line.to_string());
+
+            // Emit progress event
+            let progress = downloaded_segments.len() as f64 / segment_lines.len() as f64 * 100.0;
+
+            let window = window_arc.lock().unwrap();
+            window.emit("download-progress", &progress).expect("Failed to emit progress event");
+            drop(window); // Release the lock
+
+            println!("Downloading segment: {}, progress: {}", segment_url, progress);
+        }
+
+        // Print the response
+        println!("Response: {}", response);
+        // Check for live stream end condition
+        if response.contains("#EXT-X-ENDLIST") {
+            break; // End of live stream
+        }
+
+        // Sleep for 10 seconds before downloading the next segment in this ASYNC thread
+        tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+    }
+
+    Ok(())
+}
+
+
+async fn download_and_concatenate_m3u8_vod(window: &Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+    let response = reqwest::get(url).await?.text().await?;
+    let base_url = url.rsplitn(2, '/').nth(1).unwrap_or("");
+    let mut output = File::create(output_file)?;
+    let segment_lines: Vec<&str> = response.lines().filter(|line| line.ends_with(".ts")).collect();
+    let total_segments = segment_lines.len();
+    println!("Base Url: {}", base_url);
+    println!("Segment lines: {:?}", segment_lines);
+
+    for (index, line) in segment_lines.iter().enumerate() {
+        let segment_url = if line.starts_with("http") {
+            line.to_string()
+        } else {
+            format!("{}/{}", base_url, line)
+        };
+        let content = reqwest::get(&segment_url).await?.bytes().await?;
+        output.write_all(&content)?;
+
+        // Emit progress event
+        // Inside the loop in download_and_concatenate_m3u8
+        let progress = (index + 1) as f64 / total_segments as f64 * 100.0;
+        window.emit("download-progress", &progress).expect("Failed to emit progress event");
+        // Inside the loop in download_and_concatenate_m3u8
+        println!("Downloading segment: {}, progress: {}", segment_url, progress);
+    }
+
+    Ok(())
+}
