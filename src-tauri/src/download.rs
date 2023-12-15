@@ -1,10 +1,10 @@
-use tauri::Window;
-use std::path::{Path};
-use std::fs::File;
-use std::io::Write;
 use reqwest;
 use std::collections::HashSet;
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 use std::sync::{Arc, Mutex};
+use tauri::Window;
 
 #[derive(Debug)]
 enum DownloadError {
@@ -38,7 +38,14 @@ pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), Str
 
     let window_arc = Arc::new(Mutex::new(window));
 
-    match download_parse_m3u8_live(window_arc, &args.m3u8_url, &args.download_path, &output_file).await {
+    match download_parse_m3u8_live(
+        window_arc,
+        &args.m3u8_url,
+        &args.download_path,
+        &output_file,
+    )
+    .await
+    {
         Ok(()) => Ok(()),
         Err(e) => Err(format!("Download failed: {:?}", e)),
     }
@@ -60,13 +67,19 @@ pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), Str
     println!("Download clip invoked with URL: {}", args.m3u8_url);
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
-    match download_parse_m3u8_clip(window, &args.m3u8_url, &args.download_path, &output_file).await {
+    match download_parse_m3u8_clip(window, &args.m3u8_url, &args.download_path, &output_file).await
+    {
         Ok(()) => Ok(()),
         Err(e) => Err(format!("Download failed: {:?}", e)),
     }
 }
 
-async fn download_parse_m3u8_live(window_arc: Arc<Mutex<Window>>, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+async fn download_parse_m3u8_live(
+    window_arc: Arc<Mutex<Window>>,
+    url: &str,
+    download_path: &str,
+    output_file: &Path,
+) -> Result<(), DownloadError> {
     let mut downloaded_segments = HashSet::new();
     let mut output = File::create(output_file)?;
 
@@ -75,11 +88,11 @@ async fn download_parse_m3u8_live(window_arc: Arc<Mutex<Window>>, url: &str, dow
 
         // Print the response
         println!("Response: {}", response);
-        let segment_lines: Vec<&str> = response.lines()
+        let segment_lines: Vec<&str> = response
+            .lines()
             .filter(|line| line.contains(".ts"))
             .map(|line| line.split('?').next().unwrap_or(line))
             .collect();
-
 
         if segment_lines.is_empty() {
             // Handle the case where there are no segments (possibly end of stream)
@@ -107,10 +120,15 @@ async fn download_parse_m3u8_live(window_arc: Arc<Mutex<Window>>, url: &str, dow
             let progress = downloaded_segments.len() as f64 / segment_lines.len() as f64 * 100.0;
 
             let window = window_arc.lock().unwrap();
-            window.emit("download-progress", &progress).expect("Failed to emit progress event");
+            window
+                .emit("download-progress", &progress)
+                .expect("Failed to emit progress event");
             drop(window); // Release the lock
 
-            println!("Downloading segment: {}, progress: {}", segment_url, progress);
+            println!(
+                "Downloading segment: {}, progress: {}",
+                segment_url, progress
+            );
         }
 
         // Print the response
@@ -127,12 +145,19 @@ async fn download_parse_m3u8_live(window_arc: Arc<Mutex<Window>>, url: &str, dow
     Ok(())
 }
 
-
-async fn download_parse_m3u8_vod(window: Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+async fn download_parse_m3u8_vod(
+    window: Window,
+    url: &str,
+    download_path: &str,
+    output_file: &Path,
+) -> Result<(), DownloadError> {
     let response = reqwest::get(url).await?.text().await?;
     let base_url = url.rsplitn(2, '/').nth(1).unwrap_or("");
     let mut output = File::create(output_file)?;
-    let segment_lines: Vec<&str> = response.lines().filter(|line| line.ends_with(".ts")).collect();
+    let segment_lines: Vec<&str> = response
+        .lines()
+        .filter(|line| line.ends_with(".ts"))
+        .collect();
     let total_segments = segment_lines.len();
     println!("Base Url: {}", base_url);
     println!("Segment lines: {:?}", segment_lines);
@@ -149,15 +174,25 @@ async fn download_parse_m3u8_vod(window: Window, url: &str, download_path: &str,
         // Emit progress event
         // Inside the loop in download_and_concatenate_m3u8
         let progress = (index + 1) as f64 / total_segments as f64 * 100.0;
-        window.emit("download-progress", &progress).expect("Failed to emit progress event");
+        window
+            .emit("download-progress", &progress)
+            .expect("Failed to emit progress event");
         // Inside the loop in download_and_concatenate_m3u8
-        println!("Downloading segment: {}, progress: {}", segment_url, progress);
+        println!(
+            "Downloading segment: {}, progress: {}",
+            segment_url, progress
+        );
     }
 
     Ok(())
 }
 
-async fn download_parse_m3u8_clip(window: Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+async fn download_parse_m3u8_clip(
+    window: Window,
+    url: &str,
+    download_path: &str,
+    output_file: &Path,
+) -> Result<(), DownloadError> {
     // Directly download the content from the URL (assuming it's an MP4 file)
     let content = reqwest::get(url).await?.bytes().await?;
 
@@ -166,10 +201,11 @@ async fn download_parse_m3u8_clip(window: Window, url: &str, download_path: &str
     output.write_all(&content)?;
 
     // Emit a success event (100% progress)
-    window.emit("download-progress", &100.0).expect("Failed to emit progress event");
+    window
+        .emit("download-progress", &100.0)
+        .expect("Failed to emit progress event");
 
     println!("Downloaded MP4 file: {}", url);
 
     Ok(())
 }
-

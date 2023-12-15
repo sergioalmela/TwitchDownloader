@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
+use download::{download_clip, download_live, download_vod};
 use std::io::Write;
-use download::{download_live, download_clip, download_vod};
+use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 mod download;
 
@@ -17,7 +17,11 @@ fn main() {
         .add_submenu(submenu);
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![download_live, download_vod, download_clip])
+        .invoke_handler(tauri::generate_handler![
+            download_live,
+            download_vod,
+            download_clip
+        ])
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
             "quit" => {
