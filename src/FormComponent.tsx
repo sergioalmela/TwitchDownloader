@@ -14,13 +14,14 @@ const FormComponent = () => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [selectedPlaylistUrl, setSelectedPlaylistUrl] = useState('')
   const [folder, setFolder] = useState('')
+  const [downloadProgress, setDownloadProgress] = useState(0)
+  const [fileName, setFileName] = useState('download.mp4')
+  const [downloadCommand, setDownloadCommand] = useState<
+    'download_vod' | 'download_clip' | 'download_stream'
+  >('download_vod')
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-
-  const [downloadProgress, setDownloadProgress] = useState(0)
-
-  const [fileName, setFileName] = useState('download.mp4')
 
   useEffect(() => {
     const unlisten = listen('download-progress', (event) => {
@@ -80,6 +81,14 @@ const FormComponent = () => {
         return
       }
 
+      setDownloadCommand(
+        contentType === 'clip'
+          ? 'download_clip'
+          : contentType === 'live'
+          ? 'download_stream'
+          : 'download_vod'
+      )
+
       const id = getContentIdFromUrl(contentType, url)
 
       if (id === null) {
@@ -136,7 +145,7 @@ const FormComponent = () => {
           }
         }
 
-        const result = await invoke('download', downloadData)
+        const result = await invoke(downloadCommand, downloadData)
         console.log(result)
       } catch (error) {
         console.log(error)

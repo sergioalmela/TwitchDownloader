@@ -32,19 +32,41 @@ pub struct DownloadArgs {
 }
 
 #[tauri::command]
-pub async fn download(args: DownloadArgs, window: Window) -> Result<(), String> {
-    println!("Download command invoked with URL: {}", args.m3u8_url);
+pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), String> {
+    println!("Download live invoked with URL: {}", args.m3u8_url);
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     let window_arc = Arc::new(Mutex::new(window));
 
-    match download_and_concatenate_m3u8(window_arc, &args.m3u8_url, &args.download_path, &output_file).await {
+    match download_parse_m3u8_live(window_arc, &args.m3u8_url, &args.download_path, &output_file).await {
         Ok(()) => Ok(()),
         Err(e) => Err(format!("Download failed: {:?}", e)),
     }
 }
 
-async fn download_and_concatenate_m3u8(window_arc: Arc<Mutex<Window>>, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+#[tauri::command]
+pub async fn download_vod(args: DownloadArgs, window: Window) -> Result<(), String> {
+    println!("Download vod invoked with URL: {}", args.m3u8_url);
+    let output_file = Path::new(&args.download_path).join(args.file_name);
+
+    match download_parse_m3u8_vod(window, &args.m3u8_url, &args.download_path, &output_file).await {
+        Ok(()) => Ok(()),
+        Err(e) => Err(format!("Download failed: {:?}", e)),
+    }
+}
+
+#[tauri::command]
+pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), String> {
+    println!("Download clip invoked with URL: {}", args.m3u8_url);
+    let output_file = Path::new(&args.download_path).join(args.file_name);
+
+    match download_parse_m3u8_clip(window, &args.m3u8_url, &args.download_path, &output_file).await {
+        Ok(()) => Ok(()),
+        Err(e) => Err(format!("Download failed: {:?}", e)),
+    }
+}
+
+async fn download_parse_m3u8_live(window_arc: Arc<Mutex<Window>>, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
     let mut downloaded_segments = HashSet::new();
     let mut output = File::create(output_file)?;
 
@@ -106,7 +128,7 @@ async fn download_and_concatenate_m3u8(window_arc: Arc<Mutex<Window>>, url: &str
 }
 
 
-async fn download_and_concatenate_m3u8_vod(window: &Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+async fn download_parse_m3u8_vod(window: Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
     let response = reqwest::get(url).await?.text().await?;
     let base_url = url.rsplitn(2, '/').nth(1).unwrap_or("");
     let mut output = File::create(output_file)?;
@@ -134,3 +156,20 @@ async fn download_and_concatenate_m3u8_vod(window: &Window, url: &str, download_
 
     Ok(())
 }
+
+async fn download_parse_m3u8_clip(window: Window, url: &str, download_path: &str, output_file: &Path) -> Result<(), DownloadError> {
+    // Directly download the content from the URL (assuming it's an MP4 file)
+    let content = reqwest::get(url).await?.bytes().await?;
+
+    // Create the output file and write the content to it
+    let mut output = File::create(output_file)?;
+    output.write_all(&content)?;
+
+    // Emit a success event (100% progress)
+    window.emit("download-progress", &100.0).expect("Failed to emit progress event");
+
+    println!("Downloaded MP4 file: {}", url);
+
+    Ok(())
+}
+
