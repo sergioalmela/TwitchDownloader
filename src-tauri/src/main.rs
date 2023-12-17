@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use download::{download_clip, download_live, download_vod};
-use std::io::Write;
+
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 mod download;

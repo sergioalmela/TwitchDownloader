@@ -1,4 +1,3 @@
-use reqwest;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::Write;
@@ -77,7 +76,7 @@ pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), Str
 async fn download_parse_m3u8_live(
     window_arc: Arc<Mutex<Window>>,
     url: &str,
-    download_path: &str,
+    _download_path: &str,
     output_file: &Path,
 ) -> Result<(), DownloadError> {
     let mut downloaded_segments = HashSet::new();
@@ -148,11 +147,11 @@ async fn download_parse_m3u8_live(
 async fn download_parse_m3u8_vod(
     window: Window,
     url: &str,
-    download_path: &str,
+    _download_path: &str,
     output_file: &Path,
 ) -> Result<(), DownloadError> {
     let response = reqwest::get(url).await?.text().await?;
-    let base_url = url.rsplitn(2, '/').nth(1).unwrap_or("");
+    let base_url = url.rsplit_once('/').map(|x| x.0).unwrap_or("");
     let mut output = File::create(output_file)?;
     let segment_lines: Vec<&str> = response
         .lines()
@@ -190,7 +189,7 @@ async fn download_parse_m3u8_vod(
 async fn download_parse_m3u8_clip(
     window: Window,
     url: &str,
-    download_path: &str,
+    _download_path: &str,
     output_file: &Path,
 ) -> Result<(), DownloadError> {
     // Directly download the content from the URL (assuming it's an MP4 file)
