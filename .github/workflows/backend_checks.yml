@@ -21,6 +21,7 @@ jobs:
         with:
           command: fmt
           args: -- --check
+          working-directory: ./src-tauri
 
       - name: Lint with Clippy
         uses: actions-rs/clippy-check@v1
