@@ -10,7 +10,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libsoup2.4-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libsoup2.4-dev libwebkit2gtk-4.0-dev
 
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -24,7 +26,7 @@ jobs:
           cd src-tauri
           cargo fmt -- --check
 
-      - name: Lint with Clippy
+      - name: Check linting with Clippy
         run: |
           cd src-tauri
           cargo clippy -- -D warnings
