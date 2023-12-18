@@ -6,10 +6,6 @@ jobs:
   rust-lint-and-build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: src-tauri
-
     steps:
       - uses: actions/checkout@v4
 
@@ -24,19 +20,16 @@ jobs:
           override: true
 
       - name: Check formatting with Rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -- --check
+        run: |
+          cd src-tauri
+          cargo fmt -- --check
 
       - name: Lint with Clippy
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: -- -D warnings
+        run: |
+          cd src-tauri
+          cargo clippy -- -D warnings
 
       - name: Build with Cargo
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
+        run: |
+          cd src-tauri
+          cargo build --release
