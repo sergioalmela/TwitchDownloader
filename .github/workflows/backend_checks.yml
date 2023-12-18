@@ -13,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: List directory contents
+        run: ls -alh
+
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
