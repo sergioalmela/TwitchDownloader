@@ -17,13 +17,6 @@ jobs:
             ~/.cargo/git
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Cache Target Directory
-        uses: actions/cache@v3
-        with:
-          path: target
-          key: ${{ runner.os }}-target-${{ hashFiles('**/Cargo.lock') }}
-
-
       - name: Install dependencies
         run: |
           sudo apt-get update
