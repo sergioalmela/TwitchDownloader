@@ -6,10 +6,6 @@ jobs:
   rust-lint-and-build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: src-tauri
-
     steps:
       - uses: actions/checkout@v4
 
