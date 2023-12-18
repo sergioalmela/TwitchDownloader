@@ -6,6 +6,10 @@ jobs:
   rust-lint-and-build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: src-tauri
+
     steps:
       - uses: actions/checkout@v4
 
@@ -21,7 +25,6 @@ jobs:
         with:
           command: fmt
           args: -- --check
-          working-directory: ./src-tauri
 
       - name: Lint with Clippy
         uses: actions-rs/clippy-check@v1
