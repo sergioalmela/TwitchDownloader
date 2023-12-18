@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error m3u8-parser doesn't provide types
 import { Parser } from 'm3u8-parser'
 
 export type Playlist = {

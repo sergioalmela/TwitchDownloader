@@ -129,11 +129,12 @@ const FormComponent = () => {
     setSelectedPlaylistUrl(target.value)
   }
 
-  const handleFileNameChange = (event: any) => {
-    setFileName(event.target.value)
+  const handleFileNameChange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    setFileName(target.value)
   }
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: Event) => {
     event.preventDefault()
     if (selectedPlaylistUrl && fileName) {
       try {

@@ -9,23 +9,37 @@ export type Credentials = {
   value: string
 }
 
+type AuthResponse = {
+  data: {
+    data: {
+      videoPlaybackAccessToken: Credentials
+      clip: {
+        playbackAccessToken: Credentials
+      }
+      streamPlaybackAccessToken: Credentials
+    }
+  }
+}
+
 export const getCredentials = async (
   contentType: ContentTypes,
   id: ContentId
 ): Promise<Credentials> => {
-  const response = await fetch('https://gql.twitch.tv/gql', {
+  const response: AuthResponse = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     timeout: 30,
     body: Body.json(getAuthVariables(contentType, id)),
     headers: getAuthHeaders()
   })
 
+  console.log(response)
+
   return getAccessTokenFromResponse(contentType, response)
 }
 
 const getAccessTokenFromResponse = (
   contentType: ContentTypes,
-  response: any
+  response: AuthResponse
 ): Credentials => {
   if (contentType === ContentTypes.VOD) {
     return response.data.data.videoPlaybackAccessToken
