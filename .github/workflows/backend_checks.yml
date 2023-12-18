@@ -46,7 +46,7 @@ jobs:
           cd src-tauri
           cargo clippy -- -D warnings
 
-      - name: Build with Cargo
+      - name: Cargo Build
         run: |
           cd src-tauri
           cargo build --release
