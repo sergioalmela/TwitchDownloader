@@ -23,6 +23,10 @@ const FormComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const clearErrors = () => {
+    setError('')
+  }
+
   useEffect(() => {
     const unlisten = listen('download-progress', (event) => {
       console.log(`Received event: ${event.payload}`)
@@ -136,28 +140,32 @@ const FormComponent = () => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    if (selectedPlaylistUrl && fileName) {
-      try {
-        const downloadData = {
-          args: {
-            m3u8_url: selectedPlaylistUrl,
-            download_path: folder,
-            file_name: fileName
-          }
-        }
+    console.log('submitting')
+    console.log(selectedPlaylistUrl, fileName)
+    if (!selectedPlaylistUrl || !fileName.trim()) {
+      setError('Please fill in all fields.')
+      return
+    }
 
-        const result = await invoke(downloadCommand, downloadData)
-        console.log(result)
-      } catch (error) {
-        console.log(error)
-        if (error instanceof Error) {
-          setError(error.message)
-        } else if (typeof error === 'string') {
-          setError(error)
+    try {
+      const downloadData = {
+        args: {
+          m3u8_url: selectedPlaylistUrl,
+          download_path: folder,
+          file_name: fileName
         }
       }
-    } else {
-      setError('Please fill in all fields.')
+
+      clearErrors()
+      const result = await invoke(downloadCommand, downloadData)
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof Error) {
+        setError(error.message)
+      } else if (typeof error === 'string') {
+        setError(error)
+      }
     }
   }
 
@@ -207,7 +215,6 @@ const FormComponent = () => {
             name="fileName"
             value={fileName}
             onChange={handleFileNameChange}
-            required
             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
