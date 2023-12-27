@@ -7,6 +7,7 @@ import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
 import { invoke } from '@tauri-apps/api/tauri'
 import { open } from '@tauri-apps/api/dialog'
 import { listen } from '@tauri-apps/api/event'
+import ProgressBar from './ProgressBar.tsx'
 
 const FormComponent = () => {
   const [showQualities, setShowQualities] = useState(false)
@@ -15,6 +16,7 @@ const FormComponent = () => {
   const [selectedPlaylistUrl, setSelectedPlaylistUrl] = useState('')
   const [folder, setFolder] = useState('')
   const [downloadProgress, setDownloadProgress] = useState(0)
+  const [isDownloading, setIsDownloading] = useState(false)
   const [fileName, setFileName] = useState('download.mp4')
   const [downloadCommand, setDownloadCommand] = useState<
     'download_vod' | 'download_clip' | 'download_stream'
@@ -33,6 +35,7 @@ const FormComponent = () => {
       if (typeof event.payload === 'number') {
         console.log(`Download progress: ${event.payload}%`)
         setDownloadProgress(event.payload)
+        setIsDownloading(true)
       }
     })
 
@@ -81,7 +84,7 @@ const FormComponent = () => {
       const contentType = detectContentType(url)
 
       if (contentType === null) {
-        handleError('Failed to detect content type')
+        handleError('Content URL seems wrong')
         return
       }
 
@@ -273,7 +276,7 @@ const FormComponent = () => {
         </div>
       )}
 
-      <p>Download Progress: {downloadProgress}%</p>
+      {isDownloading && <ProgressBar progress={downloadProgress} />}
     </div>
   )
 }
