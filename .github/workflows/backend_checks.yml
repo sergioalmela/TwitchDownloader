@@ -1,6 +1,12 @@
 name: Rust Checks
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'src-tauri/**'
+  pull_request:
+    paths:
+      - 'src-tauri/**'
 
 jobs:
   rust-lint-and-build:
