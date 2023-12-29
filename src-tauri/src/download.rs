@@ -81,12 +81,16 @@ async fn download_parse_m3u8_live(
 ) -> Result<(), DownloadError> {
     let mut downloaded_segments = HashSet::new();
     let mut output = File::create(output_file)?;
+    let mut is_stream_over = false;
 
     loop {
         let response = reqwest::get(url).await?.text().await?;
 
-        // Print the response
-        println!("Response: {}", response);
+        // Stream is over
+        if response.contains("#EXT-X-ENDLIST") {
+            is_stream_over = true;
+        }
+
         let segment_lines: Vec<&str> = response
             .lines()
             .filter(|line| line.contains(".ts"))
@@ -94,12 +98,19 @@ async fn download_parse_m3u8_live(
             .collect();
 
         if segment_lines.is_empty() {
-            // Handle the case where there are no segments (possibly end of stream)
-            break;
+            if is_stream_over {
+                // If there are no segments and the stream is over, break the loop
+                break;
+            } else {
+                // If there are no segments but the stream is not over yet, wait and then continue
+                tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                continue;
+            }
         }
 
         for line in &segment_lines {
-            if downloaded_segments.contains(&line.to_string()) {
+            let line_str = line.to_string();
+            if downloaded_segments.contains(&line_str) {
                 continue;
             }
 
@@ -112,33 +123,23 @@ async fn download_parse_m3u8_live(
             let content = reqwest::get(&segment_url).await?.bytes().await?;
             output.write_all(&content)?;
 
-            // Update the downloaded segments set
-            downloaded_segments.insert(line.to_string());
+            downloaded_segments.insert(line_str);
+        }
 
-            // Emit progress event
-            let progress = downloaded_segments.len() as f64 / segment_lines.len() as f64 * 100.0;
+        let progress = if is_stream_over { 100.0 } else { 50.0 };
 
+        {
             let window = window_arc.lock().unwrap();
             window
                 .emit("download-progress", &progress)
                 .expect("Failed to emit progress event");
-            drop(window); // Release the lock
-
-            println!(
-                "Downloading segment: {}, progress: {}",
-                segment_url, progress
-            );
         }
 
-        // Print the response
-        println!("Response: {}", response);
-        // Check for live stream end condition
-        if response.contains("#EXT-X-ENDLIST") {
-            break; // End of live stream
+        if is_stream_over {
+            break;
         }
 
-        // Sleep for 10 seconds before downloading the next segment in this ASYNC thread
-        tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     }
 
     Ok(())
@@ -171,16 +172,10 @@ async fn download_parse_m3u8_vod(
         output.write_all(&content)?;
 
         // Emit progress event
-        // Inside the loop in download_and_concatenate_m3u8
         let progress = (index + 1) as f64 / total_segments as f64 * 100.0;
         window
             .emit("download-progress", &progress)
             .expect("Failed to emit progress event");
-        // Inside the loop in download_and_concatenate_m3u8
-        println!(
-            "Downloading segment: {}, progress: {}",
-            segment_url, progress
-        );
     }
 
     Ok(())
