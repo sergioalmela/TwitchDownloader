@@ -19,7 +19,7 @@ const FormComponent = () => {
   const [isDownloading, setIsDownloading] = useState(false)
   const [fileName, setFileName] = useState('download.mp4')
   const [downloadCommand, setDownloadCommand] = useState<
-    'download_vod' | 'download_clip' | 'download_stream'
+    'download_vod' | 'download_clip' | 'download_live'
   >('download_vod')
 
   const [isLoading, setIsLoading] = useState(false)
@@ -35,7 +35,7 @@ const FormComponent = () => {
       if (typeof event.payload === 'number') {
         console.log(`Download progress: ${event.payload}%`)
         setDownloadProgress(event.payload)
-        setIsDownloading(true)
+        setIsDownloading(event.payload < 100)
       }
     })
 
@@ -92,7 +92,7 @@ const FormComponent = () => {
         contentType === 'clip'
           ? 'download_clip'
           : contentType === 'live'
-          ? 'download_stream'
+          ? 'download_live'
           : 'download_vod'
       )
 
@@ -172,6 +172,20 @@ const FormComponent = () => {
     }
   }
 
+  const resetForm = () => {
+    setShowQualities(false)
+    setUrl('')
+    setPlaylists([])
+    setSelectedPlaylistUrl('')
+    setFolder('')
+    setDownloadProgress(0)
+    setIsDownloading(false)
+    setFileName('download.mp4')
+    setDownloadCommand('download_vod')
+    setIsLoading(false)
+    setError('')
+  }
+
   return (
     <div class="max-w-lg mx-auto p-4 w-4/5">
       <form onSubmit={handleSubmit} class="space-y-6">
@@ -222,7 +236,11 @@ const FormComponent = () => {
           />
         </div>
 
-        {error && <div className="error-message text-red-500">{error}</div>}
+        {error && (
+          <div className="bg-red-500 text-white text-center p-3 rounded-md my-2 border border-red-700 shadow-lg">
+            <strong>Error: </strong> {error}
+          </div>
+        )}
 
         <div>
           <button
@@ -234,7 +252,7 @@ const FormComponent = () => {
           </button>
         </div>
 
-        {showQualities && playlists.length && (
+        {showQualities && playlists.length > 0 && (
           <>
             <div>
               <label
@@ -277,6 +295,16 @@ const FormComponent = () => {
       )}
 
       {isDownloading && <ProgressBar progress={downloadProgress} />}
+
+      {!isDownloading && downloadProgress === 100 && (
+        <button
+          type="button"
+          onClick={resetForm}
+          className="mt-4 py-2 px-4 w-full border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          Download Another
+        </button>
+      )}
     </div>
   )
 }
