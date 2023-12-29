@@ -86,7 +86,7 @@ async fn download_parse_m3u8_live(
     loop {
         let response = reqwest::get(url).await?.text().await?;
 
-        // Stream is over
+        // Set Stream is over
         if response.contains("#EXT-X-ENDLIST") {
             is_stream_over = true;
         }
