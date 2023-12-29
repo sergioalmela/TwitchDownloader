@@ -24,8 +24,8 @@ type RawPlaylist = {
 export const getPlaylist = (manifest: string): Playlist[] => {
   const parsedPlaylist = parsePlaylist(manifest)
 
-  if (parsedPlaylist.length === 0) {
-    throw new Error('Playlist not found')
+  if (!parsedPlaylist || parsedPlaylist.length === 0) {
+    throw new Error('Content not found or not started')
   }
 
   return parsedPlaylist.map((playlist) => {
