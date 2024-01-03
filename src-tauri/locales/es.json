@@ -1,8 +1,17 @@
 {
-  "file": "Archivo",
-  "edit": "Editar",
-  "undo": "Deshacer",
-  "redo": "Rehacer",
-  "quit": "Salir",
-  "close": "Cerrar"
+  "about": "Acerca de",
+  "close": "Cerrar",
+  "config": "Configuración",
+  "donate": "Donar",
+  "english": "Inglés",
+  "french": "Francés",
+  "german": "Alemán",
+  "github": "GitHub",
+  "help": "Ayuda",
+  "italian": "Italiano",
+  "language": "Idioma",
+  "portuguese": "Portugués",
+  "preferences": "Preferencias",
+  "spanish": "Español",
+  "window": "Ventana"
 }

@@ -1,8 +1,17 @@
 {
-  "file": "File",
-  "edit": "Edit",
-  "undo": "Undo",
-  "redo": "Redo",
-  "quit": "Quit",
-  "close": "Close"
+  "about": "About us",
+  "close": "Close",
+  "config": "Configuration",
+  "donate": "Donate",
+  "english": "English",
+  "french": "French",
+  "german": "German",
+  "github": "GitHub",
+  "help": "Help",
+  "italian": "Italian",
+  "language": "Language",
+  "portuguese": "Portuguese",
+  "preferences": "Preferences",
+  "spanish": "Spanish",
+  "window": "Window"
 }
