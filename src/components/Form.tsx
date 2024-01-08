@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'preact/hooks'
-import { detectContentType } from './downloader/detectContentType.ts'
-import { getContentIdFromUrl } from './downloader/getContentId.ts'
-import { getCredentials } from './downloader/auth/getCredentials.ts'
-import { getManifest } from './downloader/getManifest.ts'
-import { getPlaylist, Playlist } from './downloader/getPlaylist.ts'
+import { detectContentType } from '../downloader/detectContentType.ts'
+import { getContentIdFromUrl } from '../downloader/getContentId.ts'
+import { getCredentials } from '../downloader/auth/getCredentials.ts'
+import { getManifest } from '../downloader/getManifest.ts'
+import { getPlaylist, Playlist } from '../downloader/getPlaylist.ts'
 import { invoke } from '@tauri-apps/api/tauri'
 import { open } from '@tauri-apps/api/dialog'
 import { listen } from '@tauri-apps/api/event'
 import ProgressBar from './ProgressBar.tsx'
 
-const FormComponent = () => {
+const Form = () => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
   const [playlists, setPlaylists] = useState<Playlist[]>([])
@@ -309,4 +309,4 @@ const FormComponent = () => {
   )
 }
 
-export default FormComponent
+export default Form

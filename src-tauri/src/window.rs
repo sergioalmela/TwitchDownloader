@@ -9,7 +9,7 @@ pub fn preferences_window(handle: tauri::AppHandle) {
                 .title("Preferences")
                 .resizable(true)
                 .fullscreen(false)
-                .inner_size(600.0, 600.0)
+                .inner_size(900.0, 600.0)
                 .min_inner_size(600.0, 600.0)
                 .build()
                 .unwrap();

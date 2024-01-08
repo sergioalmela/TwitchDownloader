@@ -1,4 +1,4 @@
-import FormComponent from './FormComponent'
+import Form from './components/Form.tsx'
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         />
       </div>
 
-      <FormComponent />
+      <Form />
     </div>
   )
 }
