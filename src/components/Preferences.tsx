@@ -1,11 +1,12 @@
-import { useRef, useState } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import { open } from '@tauri-apps/api/dialog'
 import { invoke } from '@tauri-apps/api/tauri'
 
 const Preferences = () => {
   const [activeTab, setActiveTab] = useState('General')
-  const formRef = useRef(null)
-
+  const [language, setLanguage] = useState('english')
+  const [openOnDownload, setOpenOnDownload] = useState('dont-open')
+  const [theme, setTheme] = useState('light')
   const [selectedFolder, setSelectedFolder] = useState('')
 
   const selectFolder = async () => {
@@ -24,17 +25,28 @@ const Preferences = () => {
   }
 
   const updatePreferences = async () => {
-    if (formRef.current) {
-      // TODO: Get all values with react setState
-      const formData = new FormData(formRef.current)
-      const values = Object.fromEntries(formData)
-      try {
-        await invoke('update_preferences', { data: values })
-      } catch (error) {
-        console.error('Error submitting form:', error)
-      }
+    const values = {
+      language,
+      selectedFolder,
+      openOnDownload,
+      theme
+    }
+
+    try {
+      await invoke('update_preferences', { data: values })
+    } catch (error) {
+      console.error('Error submitting form:', error)
     }
   }
+
+  const handleLanguageChange = (event: Event) =>
+    setLanguage((event.target as HTMLSelectElement).value)
+
+  const handleOpenOnDownloadChange = (event: Event) =>
+    setOpenOnDownload((event.target as HTMLSelectElement).value)
+
+  const handleThemeChange = (event: Event) =>
+    setTheme((event.target as HTMLSelectElement).value)
 
   const tabClass = (tabName: string) =>
     `flex-1 cursor-pointer text-center p-4 ${
@@ -44,7 +56,7 @@ const Preferences = () => {
     }`
 
   return (
-    <form ref={formRef}>
+    <form>
       <div className="App bg-gray-100 min-h-screen p-4 flex flex-col items-center">
         <div className="bg-white shadow rounded-lg w-full max-w-4xl mb-4">
           <div className="flex">
@@ -78,6 +90,8 @@ const Preferences = () => {
                     name="language"
                     id="language"
                     className="border p-2 rounded w-full"
+                    value={language}
+                    onChange={handleLanguageChange}
                   >
                     <option value="english">English</option>
                     <option value="spanish">Spanish</option>
@@ -116,6 +130,8 @@ const Preferences = () => {
                       id="open-folder"
                       className="border p-2 rounded w-full"
                       name="open-folder"
+                      value={openOnDownload}
+                      onChange={handleOpenOnDownloadChange}
                     >
                       <option value="dont-open">Don't Open</option>
                       <option value="open">Open</option>
@@ -132,6 +148,8 @@ const Preferences = () => {
                     name="theme"
                     id="theme"
                     className="border p-2 rounded w-full"
+                    value={theme}
+                    onChange={handleThemeChange}
                   >
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
