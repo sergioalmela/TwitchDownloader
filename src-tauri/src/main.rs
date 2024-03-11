@@ -7,10 +7,10 @@ use serde_json::{from_str, Value};
 use std::fs;
 use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
+mod config;
 mod download;
 mod utils;
 mod window;
-mod config;
 
 fn create_menu(lang: &str) -> Menu {
     let file_path = format!("./locales/{}.json", lang);

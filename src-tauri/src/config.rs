@@ -1,8 +1,8 @@
-use tauri::AppHandle;
-use std::{collections::BTreeMap, path::PathBuf};
 use crate::utils::{app_root, create_file, exists};
 use log::{error, info};
 use serde_json::Value;
+use std::{collections::BTreeMap, path::PathBuf};
+use tauri::AppHandle;
 use tauri::{Manager, Theme};
 
 pub const APP_CONF_PATH: &str = "twitch-downloader.conf.json";
@@ -23,11 +23,11 @@ macro_rules! pub_struct {
 }
 
 pub_struct!(AppConf {
-  theme: String,
-  auto_update: String,
+    theme: String,
+    auto_update: String,
 
-  main_width: f64,
-  main_height: f64,
+    main_width: f64,
+    main_height: f64,
 });
 
 impl AppConf {

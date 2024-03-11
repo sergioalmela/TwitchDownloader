@@ -1,9 +1,9 @@
-use tauri::utils::config::Config;
+use anyhow::Result;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
-use anyhow::Result;
+use tauri::utils::config::Config;
 
 pub fn get_tauri_conf() -> Option<Config> {
     let config_file = include_str!("../tauri.conf.json");
@@ -13,7 +13,9 @@ pub fn get_tauri_conf() -> Option<Config> {
 }
 
 pub fn app_root() -> PathBuf {
-    tauri::api::path::home_dir().unwrap().join(".twitch-downloader")
+    tauri::api::path::home_dir()
+        .unwrap()
+        .join(".twitch-downloader")
 }
 
 pub fn exists(path: &Path) -> bool {
