@@ -10,11 +10,7 @@ use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 mod download;
 mod utils;
 mod window;
-
-#[tauri::command]
-fn update_preferences(_app: AppHandle, data: serde_json::Value) {
-    println!("Preferences updated with: {:?}", data);
-}
+mod config;
 
 fn create_menu(lang: &str) -> Menu {
     let file_path = format!("./locales/{}.json", lang);
@@ -132,7 +128,7 @@ fn main() {
             download_live,
             download_vod,
             download_clip,
-            update_preferences
+            config::update_preferences
         ])
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
