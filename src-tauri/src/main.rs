@@ -12,6 +12,10 @@ mod download;
 mod utils;
 mod window;
 
+use crate::{
+    config::AppConf,
+};
+
 fn create_menu(lang: &str) -> Menu {
     let file_path = format!("./locales/{}.json", lang);
     let data = match fs::read_to_string(&file_path) {
@@ -121,6 +125,9 @@ pub fn open(app: &AppHandle, path: &str) {
 fn main() {
     let current_lang = "es";
 
+    let app_conf = AppConf::read().write();
+    let theme = AppConf::theme_mode();
+
     let menu = create_menu(current_lang);
 
     tauri::Builder::default()
@@ -128,7 +135,9 @@ fn main() {
             download_live,
             download_vod,
             download_clip,
-            config::update_preferences
+            config::update_preferences,
+            config::get_preferences,
+            config::cmd::form_confirm,
         ])
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {

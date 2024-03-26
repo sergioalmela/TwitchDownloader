@@ -13,6 +13,11 @@ pub fn update_preferences(_app: AppHandle, data: serde_json::Value) {
     AppConf::read().amend(serde_json::json!(data)).write();
 }
 
+#[tauri::command]
+pub fn get_preferences() -> AppConf {
+    AppConf::read()
+}
+
 macro_rules! pub_struct {
   ($name:ident {$($field:ident: $t:ty,)*}) => {
     #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
@@ -24,8 +29,9 @@ macro_rules! pub_struct {
 
 pub_struct!(AppConf {
     theme: String,
-    auto_update: String,
-
+    language: String,
+    download_folder: String,
+    open_on_download: String,
     main_width: f64,
     main_height: f64,
 });
@@ -34,7 +40,9 @@ impl AppConf {
     pub fn new() -> Self {
         Self {
             theme: "light".into(),
-            auto_update: "prompt".into(),
+            language: "en".into(),
+            download_folder: "".into(),
+            open_on_download: "open".into(),
             main_width: 800.0,
             main_height: 600.0,
         }
@@ -117,11 +125,7 @@ impl AppConf {
     pub fn get_theme() -> String {
         Self::read().theme.to_lowercase()
     }
-
-    pub fn get_auto_update(self) -> String {
-        self.auto_update.to_lowercase()
-    }
-
+    
     pub fn theme_check(self, mode: &str) -> bool {
         self.theme.to_lowercase() == mode
     }
@@ -134,5 +138,25 @@ impl AppConf {
 impl Default for AppConf {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub mod cmd {
+    use super::AppConf;
+    use tauri::{command, AppHandle, Manager};
+
+    #[command]
+    pub fn get_app_conf() -> AppConf {
+        AppConf::read()
+    }
+
+    #[command]
+    pub fn get_theme() -> String {
+        AppConf::get_theme()
+    }
+
+    #[command]
+    pub fn form_confirm(_app: AppHandle, data: serde_json::Value) {
+        AppConf::read().amend(serde_json::json!(data)).write();
     }
 }

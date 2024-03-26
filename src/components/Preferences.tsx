@@ -1,13 +1,42 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { open } from '@tauri-apps/api/dialog'
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke, dialog, process } from '@tauri-apps/api'
+import useInit from '../hooks/useInit.ts'
+
+type Config = {
+  theme: string
+  language: string
+  download_folder: string
+  open_on_download: string
+}
 
 const Preferences = () => {
+  const [config, setConfig] = useState<Config | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
   const [activeTab, setActiveTab] = useState('General')
-  const [language, setLanguage] = useState('english')
-  const [openOnDownload, setOpenOnDownload] = useState('dont-open')
-  const [theme, setTheme] = useState('light')
-  const [selectedFolder, setSelectedFolder] = useState('')
+  const [language, setLanguage] = useState(config ? config.language : 'english')
+  const [openOnDownload, setOpenOnDownload] = useState(
+    config ? config.open_on_download : 'dont-open'
+  )
+  const [theme, setTheme] = useState(config ? config.theme : 'light')
+  const [downloadFolder, setDownloadFolder] = useState(
+    config ? config.download_folder : ''
+  )
+
+  useEffect(() => {
+    if (config) {
+      setLanguage(config.language)
+      setOpenOnDownload(config.open_on_download)
+      setTheme(config.theme)
+      setDownloadFolder(config.download_folder)
+    }
+  }, [config])
+
+  useInit(async () => {
+    setConfig(await invoke('get_preferences'))
+    setIsLoading(false)
+  })
 
   const selectFolder = async () => {
     try {
@@ -16,8 +45,18 @@ const Preferences = () => {
         multiple: false
       })
 
+      console.log('Path:', path)
+
       if (path) {
-        setSelectedFolder(Array.isArray(path) ? path[0] : path)
+        const newDownloadFolder = Array.isArray(path) ? path[0] : path
+        setDownloadFolder(newDownloadFolder)
+        console.log('New download folder:', newDownloadFolder)
+        console.log('Config:', config)
+        if (config) {
+          setConfig({ ...config, download_folder: newDownloadFolder })
+        }
+
+        await updatePreferences()
       }
     } catch (error) {
       console.error('Error selecting folder:', error)
@@ -27,26 +66,51 @@ const Preferences = () => {
   const updatePreferences = async () => {
     const values = {
       language,
-      selectedFolder,
-      openOnDownload,
+      download_folder: downloadFolder,
+      open_on_download: openOnDownload,
       theme
     }
 
     try {
       await invoke('update_preferences', { data: values })
+      const isOk = await dialog.ask(
+        `Configuration saved successfully, do you want to restart?`,
+        {
+          title: 'Twitch Downloader Preferences'
+        }
+      )
+      if (isOk) {
+        await process.relaunch()
+        return
+      }
     } catch (error) {
       console.error('Error submitting form:', error)
     }
   }
 
-  const handleLanguageChange = (event: Event) =>
-    setLanguage((event.target as HTMLSelectElement).value)
+  const handleLanguageChange = (event: Event) => {
+    const newLanguage = (event.target as HTMLSelectElement).value
+    setLanguage(newLanguage)
+    if (config) {
+      setConfig({ ...config, language: newLanguage })
+    }
+  }
 
-  const handleOpenOnDownloadChange = (event: Event) =>
-    setOpenOnDownload((event.target as HTMLSelectElement).value)
+  const handleOpenOnDownloadChange = (event: Event) => {
+    const newOpenOnDownload = (event.target as HTMLSelectElement).value
+    setOpenOnDownload(newOpenOnDownload)
+    if (config) {
+      setConfig({ ...config, open_on_download: newOpenOnDownload })
+    }
+  }
 
-  const handleThemeChange = (event: Event) =>
-    setTheme((event.target as HTMLSelectElement).value)
+  const handleThemeChange = (event: Event) => {
+    const newTheme = (event.target as HTMLSelectElement).value
+    setTheme(newTheme)
+    if (config) {
+      setConfig({ ...config, theme: newTheme })
+    }
+  }
 
   const tabClass = (tabName: string) =>
     `flex-1 cursor-pointer text-center p-4 ${
@@ -54,6 +118,10 @@ const Preferences = () => {
         ? 'bg-blue-500 text-white'
         : 'bg-gray-200 hover:bg-gray-300'
     }`
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <form>
@@ -90,7 +158,7 @@ const Preferences = () => {
                     name="language"
                     id="language"
                     className="border p-2 rounded w-full"
-                    value={language}
+                    value={config?.language}
                     onChange={handleLanguageChange}
                   >
                     <option value="english">English</option>
@@ -115,10 +183,10 @@ const Preferences = () => {
                       Select Folder
                     </button>
 
-                    {selectedFolder && (
+                    {downloadFolder && (
                       <div className="mt-4">
                         Selected Folder:{' '}
-                        <span className="font-semibold">{selectedFolder}</span>
+                        <span className="font-semibold">{downloadFolder}</span>
                       </div>
                     )}
                   </div>
@@ -130,7 +198,7 @@ const Preferences = () => {
                       id="open-folder"
                       className="border p-2 rounded w-full"
                       name="open-folder"
-                      value={openOnDownload}
+                      value={config?.open_on_download}
                       onChange={handleOpenOnDownloadChange}
                     >
                       <option value="dont-open">Don't Open</option>
@@ -148,11 +216,12 @@ const Preferences = () => {
                     name="theme"
                     id="theme"
                     className="border p-2 rounded w-full"
-                    value={theme}
+                    value={config?.theme}
                     onChange={handleThemeChange}
                   >
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
+                    <option value="system">System</option>
                   </select>
                 </div>
               )}
