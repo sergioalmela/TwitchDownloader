@@ -4,88 +4,77 @@
 use download::{download_clip, download_live, download_vod};
 
 use serde_json::{from_str, Value};
-use std::fs;
+use std::{env, fs};
 use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
 mod config;
 mod download;
 mod utils;
 mod window;
+mod translations;
+
+use translations::Language;
+
+use translations::{English, Spanish};
 
 use crate::{
     config::AppConf,
 };
 
 fn create_menu(lang: &str) -> Menu {
-    let file_path = format!("./locales/{}.json", lang);
-    let data = match fs::read_to_string(&file_path) {
-        Ok(content) => content,
-        Err(err) => {
-            eprintln!("Error reading file '{}': {}", file_path, err);
-            return Menu::new();
-        }
+    let translations: Box<dyn Language> = match lang {
+        "en" => Box::new(English::new()),
+        "es" => Box::new(Spanish::new()),
+        _ => Box::new(English::new()),
     };
 
-    let translations = match from_str::<Value>(&data) {
-        Ok(value) => value,
-        Err(err) => {
-            eprintln!("Error parsing JSON: {}", err);
-            return Menu::new();
-        }
-    };
+    let window_label = translations.window();
+    let close_s = CustomMenuItem::new("quit".to_string(), translations.close());
 
-    let window_label = translations["window"].as_str().unwrap_or("Window");
-    let close_s = CustomMenuItem::new(
-        "quit".to_string(),
-        translations["close"].as_str().unwrap_or("Close"),
-    );
-
-    let language_label = translations["language"].as_str().unwrap_or("Language");
+    let language_label = translations.language();
     let english_s = CustomMenuItem::new(
         "english".to_string(),
-        translations["english"].as_str().unwrap_or("English"),
+        translations.english(),
     );
     let spanish_s = CustomMenuItem::new(
         "spanish".to_string(),
-        translations["spanish"].as_str().unwrap_or("Spanish"),
+        translations.spanish(),
     );
     let italian_s = CustomMenuItem::new(
         "italian".to_string(),
-        translations["italian"].as_str().unwrap_or("Italian"),
+        translations.italian()
     );
     let french_s = CustomMenuItem::new(
         "french".to_string(),
-        translations["french"].as_str().unwrap_or("French"),
+        translations.french()
     );
     let german_s = CustomMenuItem::new(
         "german".to_string(),
-        translations["german"].as_str().unwrap_or("German"),
+        translations.german()
     );
     let portuguese_s = CustomMenuItem::new(
         "portuguese".to_string(),
-        translations["portuguese"].as_str().unwrap_or("Portuguese"),
+        translations.portuguese()
     );
 
-    let config_label = translations["config"].as_str().unwrap_or("Config");
+    let config_label = translations.config();
     let preferences_s = CustomMenuItem::new(
         "preferences".to_string(),
-        translations["preferences"]
-            .as_str()
-            .unwrap_or("Preferences"),
+        translations.preferences()
     );
 
-    let help_label = translations["help"].as_str().unwrap_or("Help");
+    let help_label = translations.help();
     let about_s = CustomMenuItem::new(
         "about".to_string(),
-        translations["about"].as_str().unwrap_or("About"),
+       translations.about()
     );
     let github_s = CustomMenuItem::new(
         "github".to_string(),
-        translations["github"].as_str().unwrap_or("GitHub"),
+        translations.github()
     );
     let donate_s = CustomMenuItem::new(
         "donate".to_string(),
-        translations["donate"].as_str().unwrap_or("Donate"),
+        translations.donate()
     );
 
     let submenu_window = Submenu::new(window_label, Menu::new().add_item(close_s));
@@ -123,12 +112,12 @@ pub fn open(app: &AppHandle, path: &str) {
 }
 
 fn main() {
-    let current_lang = "es";
-
     let app_conf = AppConf::read().write();
     let theme = AppConf::theme_mode();
 
-    let menu = create_menu(current_lang);
+    let language = app_conf.language();
+
+    let menu = create_menu(&language);
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![

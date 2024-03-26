@@ -15,7 +15,7 @@ const Preferences = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [activeTab, setActiveTab] = useState('General')
-  const [language, setLanguage] = useState(config ? config.language : 'english')
+  const [language, setLanguage] = useState(config ? config.language : 'en')
   const [openOnDownload, setOpenOnDownload] = useState(
     config ? config.open_on_download : 'dont-open'
   )
@@ -161,11 +161,11 @@ const Preferences = () => {
                     value={config?.language}
                     onChange={handleLanguageChange}
                   >
-                    <option value="english">English</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
-                    <option value="italian">Italian</option>
-                    <option value="german">German</option>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="it">Italian</option>
+                    <option value="de">German</option>
                   </select>
                 </div>
               )}

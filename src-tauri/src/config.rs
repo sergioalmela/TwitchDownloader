@@ -109,6 +109,10 @@ impl AppConf {
             }
         }
     }
+    
+    pub fn language(&self) -> String {
+        self.language.to_lowercase()
+    }
 
     pub fn theme_mode() -> Theme {
         match Self::get_theme().as_str() {
