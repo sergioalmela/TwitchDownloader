@@ -9,17 +9,15 @@ use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
 mod config;
 mod download;
+mod translations;
 mod utils;
 mod window;
-mod translations;
 
 use translations::Language;
 
 use translations::{English, Spanish};
 
-use crate::{
-    config::AppConf,
-};
+use crate::config::AppConf;
 
 fn create_menu(lang: &str) -> Menu {
     let translations: Box<dyn Language> = match lang {
@@ -32,50 +30,20 @@ fn create_menu(lang: &str) -> Menu {
     let close_s = CustomMenuItem::new("quit".to_string(), translations.close());
 
     let language_label = translations.language();
-    let english_s = CustomMenuItem::new(
-        "english".to_string(),
-        translations.english(),
-    );
-    let spanish_s = CustomMenuItem::new(
-        "spanish".to_string(),
-        translations.spanish(),
-    );
-    let italian_s = CustomMenuItem::new(
-        "italian".to_string(),
-        translations.italian()
-    );
-    let french_s = CustomMenuItem::new(
-        "french".to_string(),
-        translations.french()
-    );
-    let german_s = CustomMenuItem::new(
-        "german".to_string(),
-        translations.german()
-    );
-    let portuguese_s = CustomMenuItem::new(
-        "portuguese".to_string(),
-        translations.portuguese()
-    );
+    let english_s = CustomMenuItem::new("english".to_string(), translations.english());
+    let spanish_s = CustomMenuItem::new("spanish".to_string(), translations.spanish());
+    let italian_s = CustomMenuItem::new("italian".to_string(), translations.italian());
+    let french_s = CustomMenuItem::new("french".to_string(), translations.french());
+    let german_s = CustomMenuItem::new("german".to_string(), translations.german());
+    let portuguese_s = CustomMenuItem::new("portuguese".to_string(), translations.portuguese());
 
     let config_label = translations.config();
-    let preferences_s = CustomMenuItem::new(
-        "preferences".to_string(),
-        translations.preferences()
-    );
+    let preferences_s = CustomMenuItem::new("preferences".to_string(), translations.preferences());
 
     let help_label = translations.help();
-    let about_s = CustomMenuItem::new(
-        "about".to_string(),
-       translations.about()
-    );
-    let github_s = CustomMenuItem::new(
-        "github".to_string(),
-        translations.github()
-    );
-    let donate_s = CustomMenuItem::new(
-        "donate".to_string(),
-        translations.donate()
-    );
+    let about_s = CustomMenuItem::new("about".to_string(), translations.about());
+    let github_s = CustomMenuItem::new("github".to_string(), translations.github());
+    let donate_s = CustomMenuItem::new("donate".to_string(), translations.donate());
 
     let submenu_window = Submenu::new(window_label, Menu::new().add_item(close_s));
     let submenu_language = Submenu::new(

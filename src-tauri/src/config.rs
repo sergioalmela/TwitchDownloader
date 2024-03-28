@@ -109,7 +109,7 @@ impl AppConf {
             }
         }
     }
-    
+
     pub fn language(&self) -> String {
         self.language.to_lowercase()
     }
@@ -129,7 +129,7 @@ impl AppConf {
     pub fn get_theme() -> String {
         Self::read().theme.to_lowercase()
     }
-    
+
     pub fn theme_check(self, mode: &str) -> bool {
         self.theme.to_lowercase() == mode
     }

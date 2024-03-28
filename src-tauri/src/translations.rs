@@ -140,38 +140,44 @@ macro_rules! define_language {
     };
 }
 
-define_language!(English, Translations {
-    about: "About us",
-    close: "Close",
-    config: "Config",
-    donate: "Donate",
-    english: "English",
-    french: "French",
-    german: "German",
-    github: "GitHub",
-    help: "Help",
-    italian: "Italian",
-    language: "Language",
-    portuguese: "Portuguese",
-    preferences: "Preferences",
-    spanish: "Spanish",
-    window: "Window",
-});
+define_language!(
+    English,
+    Translations {
+        about: "About us",
+        close: "Close",
+        config: "Config",
+        donate: "Donate",
+        english: "English",
+        french: "French",
+        german: "German",
+        github: "GitHub",
+        help: "Help",
+        italian: "Italian",
+        language: "Language",
+        portuguese: "Portuguese",
+        preferences: "Preferences",
+        spanish: "Spanish",
+        window: "Window",
+    }
+);
 
-define_language!(Spanish, Translations {
-    about: "Acerca de nosotros",
-    close: "Cerrar",
-    config: "Configuración",
-    donate: "Donar",
-    english: "Inglés",
-    french: "Francés",
-    german: "Alemán",
-    github: "GitHub",
-    help: "Ayuda",
-    italian: "Italiano",
-    language: "Idioma",
-    portuguese: "Portugués",
-    preferences: "Preferencias",
-    spanish: "Español",
-    window: "Ventana",
-});
+define_language!(
+    Spanish,
+    Translations {
+        about: "Acerca de nosotros",
+        close: "Cerrar",
+        config: "Configuración",
+        donate: "Donar",
+        english: "Inglés",
+        french: "Francés",
+        german: "Alemán",
+        github: "GitHub",
+        help: "Ayuda",
+        italian: "Italiano",
+        language: "Idioma",
+        portuguese: "Portugués",
+        preferences: "Preferencias",
+        spanish: "Español",
+        window: "Ventana",
+    }
+);
