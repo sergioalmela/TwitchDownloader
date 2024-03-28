@@ -7,19 +7,19 @@ use tauri::Window;
 
 #[derive(Debug)]
 enum DownloadError {
-    Request(reqwest::Error),
-    Io(std::io::Error),
+    Request,
+    Io,
 }
 
 impl From<reqwest::Error> for DownloadError {
-    fn from(err: reqwest::Error) -> Self {
-        DownloadError::Request(err)
+    fn from(_err: reqwest::Error) -> Self {
+        DownloadError::Request
     }
 }
 
 impl From<std::io::Error> for DownloadError {
-    fn from(err: std::io::Error) -> Self {
-        DownloadError::Io(err)
+    fn from(_err: std::io::Error) -> Self {
+        DownloadError::Io
     }
 }
 
