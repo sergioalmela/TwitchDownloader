@@ -147,7 +147,7 @@ impl Default for AppConf {
 
 pub mod cmd {
     use super::AppConf;
-    use tauri::{command, AppHandle, Manager};
+    use tauri::{command, AppHandle};
 
     #[command]
     pub fn get_app_conf() -> AppConf {

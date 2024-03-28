@@ -3,8 +3,8 @@
 
 use download::{download_clip, download_live, download_vod};
 
-use serde_json::{from_str, Value};
-use std::{env, fs};
+
+use std::{env};
 use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
 mod config;
@@ -56,7 +56,9 @@ fn create_menu(lang: &str) -> Menu {
             .add_item(german_s)
             .add_item(portuguese_s),
     );
-    let menu = Menu::new()
+    
+
+    Menu::new()
         .add_native_item(MenuItem::Copy)
         .add_submenu(submenu_window)
         .add_submenu(submenu_language)
@@ -70,9 +72,7 @@ fn create_menu(lang: &str) -> Menu {
                 .add_item(about_s)
                 .add_item(github_s)
                 .add_item(donate_s),
-        ));
-
-    menu
+        ))
 }
 
 pub fn open(app: &AppHandle, path: &str) {
@@ -81,7 +81,7 @@ pub fn open(app: &AppHandle, path: &str) {
 
 fn main() {
     let app_conf = AppConf::read().write();
-    let theme = AppConf::theme_mode();
+    let _theme = AppConf::theme_mode();
 
     let language = app_conf.language();
 
@@ -102,17 +102,17 @@ fn main() {
                 std::process::exit(0);
             }
             "github" => {
-                let win = Some(event.window()).unwrap();
+                let win = event.window();
                 let app = win.app_handle();
                 open(&app, "https://github.com/sergioalmela/TwitchDownloader");
             }
             "donate" => {
-                let win = Some(event.window()).unwrap();
+                let win = event.window();
                 let app = win.app_handle();
                 open(&app, "https://www.buymeacoffee.com/sergioalmela");
             }
             "about" => {
-                let win = Some(event.window()).unwrap();
+                let win = event.window();
                 let app = win.app_handle();
                 let tauri_conf = utils::get_tauri_conf().unwrap();
                 tauri::api::dialog::message(
@@ -122,7 +122,7 @@ fn main() {
                 );
             }
             "preferences" => {
-                let win = Some(event.window()).unwrap();
+                let win = event.window();
                 let app = win.app_handle();
                 window::preferences_window(app.clone());
             }
