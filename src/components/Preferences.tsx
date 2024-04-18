@@ -79,6 +79,7 @@ const Preferences = () => {
           title: 'Twitch Downloader Preferences'
         }
       )
+
       if (isOk) {
         await process.relaunch()
         return
@@ -231,7 +232,10 @@ const Preferences = () => {
         <div className="w-full max-w-4xl px-4 flex justify-end">
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            onClick={updatePreferences}
+            onClick={(event) => {
+              event.preventDefault()
+              updatePreferences()
+            }}
           >
             Submit
           </button>
