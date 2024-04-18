@@ -1,5 +1,17 @@
 import { render } from 'preact'
 import App from './App'
+import Preferences from './components/Preferences'
 import './App.css'
 
-render(<App />, document.getElementById('root')!)
+const urlParams = new URLSearchParams(window.location.search)
+const type = urlParams.get('type')
+
+const ComponentToRender = type === 'preferences' ? Preferences : App
+
+const rootElement = document.getElementById('root')
+
+if (!rootElement) {
+  throw new Error("Couldn't find root element")
+}
+
+render(<ComponentToRender />, rootElement)

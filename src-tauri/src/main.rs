@@ -124,7 +124,8 @@ fn main() {
             "preferences" => {
                 let win = event.window();
                 let app = win.app_handle();
-                window::preferences_window(app.clone());
+
+                window::cmd::control_window(app, "preferences".into());
             }
             _ => {}
         })
