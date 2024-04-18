@@ -32,8 +32,6 @@ pub_struct!(AppConf {
     language: String,
     download_folder: String,
     open_on_download: String,
-    main_width: f64,
-    main_height: f64,
 });
 
 impl AppConf {
@@ -43,8 +41,6 @@ impl AppConf {
             language: "en".into(),
             download_folder: "".into(),
             open_on_download: "open".into(),
-            main_width: 800.0,
-            main_height: 600.0,
         }
     }
 
