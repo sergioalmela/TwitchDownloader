@@ -33,6 +33,12 @@ const Preferences = () => {
     }
   }, [config])
 
+  useEffect(() => {
+    if (config && downloadFolder !== config.download_folder) {
+      setConfig({ ...config, download_folder: downloadFolder })
+    }
+  }, [downloadFolder])
+
   useInit(async () => {
     setConfig(await invoke('get_preferences'))
     setIsLoading(false)
@@ -45,18 +51,9 @@ const Preferences = () => {
         multiple: false
       })
 
-      console.log('Path:', path)
-
       if (path) {
         const newDownloadFolder = Array.isArray(path) ? path[0] : path
         setDownloadFolder(newDownloadFolder)
-        console.log('New download folder:', newDownloadFolder)
-        console.log('Config:', config)
-        if (config) {
-          setConfig({ ...config, download_folder: newDownloadFolder })
-        }
-
-        await updatePreferences()
       }
     } catch (error) {
       console.error('Error selecting folder:', error)
@@ -177,6 +174,7 @@ const Preferences = () => {
                       Default Download Folder
                     </label>
                     <button
+                      type="button"
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       onClick={selectFolder}
                       name="download-folder"
