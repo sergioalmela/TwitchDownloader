@@ -3,8 +3,7 @@
 
 use download::{download_clip, download_live, download_vod};
 
-
-use std::{env};
+use std::env;
 use tauri::{AppHandle, CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
 mod config;
@@ -56,7 +55,6 @@ fn create_menu(lang: &str) -> Menu {
             .add_item(german_s)
             .add_item(portuguese_s),
     );
-    
 
     Menu::new()
         .add_native_item(MenuItem::Copy)

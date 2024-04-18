@@ -1,28 +1,4 @@
-use tauri::{utils::config::WindowUrl, window::WindowBuilder, Manager};
-
-pub fn preferences_window(handle: tauri::AppHandle) {
-    tauri::async_runtime::spawn(async move {
-        if let Some(win) = handle.get_window("preferences") {
-            win.show().unwrap()
-        } else {
-            WindowBuilder::new(
-                &handle,
-                "preferences",
-                WindowUrl::App("preferences.html".into()),
-            )
-                .title("Preferences")
-                .resizable(true)
-                .fullscreen(false)
-                .inner_size(900.0, 600.0)
-                .min_inner_size(600.0, 600.0)
-                .build()
-                .unwrap();
-        }
-    });
-}
-
 pub mod cmd {
-    use super::*;
     use tauri::{utils::config::WindowUrl, window::WindowBuilder, Manager};
 
     #[tauri::command]
@@ -34,13 +10,13 @@ pub mod cmd {
                     "preferences",
                     WindowUrl::App(format!("index.html?type={}", win_type).into()),
                 )
-                    .title("Preferences")
-                    .resizable(true)
-                    .fullscreen(false)
-                    .inner_size(900.0, 600.0)
-                    .min_inner_size(600.0, 600.0)
-                    .build()
-                    .unwrap();
+                .title("Preferences")
+                .resizable(true)
+                .fullscreen(false)
+                .inner_size(900.0, 600.0)
+                .min_inner_size(600.0, 600.0)
+                .build()
+                .unwrap();
             } else {
                 let main_win = handle.get_window("preferences").unwrap();
                 main_win.show().unwrap();
