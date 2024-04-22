@@ -6,7 +6,7 @@ import './App.css'
 const urlParams = new URLSearchParams(window.location.search)
 const type = urlParams.get('type')
 
-const ComponentToRender = type === 'preferences' ? Preferences : App
+const Component = type === 'preferences' ? Preferences : App
 
 const rootElement = document.getElementById('root')
 
@@ -14,4 +14,4 @@ if (!rootElement) {
   throw new Error("Couldn't find root element")
 }
 
-render(<ComponentToRender />, rootElement)
+render(<Component />, rootElement)

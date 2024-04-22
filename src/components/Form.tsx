@@ -8,6 +8,14 @@ import { invoke } from '@tauri-apps/api/tauri'
 import { open } from '@tauri-apps/api/dialog'
 import { listen } from '@tauri-apps/api/event'
 import ProgressBar from './ProgressBar.tsx'
+import useInit from '../hooks/useInit.ts'
+
+type Config = {
+  theme: string
+  language: string
+  download_folder: string
+  open_on_download: string
+}
 
 const Form = () => {
   const [showQualities, setShowQualities] = useState(false)
@@ -25,12 +33,28 @@ const Form = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const [config, setConfig] = useState<Config | null>(null)
+  const [downloadFolder, setDownloadFolder] = useState(
+    config ? config.download_folder : ''
+  )
+
+  useEffect(() => {
+    if (config) {
+      setDownloadFolder(config.download_folder)
+    }
+  }, [config])
+
+  useInit(async () => {
+    setConfig(await invoke('get_preferences'))
+    setIsLoading(false)
+  })
+
   const clearErrors = () => {
     setError('')
   }
 
   useEffect(() => {
-    const unlisten = listen('download-progress', (event) => {
+    const progress = listen('download-progress', (event) => {
       console.log(`Received event: ${event.payload}`)
       if (typeof event.payload === 'number') {
         console.log(`Download progress: ${event.payload}%`)
@@ -40,7 +64,7 @@ const Form = () => {
     })
 
     return () => {
-      unlisten.then((fn) => fn())
+      progress.then((fn) => fn())
     }
   }, [])
 
@@ -92,8 +116,8 @@ const Form = () => {
         contentType === 'clip'
           ? 'download_clip'
           : contentType === 'live'
-          ? 'download_live'
-          : 'download_vod'
+            ? 'download_live'
+            : 'download_vod'
       )
 
       const id = getContentIdFromUrl(contentType, url)
@@ -154,7 +178,7 @@ const Form = () => {
       const downloadData = {
         args: {
           m3u8_url: selectedPlaylistUrl,
-          download_path: folder,
+          download_path: folder || downloadFolder,
           file_name: fileName
         }
       }
@@ -214,9 +238,13 @@ const Form = () => {
           >
             Select Folder
           </button>
-          {folder && (
+          {folder ? (
             <span class="text-sm text-gray-500 text-center">{folder}</span>
-          )}
+          ) : downloadFolder ? (
+            <span class="text-sm text-gray-500 text-center">
+              {downloadFolder}
+            </span>
+          ) : null}
         </div>
 
         <div>
