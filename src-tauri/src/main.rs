@@ -28,14 +28,6 @@ fn create_menu(lang: &str) -> Menu {
     let window_label = translations.window();
     let close_s = CustomMenuItem::new("quit".to_string(), translations.close());
 
-    let language_label = translations.language();
-    let english_s = CustomMenuItem::new("english".to_string(), translations.english());
-    let spanish_s = CustomMenuItem::new("spanish".to_string(), translations.spanish());
-    let italian_s = CustomMenuItem::new("italian".to_string(), translations.italian());
-    let french_s = CustomMenuItem::new("french".to_string(), translations.french());
-    let german_s = CustomMenuItem::new("german".to_string(), translations.german());
-    let portuguese_s = CustomMenuItem::new("portuguese".to_string(), translations.portuguese());
-
     let config_label = translations.config();
     let preferences_s = CustomMenuItem::new("preferences".to_string(), translations.preferences());
 
@@ -45,21 +37,10 @@ fn create_menu(lang: &str) -> Menu {
     let donate_s = CustomMenuItem::new("donate".to_string(), translations.donate());
 
     let submenu_window = Submenu::new(window_label, Menu::new().add_item(close_s));
-    let submenu_language = Submenu::new(
-        language_label,
-        Menu::new()
-            .add_item(english_s)
-            .add_item(spanish_s)
-            .add_item(italian_s)
-            .add_item(french_s)
-            .add_item(german_s)
-            .add_item(portuguese_s),
-    );
 
     Menu::new()
         .add_native_item(MenuItem::Copy)
         .add_submenu(submenu_window)
-        .add_submenu(submenu_language)
         .add_submenu(Submenu::new(
             config_label,
             Menu::new().add_item(preferences_s),
