@@ -9,6 +9,7 @@ import { open } from '@tauri-apps/api/dialog'
 import { listen } from '@tauri-apps/api/event'
 import ProgressBar from './ProgressBar.tsx'
 import useInit from '../hooks/useInit.ts'
+import { open as openShell } from '@tauri-apps/api/shell'
 
 type Config = {
   theme: string
@@ -184,8 +185,14 @@ const Form = () => {
       }
 
       clearErrors()
-      const result = await invoke(downloadCommand, downloadData)
-      console.log(result)
+      await invoke(downloadCommand, downloadData)
+
+      if (config && config.open_on_download === 'open') {
+        const filePath = `${downloadData.args.download_path}/${downloadData.args.file_name}`
+        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'))
+
+        await openShell(dirPath)
+      }
     } catch (error) {
       console.log(error)
       if (error instanceof Error) {
