@@ -1,0 +1,27 @@
+.dark .text-gray-700 {
+    color: #d1d5db;
+}
+
+.dark .text-white {
+    color: #d1d5db;
+}
+
+.dark .bg-white {
+    background-color: #1f2937;
+}
+
+.dark .bg-green-600 {
+    background-color: #16a34a;
+}
+
+.dark .bg-indigo-600 {
+    background-color: #4f46e5;
+}
+
+.dark .bg-red-500 {
+    background-color: #ef4444;
+}
+
+.dark .border-gray-300 {
+    border-color: #374151;
+}

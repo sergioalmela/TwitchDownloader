@@ -220,7 +220,6 @@ const Preferences = () => {
                   >
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
-                    <option value="system">System</option>
                   </select>
                 </div>
               )}

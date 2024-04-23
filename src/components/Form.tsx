@@ -50,6 +50,14 @@ const Form = () => {
     setIsLoading(false)
   })
 
+  useEffect(() => {
+    if (config && config.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [config])
+
   const clearErrors = () => {
     setError('')
   }
