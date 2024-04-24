@@ -10,6 +10,7 @@ import { listen } from '@tauri-apps/api/event'
 import ProgressBar from './ProgressBar.tsx'
 import useInit from '../hooks/useInit.ts'
 import { open as openShell } from '@tauri-apps/api/shell'
+import { useTranslation } from 'react-i18next'
 
 type Config = {
   theme: string
@@ -76,6 +77,8 @@ const Form = () => {
       progress.then((fn) => fn())
     }
   }, [])
+
+  const { t } = useTranslation('translation')
 
   const handleUrlChange = (event: Event) => {
     const target = event.target as HTMLInputElement
@@ -251,7 +254,7 @@ const Form = () => {
             type="button"
             className="py-2 px-4 w-full border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
           >
-            Select Folder
+            {t('selectFolder')}
           </button>
           {folder ? (
             <span class="text-sm text-gray-500 text-center">{folder}</span>

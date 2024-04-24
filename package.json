@@ -17,8 +17,10 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.3",
+    "i18next": "^23.11.2",
     "m3u8-parser": "^7.1.0",
-    "preact": "^10.20.1"
+    "preact": "^10.20.1",
+    "react-i18next": "^14.1.1"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
