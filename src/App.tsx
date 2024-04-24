@@ -4,7 +4,7 @@ import Form from './components/Form.tsx'
 function App() {
   return (
     <ThemeProvider>
-      <div className="bg-white flex flex-col items-center justify-center">
+      <div className="bg-white flex flex-col items-center justify-center h-full">
         <div>
           <img
             src="/logo.png"
