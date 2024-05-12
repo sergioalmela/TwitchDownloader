@@ -6,5 +6,6 @@
   "getQualities": "Get Qualities",
   "loading": "Loading...",
   "selectFolder": "Select Folder",
-  "selectQuality": "Select Quality"
+  "selectQuality": "Select Quality:",
+  "twitchURL": "Twitch URL:"
 }

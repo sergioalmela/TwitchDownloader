@@ -5,5 +5,6 @@
   "getQualities": "Obtener Formatos",
   "loading": "Cargando...",
   "selectFolder": "Seleccionar Carpeta",
-  "selectQuality": "Seleccionar Calidad"
+  "selectQuality": "Seleccionar Calidad:",
+  "twitchUrl": "URL de Twitch:"
 }
