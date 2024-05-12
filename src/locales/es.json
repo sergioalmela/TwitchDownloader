@@ -1,3 +1,9 @@
 {
-  "selectFolder": "Seleccionar Carpeta"
+  "clear": "Limpiar",
+  "download": "Descargar",
+  "fileName": "Nombre del Archivo",
+  "getQualities": "Obtener Formatos",
+  "loading": "Cargando...",
+  "selectFolder": "Seleccionar Carpeta",
+  "selectQuality": "Seleccionar Calidad"
 }
