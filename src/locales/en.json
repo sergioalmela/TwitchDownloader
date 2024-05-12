@@ -1,3 +1,10 @@
 {
-  "selectFolder": "Select Folder"
+  "clear": "Clear",
+  "download": "Download",
+  "downloadAnother": "Download Another",
+  "fileName": "File Name",
+  "getQualities": "Get Qualities",
+  "loading": "Loading...",
+  "selectFolder": "Select Folder",
+  "selectQuality": "Select Quality"
 }
