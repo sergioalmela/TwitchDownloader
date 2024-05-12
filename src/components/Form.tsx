@@ -236,7 +236,7 @@ const Form = () => {
             htmlFor="twitchUrl"
             class="block text-sm font-medium text-gray-700"
           >
-            Twitch URL:
+            {t('twitchUrl')}
           </label>
           <input
             type="url"
@@ -270,7 +270,7 @@ const Form = () => {
             htmlFor="fileName"
             class="block text-sm font-medium text-gray-700"
           >
-            File Name:
+            {t('fileName')}:
           </label>
           <input
             type="text"
@@ -294,7 +294,7 @@ const Form = () => {
             onClick={handleGetQualities}
             class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Get Qualities
+            {t('getQualities')}
           </button>
         </div>
 
@@ -305,7 +305,7 @@ const Form = () => {
                 htmlFor="selectQuality"
                 class="block text-sm font-medium text-gray-700"
               >
-                Select Quality:
+                {t('selectQuality')}
               </label>
               <select
                 id="selectQuality"
@@ -323,7 +323,7 @@ const Form = () => {
               type="submit"
               class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Download
+              {t('download')}
             </button>
           </>
         )}
@@ -335,7 +335,7 @@ const Form = () => {
             role="status"
             aria-label="loading"
           >
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only">{t('loading')}</span>
           </div>
         </div>
       )}
@@ -348,7 +348,7 @@ const Form = () => {
           onClick={resetForm}
           className="mt-4 py-2 px-4 w-full border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
-          Download Another
+          {t('clear')}
         </button>
       )}
     </div>
