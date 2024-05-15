@@ -28,7 +28,7 @@ const Preferences = () => {
   }, [config])
 
   useEffect(() => {
-    if (config && downloadFolder !== config.download_folder) {
+    if (config && setConfig && downloadFolder !== config.download_folder) {
       setConfig({ ...config, download_folder: downloadFolder })
     }
   }, [downloadFolder])
@@ -78,7 +78,7 @@ const Preferences = () => {
   const handleLanguageChange = (event: Event) => {
     const newLanguage = (event.target as HTMLSelectElement).value
     setLanguage(newLanguage)
-    if (config) {
+    if (config && setConfig) {
       setConfig({ ...config, language: newLanguage })
     }
   }
@@ -86,7 +86,7 @@ const Preferences = () => {
   const handleOpenOnDownloadChange = (event: Event) => {
     const newOpenOnDownload = (event.target as HTMLSelectElement).value
     setOpenOnDownload(newOpenOnDownload)
-    if (config) {
+    if (config && setConfig) {
       setConfig({ ...config, open_on_download: newOpenOnDownload })
     }
   }
@@ -94,7 +94,7 @@ const Preferences = () => {
   const handleThemeChange = (event: Event) => {
     const newTheme = (event.target as HTMLSelectElement).value
     setTheme(newTheme)
-    if (config) {
+    if (config && setConfig) {
       setConfig({ ...config, theme: newTheme })
     }
   }
