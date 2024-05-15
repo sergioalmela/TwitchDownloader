@@ -1,18 +1,12 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useContext, useEffect, useState } from 'preact/hooks'
 import { open } from '@tauri-apps/api/dialog'
-import { invoke, dialog, process } from '@tauri-apps/api'
-import useInit from '../hooks/useInit.ts'
-
-type Config = {
-  theme: string
-  language: string
-  download_folder: string
-  open_on_download: string
-}
+import { dialog, invoke, process } from '@tauri-apps/api'
+import { ConfigContext } from '../ConfigContext.ts'
 
 const Preferences = () => {
-  const [config, setConfig] = useState<Config | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const configContext = useContext(ConfigContext)
+  const config = configContext?.config
+  const setConfig = configContext?.setConfig
 
   const [activeTab, setActiveTab] = useState('General')
   const [language, setLanguage] = useState(config ? config.language : 'en')
@@ -38,11 +32,6 @@ const Preferences = () => {
       setConfig({ ...config, download_folder: downloadFolder })
     }
   }, [downloadFolder])
-
-  useInit(async () => {
-    setConfig(await invoke('get_preferences'))
-    setIsLoading(false)
-  })
 
   const selectFolder = async () => {
     try {
@@ -116,10 +105,6 @@ const Preferences = () => {
         ? 'bg-blue-500 text-white'
         : 'bg-gray-200 hover:bg-gray-300'
     }`
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   return (
     <form>
