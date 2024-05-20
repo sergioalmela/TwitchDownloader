@@ -1,5 +1,5 @@
 import { ComponentChildren } from 'preact'
-import { Config } from './types.ts'
+import { Config, DEFAULT_LANGUAGE } from './types.ts'
 import { invoke } from '@tauri-apps/api/tauri'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
@@ -24,8 +24,8 @@ export const ConfigProvider = ({
         translation: esTranslations
       }
     },
-    lng: 'en',
-    fallbackLng: 'en',
+    lng: DEFAULT_LANGUAGE,
+    fallbackLng: DEFAULT_LANGUAGE,
     interpolation: {
       escapeValue: false
     }

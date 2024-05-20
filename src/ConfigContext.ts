@@ -1,10 +1,9 @@
 import { createContext } from 'preact'
-import { Config } from './types.ts'
-import { Dispatch, StateUpdater } from 'preact/hooks'
+import { Config, SetConfig } from './types.ts'
 
-type ConfigContextType = {
+export type ConfigContextType = {
   config: Config | null
-  setConfig: Dispatch<StateUpdater<Config>> | null
+  setConfig: SetConfig | null
 }
 
 export const ConfigContext = createContext<ConfigContextType | null>(null)

@@ -1,110 +1,24 @@
-import { useContext, useEffect, useState } from 'preact/hooks'
-import { open } from '@tauri-apps/api/dialog'
-import { dialog, invoke, process } from '@tauri-apps/api'
-import { ConfigContext } from '../ConfigContext.ts'
+import { useContext } from 'preact/hooks'
+import { ConfigContext, ConfigContextType } from '../ConfigContext.ts'
+import { usePreferences } from '../hooks/usePreferences.ts'
+import { DEFAULT_ACTIVE_TAB, DEFAULT_OPEN_ON_DOWNLOAD } from '../types.ts'
 
 const Preferences = () => {
-  const configContext = useContext(ConfigContext)
-  const config = configContext?.config
-  const setConfig = configContext?.setConfig
+  const configContext: ConfigContextType | null = useContext(ConfigContext)
+  const config = configContext?.config || null
+  const setConfig = configContext?.setConfig || null
 
-  const [activeTab, setActiveTab] = useState('General')
-  const [language, setLanguage] = useState(config ? config.language : 'en')
-  const [openOnDownload, setOpenOnDownload] = useState(
-    config ? config.open_on_download : 'dont-open'
-  )
-  const [theme, setTheme] = useState(config ? config.theme : 'light')
-  const [downloadFolder, setDownloadFolder] = useState(
-    config ? config.download_folder : ''
-  )
-
-  useEffect(() => {
-    if (config) {
-      setLanguage(config.language)
-      setOpenOnDownload(config.open_on_download)
-      setTheme(config.theme)
-      setDownloadFolder(config.download_folder)
-    }
-  }, [config])
-
-  useEffect(() => {
-    if (config && setConfig && downloadFolder !== config.download_folder) {
-      setConfig({ ...config, download_folder: downloadFolder })
-    }
-  }, [downloadFolder])
-
-  const selectFolder = async () => {
-    try {
-      const path = await open({
-        directory: true,
-        multiple: false
-      })
-
-      if (path) {
-        const newDownloadFolder = Array.isArray(path) ? path[0] : path
-        setDownloadFolder(newDownloadFolder)
-      }
-    } catch (error) {
-      console.error('Error selecting folder:', error)
-    }
-  }
-
-  const updatePreferences = async () => {
-    const values = {
-      language,
-      download_folder: downloadFolder,
-      open_on_download: openOnDownload,
-      theme
-    }
-
-    try {
-      await invoke('update_preferences', { data: values })
-      const isOk = await dialog.ask(
-        `Configuration saved successfully, do you want to restart?`,
-        {
-          title: 'Twitch Downloader Preferences'
-        }
-      )
-
-      if (isOk) {
-        await process.relaunch()
-        return
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error)
-    }
-  }
-
-  const handleLanguageChange = (event: Event) => {
-    const newLanguage = (event.target as HTMLSelectElement).value
-    setLanguage(newLanguage)
-    if (config && setConfig) {
-      setConfig({ ...config, language: newLanguage })
-    }
-  }
-
-  const handleOpenOnDownloadChange = (event: Event) => {
-    const newOpenOnDownload = (event.target as HTMLSelectElement).value
-    setOpenOnDownload(newOpenOnDownload)
-    if (config && setConfig) {
-      setConfig({ ...config, open_on_download: newOpenOnDownload })
-    }
-  }
-
-  const handleThemeChange = (event: Event) => {
-    const newTheme = (event.target as HTMLSelectElement).value
-    setTheme(newTheme)
-    if (config && setConfig) {
-      setConfig({ ...config, theme: newTheme })
-    }
-  }
-
-  const tabClass = (tabName: string) =>
-    `flex-1 cursor-pointer text-center p-4 ${
-      activeTab === tabName
-        ? 'bg-blue-500 text-white'
-        : 'bg-gray-200 hover:bg-gray-300'
-    }`
+  const {
+    activeTab,
+    setActiveTab,
+    downloadFolder,
+    selectFolder,
+    updatePreferences,
+    handleLanguageChange,
+    handleOpenOnDownloadChange,
+    handleThemeChange,
+    tabClass
+  } = usePreferences(config, setConfig)
 
   return (
     <form>
@@ -113,8 +27,8 @@ const Preferences = () => {
           <div className="flex">
             <div className="w-1/4 flex flex-col">
               <div
-                className={tabClass('General')}
-                onClick={() => setActiveTab('General')}
+                className={tabClass(DEFAULT_ACTIVE_TAB)}
+                onClick={() => setActiveTab(DEFAULT_ACTIVE_TAB)}
               >
                 General
               </div>
@@ -132,7 +46,7 @@ const Preferences = () => {
               </div>
             </div>
             <div className="w-3/4 p-4 overflow-auto">
-              {activeTab === 'General' && (
+              {activeTab === DEFAULT_ACTIVE_TAB && (
                 <div>
                   <label htmlFor="language" className="block mb-2">
                     Language
@@ -185,7 +99,9 @@ const Preferences = () => {
                       value={config?.open_on_download}
                       onChange={handleOpenOnDownloadChange}
                     >
-                      <option value="dont-open">Don't Open</option>
+                      <option value={DEFAULT_OPEN_ON_DOWNLOAD}>
+                        Don't Open
+                      </option>
                       <option value="open">Open</option>
                     </select>
                   </div>
