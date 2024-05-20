@@ -111,3 +111,45 @@ define_language!(
         window: "Ventana",
     }
 );
+
+define_language!(
+    German,
+    Translations {
+        about: "Über uns",
+        close: "Schließen",
+        config: "Konfiguration",
+        donate: "Spenden",
+        github: "GitHub",
+        help: "Hilfe",
+        preferences: "Einstellungen",
+        window: "Fenster",
+    }
+);
+
+define_language!(
+    French,
+    Translations {
+        about: "À propos de nous",
+        close: "Fermer",
+        config: "Configuration",
+        donate: "Faire un don",
+        github: "GitHub",
+        help: "Aide",
+        preferences: "Préférences",
+        window: "Fenêtre",
+    }
+);
+
+define_language!(
+    Italian,
+    Translations {
+        about: "Riguardo a noi",
+        close: "Chiudi",
+        config: "Configurazione",
+        donate: "Donare",
+        github: "GitHub",
+        help: "Aiuto",
+        preferences: "Preferenze",
+        window: "Finestra",
+    }
+);

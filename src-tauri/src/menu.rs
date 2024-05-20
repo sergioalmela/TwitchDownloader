@@ -1,10 +1,13 @@
-use crate::translations::{English, Language, Spanish};
+use crate::translations::{English, French, German, Italian, Language, Spanish};
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub fn create_menu(lang: &str) -> Menu {
     let translations: Box<dyn Language> = match lang {
+        "de" => Box::new(German::new()),
         "en" => Box::new(English::new()),
         "es" => Box::new(Spanish::new()),
+        "fr" => Box::new(French::new()),
+        "it" => Box::new(Italian::new()),
         _ => Box::new(English::new()),
     };
 
