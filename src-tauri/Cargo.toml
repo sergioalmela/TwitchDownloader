@@ -3,7 +3,7 @@ name = "twitch-downloader"
 version = "2.0.0"
 description = "Twitch Downloader"
 authors = ["Sergio Almela"]
-license = ""
+license = "GPL-3"
 repository = "https://github.com/sergioalmela/TwitchDownloader"
 edition = "2021"
 
