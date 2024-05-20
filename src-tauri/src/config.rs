@@ -1,15 +1,16 @@
-use crate::utils::{app_root, create_file, exists};
+use std::{collections::BTreeMap, path::PathBuf};
+
 use log::{error, info};
 use serde_json::Value;
-use std::{collections::BTreeMap, path::PathBuf};
+use tauri::{Theme};
 use tauri::AppHandle;
-use tauri::{Manager, Theme};
+
+use crate::utils::{app_root, create_file, exists};
 
 pub const APP_CONF_PATH: &str = "twitch-downloader.conf.json";
 
 #[tauri::command]
 pub fn update_preferences(_app: AppHandle, data: serde_json::Value) {
-    println!("Preferences updated with: {:?}", data);
     AppConf::read().amend(serde_json::json!(data)).write();
 }
 
@@ -125,14 +126,6 @@ impl AppConf {
     pub fn get_theme() -> String {
         Self::read().theme.to_lowercase()
     }
-
-    pub fn theme_check(self, mode: &str) -> bool {
-        self.theme.to_lowercase() == mode
-    }
-
-    pub fn restart(self, app: tauri::AppHandle) {
-        tauri::api::process::restart(&app.env());
-    }
 }
 
 impl Default for AppConf {
@@ -142,18 +135,9 @@ impl Default for AppConf {
 }
 
 pub mod cmd {
+    use tauri::{AppHandle, command};
+
     use super::AppConf;
-    use tauri::{command, AppHandle};
-
-    #[command]
-    pub fn get_app_conf() -> AppConf {
-        AppConf::read()
-    }
-
-    #[command]
-    pub fn get_theme() -> String {
-        AppConf::get_theme()
-    }
 
     #[command]
     pub fn form_confirm(_app: AppHandle, data: serde_json::Value) {

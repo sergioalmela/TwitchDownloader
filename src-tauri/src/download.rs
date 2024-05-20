@@ -32,7 +32,6 @@ pub struct DownloadArgs {
 
 #[tauri::command]
 pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), String> {
-    println!("Download live invoked with URL: {}", args.m3u8_url);
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     let window_arc = Arc::new(Mutex::new(window));
@@ -52,7 +51,6 @@ pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), Str
 
 #[tauri::command]
 pub async fn download_vod(args: DownloadArgs, window: Window) -> Result<(), String> {
-    println!("Download vod invoked with URL: {}", args.m3u8_url);
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     match download_parse_m3u8_vod(window, &args.m3u8_url, &args.download_path, &output_file).await {
@@ -63,7 +61,6 @@ pub async fn download_vod(args: DownloadArgs, window: Window) -> Result<(), Stri
 
 #[tauri::command]
 pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), String> {
-    println!("Download clip invoked with URL: {}", args.m3u8_url);
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     match download_parse_m3u8_clip(window, &args.m3u8_url, &args.download_path, &output_file).await
@@ -159,8 +156,6 @@ async fn download_parse_m3u8_vod(
         .filter(|line| line.ends_with(".ts"))
         .collect();
     let total_segments = segment_lines.len();
-    println!("Base Url: {}", base_url);
-    println!("Segment lines: {:?}", segment_lines);
 
     for (index, line) in segment_lines.iter().enumerate() {
         let segment_url = if line.starts_with("http") {
@@ -198,8 +193,6 @@ async fn download_parse_m3u8_clip(
     window
         .emit("download-progress", &100.0)
         .expect("Failed to emit progress event");
-
-    println!("Downloaded MP4 file: {}", url);
 
     Ok(())
 }
