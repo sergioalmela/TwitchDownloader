@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/tauri'
 import { open } from '@tauri-apps/api/dialog'
 import { listen } from '@tauri-apps/api/event'
@@ -15,7 +15,7 @@ import {
   DOWNLOAD_COMMANDS
 } from '../types.ts'
 
-export const useForm = () => {
+export const useForm = (config: Config | null) => {
   const [showQualities, setShowQualities] = useState(false)
   const [url, setUrl] = useState('')
   const [playlists, setPlaylists] = useState<Playlist[]>([])
@@ -31,7 +31,6 @@ export const useForm = () => {
   const [downloadCommand, setDownloadCommand] = useState<DOWNLOAD_COMMANDS>(
     DEFAULT_DOWNLOAD_COMMAND
   )
-  const [config] = useState<Config | null>(null)
   const [downloadFolder, setDownloadFolder] = useState(
     config ? config.download_folder : ''
   )

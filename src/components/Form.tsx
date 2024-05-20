@@ -1,8 +1,13 @@
+import { useContext } from 'preact/hooks'
 import ProgressBar from './ProgressBar.tsx'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '../hooks/useForm.ts'
+import { ConfigContext, ConfigContextType } from '../ConfigContext.ts'
 
 const Form = () => {
+  const configContext: ConfigContextType | null = useContext(ConfigContext)
+  const config = configContext?.config || null
+
   const {
     showQualities,
     url,
@@ -21,9 +26,10 @@ const Form = () => {
     handleFileNameChange,
     handleSubmit,
     resetForm
-  } = useForm()
+  } = useForm(config)
 
   const { t } = useTranslation('translation')
+  console.log(downloadFolder)
 
   return (
     <div class="max-w-lg mx-auto p-4 w-4/5">
