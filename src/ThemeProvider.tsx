@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/tauri'
-
-type Config = {
-  theme: string
-  language: string
-  download_folder: string
-  open_on_download: string
-}
+import { Config } from './types.ts'
 
 type ThemeProviderProps = {
   children: preact.ComponentChildren
