@@ -3,8 +3,11 @@ import { Config, DEFAULT_LANGUAGE } from './types.ts'
 import { invoke } from '@tauri-apps/api/tauri'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import deTranslations from './locales/de.json'
 import enTranslations from './locales/en.json'
 import esTranslations from './locales/es.json'
+import frTranslations from './locales/fr.json'
+import itTranslations from './locales/it.json'
 import { useEffect, useState } from 'preact/hooks'
 import { ConfigContext } from './ConfigContext.ts'
 
@@ -17,11 +20,20 @@ export const ConfigProvider = ({
 
   i18next.use(initReactI18next).init({
     resources: {
+      de: {
+        translation: deTranslations
+      },
       en: {
         translation: enTranslations
       },
       es: {
         translation: esTranslations
+      },
+      fr: {
+        translation: frTranslations
+      },
+      it: {
+        translation: itTranslations
       }
     },
     lng: DEFAULT_LANGUAGE,
