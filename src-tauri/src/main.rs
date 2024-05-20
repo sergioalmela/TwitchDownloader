@@ -12,10 +12,10 @@ use crate::config::AppConf;
 
 mod config;
 mod download;
+mod menu;
 mod translations;
 mod utils;
 mod window;
-mod menu;
 
 pub fn open(app: &AppHandle, path: &str) {
     tauri::api::shell::open(&app.shell_scope(), path, None).unwrap();

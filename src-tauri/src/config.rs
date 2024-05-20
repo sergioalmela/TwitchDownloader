@@ -2,8 +2,8 @@ use std::{collections::BTreeMap, path::PathBuf};
 
 use log::{error, info};
 use serde_json::Value;
-use tauri::{Theme};
 use tauri::AppHandle;
+use tauri::Theme;
 
 use crate::utils::{app_root, create_file, exists};
 
@@ -135,7 +135,7 @@ impl Default for AppConf {
 }
 
 pub mod cmd {
-    use tauri::{AppHandle, command};
+    use tauri::{command, AppHandle};
 
     use super::AppConf;
 

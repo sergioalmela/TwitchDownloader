@@ -76,7 +76,7 @@ macro_rules! define_language {
             fn preferences(&self) -> &'static str {
                 self.preferences
             }
-            
+
             fn window(&self) -> &'static str {
                 self.window
             }
