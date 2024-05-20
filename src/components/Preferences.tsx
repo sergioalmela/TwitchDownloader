@@ -2,6 +2,7 @@ import { useContext } from 'preact/hooks'
 import { ConfigContext, ConfigContextType } from '../ConfigContext.ts'
 import { usePreferences } from '../hooks/usePreferences.ts'
 import { DEFAULT_ACTIVE_TAB, DEFAULT_OPEN_ON_DOWNLOAD } from '../types.ts'
+import { useTranslation } from 'react-i18next'
 
 const Preferences = () => {
   const configContext: ConfigContextType | null = useContext(ConfigContext)
@@ -20,6 +21,8 @@ const Preferences = () => {
     tabClass
   } = usePreferences(config, setConfig)
 
+  const { t } = useTranslation('translation')
+
   return (
     <form>
       <div className="App bg-gray-100 min-h-screen p-4 flex flex-col items-center">
@@ -30,26 +33,26 @@ const Preferences = () => {
                 className={tabClass(DEFAULT_ACTIVE_TAB)}
                 onClick={() => setActiveTab(DEFAULT_ACTIVE_TAB)}
               >
-                General
+                {t('General')}
               </div>
               <div
                 className={tabClass('Downloads')}
                 onClick={() => setActiveTab('Downloads')}
               >
-                Downloads
+                {t('downloads')}
               </div>
               <div
                 className={tabClass('Appearance')}
                 onClick={() => setActiveTab('Appearance')}
               >
-                Appearance
+                {t('appearance')}
               </div>
             </div>
             <div className="w-3/4 p-4 overflow-auto">
               {activeTab === DEFAULT_ACTIVE_TAB && (
                 <div>
                   <label htmlFor="language" className="block mb-2">
-                    Language
+                    {t('language')}
                   </label>
                   <select
                     name="language"
@@ -58,11 +61,11 @@ const Preferences = () => {
                     value={config?.language}
                     onChange={handleLanguageChange}
                   >
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="it">Italian</option>
-                    <option value="de">German</option>
+                    <option value="en">{t('languages.en')}</option>
+                    <option value="es">{t('languages.es')}</option>
+                    <option value="fr">{t('languages.fr')}</option>
+                    <option value="it">{t('languages.it')}</option>
+                    <option value="de">{t('languages.de')}</option>
                   </select>
                 </div>
               )}
@@ -70,7 +73,7 @@ const Preferences = () => {
                 <div>
                   <div className="mb-4">
                     <label htmlFor="download-folder" className="block mb-2">
-                      Default Download Folder
+                      {t('downloadFolder')}
                     </label>
                     <button
                       type="button"
@@ -78,19 +81,19 @@ const Preferences = () => {
                       onClick={selectFolder}
                       name="download-folder"
                     >
-                      Select Folder
+                      {t('selectFolder')}
                     </button>
 
                     {downloadFolder && (
                       <div className="mt-4">
-                        Selected Folder:{' '}
+                        {t('selectedFolder')}
                         <span className="font-semibold">{downloadFolder}</span>
                       </div>
                     )}
                   </div>
                   <div>
                     <label htmlFor="open-folder" className="block mb-2">
-                      Open Folder on Download?
+                      {t('openFolderOnDownload')}
                     </label>
                     <select
                       id="open-folder"
@@ -100,9 +103,9 @@ const Preferences = () => {
                       onChange={handleOpenOnDownloadChange}
                     >
                       <option value={DEFAULT_OPEN_ON_DOWNLOAD}>
-                        Don't Open
+                        {t('dontOpen')}
                       </option>
-                      <option value="open">Open</option>
+                      <option value="open">{t('open')}</option>
                     </select>
                   </div>
                 </div>
@@ -110,7 +113,7 @@ const Preferences = () => {
               {activeTab === 'Appearance' && (
                 <div>
                   <label htmlFor="theme" className="block mb-2">
-                    Theme
+                    {t('theme')}
                   </label>
                   <select
                     name="theme"
@@ -119,8 +122,8 @@ const Preferences = () => {
                     value={config?.theme}
                     onChange={handleThemeChange}
                   >
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
+                    <option value="light">{t('light')}</option>
+                    <option value="dark"> {t('dark')}</option>
                   </select>
                 </div>
               )}
@@ -135,7 +138,7 @@ const Preferences = () => {
               updatePreferences()
             }}
           >
-            Submit
+            {t('save')}
           </button>
         </div>
       </div>
