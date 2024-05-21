@@ -21,7 +21,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint src --config eslint.config.cjs",
     "prettier-check": "prettier --config .prettierrc 'src/**/*.ts' --check",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "preview": "vite preview",
