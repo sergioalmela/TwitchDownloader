@@ -1,0 +1,49 @@
+name: Rust Checks
+
+on:
+  push:
+    paths:
+      - 'src-tauri/**'
+  pull_request:
+    paths:
+      - 'src-tauri/**'
+
+jobs:
+  rust-lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Cargo Registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libsoup2.4-dev libwebkit2gtk-4.0-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting with Rustfmt
+        run: |
+          cd src-tauri
+          cargo fmt -- --check
+
+      - name: Check linting with Clippy
+        run: |
+          cd src-tauri
+          cargo clippy -- -D warnings
+
+      - name: Cargo Build
+        run: |
+          cd src-tauri
+          cargo build --release

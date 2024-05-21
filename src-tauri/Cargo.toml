@@ -1,0 +1,28 @@
+[package]
+name = "twitch-downloader"
+version = "2.0.0"
+description = "Twitch Downloader"
+authors = ["Sergio Almela"]
+license = "GPL-3"
+repository = "https://github.com/sergioalmela/TwitchDownloader"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.6", features = [ "api-all"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = "0.11"
+tokio = "1.37.0"
+log = "0.4.21"
+anyhow = "1.0.81"
+dark-light = "1.0.0"
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

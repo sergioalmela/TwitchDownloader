@@ -1,0 +1,31 @@
+{
+  "appearance": "Aspetto",
+  "clear": "Cancella",
+  "dark": "Scuro",
+  "dontOpen": "Non aprire",
+  "download": "Scarica",
+  "downloadFolder": "Cartella di scaricamento",
+  "downloads": "Scaricamenti",
+  "downloadAnother": "Scarica un altro",
+  "fileName": "Nome del file",
+  "general": "Generale",
+  "getQualities": "Ottieni qualità",
+  "language": "Lingua",
+  "languages": {
+    "de": "Tedesco",
+    "en": "Inglese",
+    "es": "Spagnolo",
+    "fr": "Francese",
+    "it": "Italiano"
+  },
+  "loading": "Caricamento...",
+  "light": "Luce",
+  "open": "Apri",
+  "openFolderOnDownload": "Apri cartella al download",
+  "save": "Salva",
+  "selectFolder": "Seleziona cartella",
+  "selectedFolder": "Cartella selezionata: ",
+  "selectQuality": "Seleziona qualità:",
+  "theme": "Tema",
+  "twitchUrl": "URL Twitch"
+}
