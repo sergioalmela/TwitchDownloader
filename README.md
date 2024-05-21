@@ -1,5 +1,5 @@
 # Twitch Downloader
-![Twitch Downloader Logo](logo.png?raw=true "Twitch Downloader Logo")
+![Twitch Downloader Logo](public/logo.png "Twitch Downloader Logo")
 
 ## About
 Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips).
