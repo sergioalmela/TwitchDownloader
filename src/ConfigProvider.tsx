@@ -1,6 +1,6 @@
 import { ComponentChildren } from 'preact'
 import { Config, DEFAULT_LANGUAGE } from './types.ts'
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke } from '@tauri-apps/api/core'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import deTranslations from './locales/de.json'

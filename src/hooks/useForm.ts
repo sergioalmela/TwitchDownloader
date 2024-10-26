@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'preact/hooks'
-import { invoke } from '@tauri-apps/api/tauri'
-import { open } from '@tauri-apps/api/dialog'
+import { invoke } from '@tauri-apps/api/core'
+import { open } from '@tauri-apps/plugin-dialog'
 import { listen } from '@tauri-apps/api/event'
-import { open as openShell } from '@tauri-apps/api/shell'
+import { open as openShell } from '@tauri-apps/plugin-shell'
 import { detectContentType } from '../downloader/detectContentType.ts'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
 import { getCredentials } from '../downloader/auth/getCredentials.ts'
@@ -55,9 +55,7 @@ export const useForm = (config: Config | null) => {
 
   useEffect(() => {
     const progress = listen('download-progress', (event) => {
-      console.log(`Received event: ${event.payload}`)
       if (typeof event.payload === 'number') {
-        console.log(`Download progress: ${event.payload}%`)
         setDownloadProgress(event.payload)
         setIsDownloading(event.payload < 100)
       }
@@ -167,8 +165,7 @@ export const useForm = (config: Config | null) => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    console.log('submitting')
-    console.log(selectedPlaylistUrl, fileName)
+
     if (!selectedPlaylistUrl || !fileName.trim()) {
       setError('Please fill in all fields.')
       return
@@ -193,7 +190,6 @@ export const useForm = (config: Config | null) => {
         await openShell(dirPath)
       }
     } catch (error) {
-      console.log(error)
       if (error instanceof Error) {
         setError(error.message)
       } else if (typeof error === 'string') {

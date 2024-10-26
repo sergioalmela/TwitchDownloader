@@ -1,7 +1,7 @@
 import { ContentTypes } from './detectContentType.ts'
 import { ContentId } from './getContentId.ts'
 import { Credentials } from './auth/getCredentials.ts'
-import { Body, fetch } from '@tauri-apps/api/http'
+import { fetch } from '@tauri-apps/plugin-http'
 import { getAuthHeaders } from './auth/getAuthHeaders.ts'
 import { getAuthVariables } from './auth/getAuthVariables.ts'
 

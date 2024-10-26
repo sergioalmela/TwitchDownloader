@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke } from '@tauri-apps/api/core'
 import { Config } from './types.ts'
 
 type ThemeProviderProps = {
