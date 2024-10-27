@@ -13,7 +13,7 @@ pub fn get_tauri_conf() -> Option<Config> {
 }
 
 pub fn app_root() -> PathBuf {
-    tauri::api::path::home_dir()
+    tauri::Manager::path::home_dir()
         .unwrap()
         .join(".twitch-downloader")
 }

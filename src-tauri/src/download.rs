@@ -3,7 +3,8 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
-use tauri::Window;
+use tauri::WebviewWindow;
+use tauri::Emitter;
 
 #[derive(Debug)]
 enum DownloadError {
@@ -31,7 +32,7 @@ pub struct DownloadArgs {
 }
 
 #[tauri::command]
-pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), String> {
+pub async fn download_live(args: DownloadArgs, window: WebviewWindow) -> Result<(), String> {
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     let window_arc = Arc::new(Mutex::new(window));
@@ -50,7 +51,7 @@ pub async fn download_live(args: DownloadArgs, window: Window) -> Result<(), Str
 }
 
 #[tauri::command]
-pub async fn download_vod(args: DownloadArgs, window: Window) -> Result<(), String> {
+pub async fn download_vod(args: DownloadArgs, window: WebviewWindow) -> Result<(), String> {
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     match download_parse_m3u8_vod(window, &args.m3u8_url, &args.download_path, &output_file).await {
@@ -60,7 +61,7 @@ pub async fn download_vod(args: DownloadArgs, window: Window) -> Result<(), Stri
 }
 
 #[tauri::command]
-pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), String> {
+pub async fn download_clip(args: DownloadArgs, window: WebviewWindow) -> Result<(), String> {
     let output_file = Path::new(&args.download_path).join(args.file_name);
 
     match download_parse_m3u8_clip(window, &args.m3u8_url, &args.download_path, &output_file).await
@@ -71,7 +72,7 @@ pub async fn download_clip(args: DownloadArgs, window: Window) -> Result<(), Str
 }
 
 async fn download_parse_m3u8_live(
-    window_arc: Arc<Mutex<Window>>,
+    window_arc: Arc<Mutex<WebviewWindow>>,
     url: &str,
     _download_path: &str,
     output_file: &Path,
@@ -143,7 +144,7 @@ async fn download_parse_m3u8_live(
 }
 
 async fn download_parse_m3u8_vod(
-    window: Window,
+    window: WebviewWindow,
     url: &str,
     _download_path: &str,
     output_file: &Path,
@@ -177,7 +178,7 @@ async fn download_parse_m3u8_vod(
 }
 
 async fn download_parse_m3u8_clip(
-    window: Window,
+    window: WebviewWindow,
     url: &str,
     _download_path: &str,
     output_file: &Path,

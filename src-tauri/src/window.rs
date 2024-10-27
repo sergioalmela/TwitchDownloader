@@ -1,14 +1,14 @@
 pub mod cmd {
-    use tauri::{utils::config::WindowUrl, window::WindowBuilder, Manager};
+    use tauri::{utils::config::WebviewUrl, WebviewWindowBuilder};
 
     #[tauri::command]
     pub fn control_window(handle: tauri::AppHandle, win_type: String) {
         tauri::async_runtime::spawn(async move {
             if handle.get_window("preferences").is_none() {
-                WindowBuilder::new(
+                WebviewWindowBuilder::new(
                     &handle,
                     "preferences",
-                    WindowUrl::App(format!("index.html?type={}", win_type).into()),
+                    WebviewUrl::App(format!("index.html?type={}", win_type).into()),
                 )
                 .title("Preferences")
                 .resizable(true)

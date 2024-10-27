@@ -4,6 +4,8 @@
 use std::env;
 
 use tauri::{AppHandle, Manager};
+use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_shell::ShellExt;
 
 use download::{download_clip, download_live, download_vod};
 use menu::create_menu;
@@ -18,7 +20,7 @@ mod utils;
 mod window;
 
 pub fn open(app: &AppHandle, path: &str) {
-    tauri::api::shell::open(&app.shell_scope(), path, None).unwrap();
+    app.shell().open(path, None).unwrap();
 }
 
 fn main() {
@@ -66,11 +68,7 @@ fn main() {
                 let win = event.window();
                 let app = win.app_handle();
                 let tauri_conf = utils::get_tauri_conf().unwrap();
-                tauri::api::dialog::message(
-                    app.get_window("core").as_ref(),
-                    "Twitch Downloader",
-                    format!("Version {}", tauri_conf.package.version.unwrap()),
-                );
+                app.dialog().message(format!("Version {}", tauri_conf.package.version.unwrap())).show();
             }
             "preferences" => {
                 let win = event.window();
