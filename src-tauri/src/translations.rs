@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub trait Language {
     fn about(&self) -> &'static str;
     fn close(&self) -> &'static str;

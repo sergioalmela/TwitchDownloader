@@ -13,15 +13,15 @@ pub fn create_menu<'a, R: Runtime, M: Manager<R>>(lang: &'a str, manager: &'a M)
     };
 
     let window_label = translations.window();
-    let close_s = MenuItemBuilder::new("quit".to_string()).build(manager).unwrap();
+    let close_s = MenuItemBuilder::new("quit").build(manager).unwrap();
 
     let config_label = translations.config();
-    let preferences_s = MenuItemBuilder::new("preferences".to_string()).build(manager).unwrap();
+    let preferences_s = MenuItemBuilder::new("preferences").build(manager).unwrap();
 
     let help_label = translations.help();
-    let about_s = MenuItemBuilder::new("about".to_string()).build(manager).unwrap();
-    let github_s = MenuItemBuilder::new("github".to_string()).build(manager).unwrap();
-    let donate_s = MenuItemBuilder::new("donate".to_string()).build(manager).unwrap();
+    let about_s = MenuItemBuilder::new("about").build(manager).unwrap();
+    let github_s = MenuItemBuilder::new("github").build(manager).unwrap();
+    let donate_s = MenuItemBuilder::new("donate").build(manager).unwrap();
 
     let submenu_window = SubmenuBuilder::new(manager, window_label).build().unwrap();
     let submenu_config = SubmenuBuilder::new(manager, config_label).item(&preferences_s).build().unwrap();
