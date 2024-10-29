@@ -1,9 +1,6 @@
 name: Rust Checks
 
 on:
-  push:
-    paths:
-      - 'src-tauri/**'
   pull_request:
     paths:
       - 'src-tauri/**'
