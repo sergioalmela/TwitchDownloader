@@ -1,31 +1,20 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
-use std::env;
-
 use tauri::{AppHandle, Manager};
-use tauri_plugin_dialog::DialogExt;
-use tauri_plugin_shell::ShellExt;
-
-use download::{download_clip, download_live, download_vod};
-use menu::create_menu;
-
-use crate::config::AppConf;
-
+use tauri_plugin_shell::open::open;
 mod config;
-mod download;
-mod menu;
-mod translations;
 mod utils;
 mod window;
-
-pub fn open(app: &AppHandle, path: &str) {
-    app.shell().open(path, None).unwrap();
-}
+mod download;
+mod menu;
+use crate::download::{download_live, download_vod, download_clip};
+use crate::menu::create_menu;
 
 fn main() {
-    let app_conf = AppConf::read().write();
-    let _theme = AppConf::theme_mode();
+    let app = tauri::Builder::default()
+        .build(tauri::generate_context!())
+        .expect("error while running tauri application");
+
+    let app_conf = config::AppConf::read(&app).write(&app);
+    let _theme = config::AppConf::theme_mode(&app);
 
     let language = app_conf.language();
 
@@ -50,25 +39,25 @@ fn main() {
             config::cmd::form_confirm,
         ])
         .menu(menu)
-        .on_menu_event(|event| match event.menu_item_id() {
+        .on_menu_event(|event, _| match event.menu_item_id() {
             "quit" => {
                 std::process::exit(0);
             }
             "github" => {
                 let win = event.window();
                 let app = win.app_handle();
-                open(&app, "https://github.com/sergioalmela/TwitchDownloader");
+                open(&app, "https://github.com/sergioalmela/TwitchDownloader", None);
             }
             "donate" => {
                 let win = event.window();
                 let app = win.app_handle();
-                open(&app, "https://www.buymeacoffee.com/sergioalmela");
+                open(&app, "https://www.buymeacoffee.com/sergioalmela", None);
             }
             "about" => {
                 let win = event.window();
                 let app = win.app_handle();
                 let tauri_conf = utils::get_tauri_conf().unwrap();
-                app.dialog().message(format!("Version {}", tauri_conf.package.version.unwrap())).show();
+                app.dialog().message(format!("Version {}", tauri_conf.version.unwrap())).show();
             }
             "preferences" => {
                 let win = event.window();

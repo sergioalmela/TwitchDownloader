@@ -2,21 +2,20 @@ use std::{collections::BTreeMap, path::PathBuf};
 
 use log::{error, info};
 use serde_json::Value;
-use tauri::AppHandle;
-use tauri::Theme;
+use tauri::{AppHandle, Manager, Runtime, Theme};
 
 use crate::utils::{app_root, create_file, exists};
 
 pub const APP_CONF_PATH: &str = "twitch-downloader.conf.json";
 
 #[tauri::command]
-pub fn update_preferences(_app: AppHandle, data: serde_json::Value) {
-    AppConf::read().amend(serde_json::json!(data)).write();
+pub fn update_preferences<R: Runtime>(app: AppHandle<R>, data: serde_json::Value) {
+    AppConf::read(&app).amend(serde_json::json!(data)).write(&app);
 }
 
 #[tauri::command]
-pub fn get_preferences() -> AppConf {
-    AppConf::read()
+pub fn get_preferences<R: Runtime>(app: AppHandle<R>) -> AppConf {
+    AppConf::read(&app)
 }
 
 macro_rules! pub_struct {
@@ -45,12 +44,12 @@ impl AppConf {
         }
     }
 
-    pub fn file_path() -> PathBuf {
-        app_root().join(APP_CONF_PATH)
+    pub fn file_path<R: Runtime>(manager: &impl Manager<R>) -> PathBuf {
+        app_root(manager).join(APP_CONF_PATH)
     }
 
-    pub fn read() -> Self {
-        match std::fs::read_to_string(Self::file_path()) {
+    pub fn read<R: Runtime>(manager: &impl Manager<R>) -> Self {
+        match std::fs::read_to_string(Self::file_path(manager)) {
             Ok(v) => {
                 if let Ok(v2) = serde_json::from_str::<AppConf>(&v) {
                     v2
@@ -66,8 +65,8 @@ impl AppConf {
         }
     }
 
-    pub fn write(self) -> Self {
-        let path = &Self::file_path();
+    pub fn write<R: Runtime>(self, manager: &impl Manager<R>) -> Self {
+        let path = &Self::file_path(manager);
         if !exists(path) {
             create_file(path).unwrap();
             info!("conf_create");
@@ -75,7 +74,7 @@ impl AppConf {
         if let Ok(v) = serde_json::to_string_pretty(&self) {
             std::fs::write(path, v).unwrap_or_else(|err| {
                 error!("conf_write: {}", err);
-                Self::default().write();
+                Self::default().write(manager);
             });
         } else {
             error!("conf_ser");
@@ -111,8 +110,8 @@ impl AppConf {
         self.language.to_lowercase()
     }
 
-    pub fn theme_mode() -> Theme {
-        match Self::get_theme().as_str() {
+    pub fn theme_mode<R: Runtime>(manager: &impl Manager<R>) -> Theme {
+        match Self::get_theme(manager).as_str() {
             "system" => match dark_light::detect() {
                 dark_light::Mode::Dark => Theme::Dark,
                 dark_light::Mode::Light => Theme::Light,
@@ -123,8 +122,8 @@ impl AppConf {
         }
     }
 
-    pub fn get_theme() -> String {
-        Self::read().theme.to_lowercase()
+    pub fn get_theme<R: Runtime>(manager: &impl Manager<R>) -> String {
+        Self::read(manager).theme.to_lowercase()
     }
 }
 
@@ -135,12 +134,12 @@ impl Default for AppConf {
 }
 
 pub mod cmd {
-    use tauri::{command, AppHandle};
+    use tauri::{command, AppHandle, Runtime};
 
     use super::AppConf;
 
     #[command]
-    pub fn form_confirm(_app: AppHandle, data: serde_json::Value) {
-        AppConf::read().amend(serde_json::json!(data)).write();
+    pub fn form_confirm<R: Runtime>(app: AppHandle<R>, data: serde_json::Value) {
+        AppConf::read(&app).amend(serde_json::json!(data)).write(&app);
     }
 }
