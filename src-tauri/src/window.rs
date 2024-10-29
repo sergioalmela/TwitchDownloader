@@ -1,5 +1,5 @@
 pub mod cmd {
-    use tauri::{utils::config::WebviewUrl, WebviewWindowBuilder, Manager};
+    use tauri::{utils::config::WebviewUrl, Manager, WebviewWindowBuilder};
 
     #[tauri::command]
     pub fn control_window(handle: tauri::AppHandle, win_type: String) {
@@ -10,13 +10,13 @@ pub mod cmd {
                     "preferences",
                     WebviewUrl::App(format!("index.html?type={}", win_type).into()),
                 )
-                    .title("Preferences")
-                    .resizable(true)
-                    .fullscreen(false)
-                    .inner_size(900.0, 600.0)
-                    .min_inner_size(600.0, 600.0)
-                    .build()
-                    .unwrap();
+                .title("Preferences")
+                .resizable(true)
+                .fullscreen(false)
+                .inner_size(900.0, 600.0)
+                .min_inner_size(600.0, 600.0)
+                .build()
+                .unwrap();
             } else {
                 let main_win = handle.get_webview_window("preferences").unwrap();
                 main_win.show().unwrap();

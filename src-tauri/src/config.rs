@@ -10,7 +10,9 @@ pub const APP_CONF_PATH: &str = "twitch-downloader.conf.json";
 
 #[tauri::command]
 pub fn update_preferences<R: Runtime>(app: AppHandle<R>, data: serde_json::Value) {
-    AppConf::read(&app).amend(serde_json::json!(data)).write(&app);
+    AppConf::read(&app)
+        .amend(serde_json::json!(data))
+        .write(&app);
 }
 
 #[tauri::command]
@@ -140,6 +142,8 @@ pub mod cmd {
 
     #[command]
     pub fn form_confirm<R: Runtime>(app: AppHandle<R>, data: serde_json::Value) {
-        AppConf::read(&app).amend(serde_json::json!(data)).write(&app);
+        AppConf::read(&app)
+            .amend(serde_json::json!(data))
+            .write(&app);
     }
 }

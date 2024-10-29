@@ -14,7 +14,11 @@ pub fn get_tauri_conf() -> Option<Config> {
 }
 
 pub fn app_root<R: Runtime>(manager: &impl Manager<R>) -> PathBuf {
-    manager.path().home_dir().unwrap().join(".twitch-downloader")
+    manager
+        .path()
+        .home_dir()
+        .unwrap()
+        .join(".twitch-downloader")
 }
 
 pub fn exists(path: &Path) -> bool {

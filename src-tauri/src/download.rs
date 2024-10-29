@@ -3,8 +3,8 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
-use tauri::WebviewWindow;
 use tauri::Emitter;
+use tauri::WebviewWindow;
 
 #[derive(Debug)]
 enum DownloadError {

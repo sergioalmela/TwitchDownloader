@@ -2,7 +2,10 @@ use crate::translations::{English, French, German, Italian, Language, Spanish};
 use tauri::menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder};
 use tauri::{Manager, Runtime};
 
-pub fn create_menu<'a, R: Runtime, M: Manager<R>>(lang: &'a str, manager: &'a M) -> MenuBuilder<'a, R, M> {
+pub fn create_menu<'a, R: Runtime, M: Manager<R>>(
+    lang: &'a str,
+    manager: &'a M,
+) -> MenuBuilder<'a, R, M> {
     let translations: Box<dyn Language> = match lang {
         "de" => Box::new(German::new()),
         "en" => Box::new(English::new()),
@@ -24,7 +27,10 @@ pub fn create_menu<'a, R: Runtime, M: Manager<R>>(lang: &'a str, manager: &'a M)
     let donate_s = MenuItemBuilder::new("donate").build(manager).unwrap();
 
     let submenu_window = SubmenuBuilder::new(manager, window_label).build().unwrap();
-    let submenu_config = SubmenuBuilder::new(manager, config_label).item(&preferences_s).build().unwrap();
+    let submenu_config = SubmenuBuilder::new(manager, config_label)
+        .item(&preferences_s)
+        .build()
+        .unwrap();
     let submenu_help = SubmenuBuilder::new(manager, help_label)
         .item(&about_s)
         .item(&github_s)
