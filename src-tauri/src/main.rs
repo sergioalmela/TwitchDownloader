@@ -1,4 +1,4 @@
-use tauri::menu::MenuId;
+use tauri::{menu::MenuId, Manager};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_shell::ShellExt;
 mod config;
@@ -11,16 +11,16 @@ use crate::download::{download_clip, download_live, download_vod};
 use crate::menu::create_menu;
 
 fn main() {
-    let app = tauri::Builder::default()
-        .build(tauri::generate_context!())
-        .expect("error while running tauri application");
-
-    let app_conf = config::AppConf::read(&app).write(&app);
-    let _theme = config::AppConf::theme_mode(&app);
-
-    let language = app_conf.language();
-
     tauri::Builder::default()
+        .setup(|app| {
+            let app_conf = config::AppConf::read(app).write(app);
+            let _theme = config::AppConf::theme_mode(app);
+
+            let language = app_conf.language();
+
+            app.manage(language);
+            Ok(())
+        })
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_notification::init())
@@ -38,7 +38,8 @@ fn main() {
             config::get_preferences,
             config::cmd::form_confirm,
         ])
-        .menu(move |app_handle| {
+        .menu(|app_handle| {
+            let language = app_handle.state::<String>().clone();
             let menu_builder = create_menu(&language, app_handle);
             let menu = menu_builder.build().expect("Failed to build menu");
             Ok(menu)
