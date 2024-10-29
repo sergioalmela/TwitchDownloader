@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 use tauri::utils::config::Config;
-use tauri::{Manager, Runtime};
+use dirs;
 
 pub fn get_tauri_conf() -> Option<Config> {
     let config_file = include_str!("../tauri.conf.json");
@@ -13,12 +13,8 @@ pub fn get_tauri_conf() -> Option<Config> {
     Some(config)
 }
 
-pub fn app_root<R: Runtime>(manager: &impl Manager<R>) -> PathBuf {
-    manager
-        .path()
-        .home_dir()
-        .unwrap()
-        .join(".twitch-downloader")
+pub fn app_root() -> PathBuf {
+    dirs::home_dir().unwrap().join(".twitch-downloader")
 }
 
 pub fn exists(path: &Path) -> bool {

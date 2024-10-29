@@ -1,24 +1,27 @@
-use tauri::{menu::MenuId, Manager};
+use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_shell::ShellExt;
+
 mod config;
 mod download;
 mod menu;
 mod translations;
 mod utils;
 mod window;
+
 use crate::download::{download_clip, download_live, download_vod};
 use crate::menu::create_menu;
 
 fn main() {
+    let app_conf = config::AppConf::read().write();
+
+    let language = app_conf.language();
+    let language_clone = language.clone();
+
     tauri::Builder::default()
-        .setup(|app| {
-            let app_conf = config::AppConf::read(app).write(app);
-            let _theme = config::AppConf::theme_mode(app);
+        .setup(move |app| {
+            app.manage(language.clone());
 
-            let language = app_conf.language();
-
-            app.manage(language);
             Ok(())
         })
         .plugin(tauri_plugin_dialog::init())
@@ -38,34 +41,33 @@ fn main() {
             config::get_preferences,
             config::cmd::form_confirm,
         ])
-        .menu(|app_handle| {
-            let language = app_handle.state::<String>().clone();
-            let menu_builder = create_menu(&language, app_handle);
+        .menu(move |app_handle| {
+            let menu_builder = create_menu(&language_clone, app_handle);
             let menu = menu_builder.build().expect("Failed to build menu");
             Ok(menu)
         })
-        .on_menu_event(|app_handle, event| match event.id {
-            id if id == MenuId::new("quit") => {
+        .on_menu_event(|app_handle, event| match event.id.as_ref() {
+            "quit" => {
                 std::process::exit(0);
             }
-            id if id == MenuId::new("github") => {
+            "github" => {
                 let _ = app_handle
                     .shell()
                     .open("https://github.com/sergioalmela/TwitchDownloader", None);
             }
-            id if id == MenuId::new("donate") => {
+            "donate" => {
                 let _ = app_handle
                     .shell()
                     .open("https://www.buymeacoffee.com/sergioalmela", None);
             }
-            id if id == MenuId::new("about") => {
+            "about" => {
                 let tauri_conf = utils::get_tauri_conf().unwrap();
                 app_handle
                     .dialog()
                     .message(format!("Version {}", tauri_conf.version.unwrap()))
                     .show(|_| {});
             }
-            id if id == MenuId::new("preferences") => {
+            "preferences" => {
                 window::cmd::control_window(app_handle.clone(), "preferences".into());
             }
             _ => {}

@@ -5,12 +5,14 @@
     "windows",
     "linux"
   ],
+  "windows": ["main", "preferences"],
   "permissions": [
     "global-shortcut:default",
     "fs:default",
     "shell:default",
     "notification:default",
     "clipboard-manager:default",
-    "dialog:default"
+    "dialog:default",
+    "process:default"
   ]
 }

@@ -1,6 +1,6 @@
 [package]
 name = "twitch-downloader"
-version = "2.0.0"
+version = "3.0.0"
 description = "Twitch Downloader"
 authors = ["Sergio Almela"]
 license = "GPL-3"
@@ -17,10 +17,11 @@ tauri = { version = "2", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 reqwest = "0.12"
-tokio = "1.40.0"
+tokio = "1.41.0"
 log = "0.4.22"
-anyhow = "1.0.89"
+anyhow = "1.0.91"
 dark-light = "1.1.1"
+dirs = "5.0.1"
 tauri-plugin-http = "2"
 tauri-plugin-os = "2"
 tauri-plugin-process = "2"

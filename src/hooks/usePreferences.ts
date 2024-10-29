@@ -77,6 +77,7 @@ export const usePreferences = (
 
     try {
       await invoke('update_preferences', { data: values })
+      console.log('Configuration saved successfully')
       const isOk = await dialog.ask(
         `Configuration saved successfully, do you want to restart?`,
         {
