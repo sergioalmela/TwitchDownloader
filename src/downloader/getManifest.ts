@@ -28,11 +28,11 @@ type ApiClipResponse = {
 }
 
 type ApiVodResponse = {
-  data: string
+  url: string
 }
 
 type ApiLiveResponse = {
-  data: string
+  url: string
 }
 
 export const getManifest = async (
@@ -62,7 +62,7 @@ const getManifestFromLive = async (
     }
   )) as ApiLiveResponse
 
-  return response.data
+  return response.url
 }
 
 const getManifestFromVod = async (
@@ -78,7 +78,7 @@ const getManifestFromVod = async (
     }
   )) as ApiVodResponse
 
-  return response.data
+  return response.url
 }
 
 const getManifestFromClip = async (
@@ -88,7 +88,7 @@ const getManifestFromClip = async (
   const response = (await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     timeout: 30,
-    body: Body.json(getAuthVariables(ContentTypes.CLIP, id)),
+    body: JSON.stringify(getAuthVariables(ContentTypes.CLIP, id)),
     headers: getAuthHeaders()
   })) as ApiClipResponse
 

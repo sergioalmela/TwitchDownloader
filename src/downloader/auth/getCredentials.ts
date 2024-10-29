@@ -11,13 +11,11 @@ export type Credentials = {
 
 type AuthResponse = {
   data: {
-    data: {
-      videoPlaybackAccessToken: Credentials
-      clip: {
-        playbackAccessToken: Credentials
-      }
-      streamPlaybackAccessToken: Credentials
+    videoPlaybackAccessToken: Credentials
+    clip: {
+      playbackAccessToken: Credentials
     }
+    streamPlaybackAccessToken: Credentials
   }
 }
 
@@ -42,10 +40,10 @@ const getAccessTokenFromResponse = (
   response: AuthResponse
 ): Credentials => {
   if (contentType === ContentTypes.VOD) {
-    return response.data.data.videoPlaybackAccessToken
+    return response.data.videoPlaybackAccessToken
   } else if (contentType === ContentTypes.CLIP) {
-    return response.data.data.clip.playbackAccessToken
+    return response.data.clip.playbackAccessToken
   } else {
-    return response.data.data.streamPlaybackAccessToken
+    return response.data.streamPlaybackAccessToken
   }
 }
