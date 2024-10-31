@@ -1,5 +1,4 @@
 use anyhow::Result;
-use dirs;
 use std::{
     fs,
     path::{Path, PathBuf},
