@@ -16,22 +16,40 @@ pub fn create_menu<'a, R: Runtime, M: Manager<R>>(
     };
 
     let close_label = translations.close();
-    let close_s = MenuItemBuilder::new(close_label).id("quit").build(manager).unwrap();
+    let close_s = MenuItemBuilder::new(close_label)
+        .id("quit")
+        .build(manager)
+        .unwrap();
 
     let preferences_label = translations.preferences();
-    let preferences_s = MenuItemBuilder::new(preferences_label).id("preferences").build(manager).unwrap();
+    let preferences_s = MenuItemBuilder::new(preferences_label)
+        .id("preferences")
+        .build(manager)
+        .unwrap();
 
     let about_label = translations.about();
-    let about_s = MenuItemBuilder::new(about_label).id("about").build(manager).unwrap();
+    let about_s = MenuItemBuilder::new(about_label)
+        .id("about")
+        .build(manager)
+        .unwrap();
 
     let github_label = translations.github();
-    let github_s = MenuItemBuilder::new(github_label).id("github").build(manager).unwrap();
+    let github_s = MenuItemBuilder::new(github_label)
+        .id("github")
+        .build(manager)
+        .unwrap();
 
     let donate_label = translations.donate();
-    let donate_s = MenuItemBuilder::new(donate_label).id("donate").build(manager).unwrap();
+    let donate_s = MenuItemBuilder::new(donate_label)
+        .id("donate")
+        .build(manager)
+        .unwrap();
 
     let window_label = translations.window();
-    let submenu_window = SubmenuBuilder::new(manager, window_label).item(&close_s).build().unwrap();
+    let submenu_window = SubmenuBuilder::new(manager, window_label)
+        .item(&close_s)
+        .build()
+        .unwrap();
 
     let config_label = translations.config();
     let submenu_config = SubmenuBuilder::new(manager, config_label)

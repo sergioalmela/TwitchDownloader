@@ -1,10 +1,10 @@
 use anyhow::Result;
+use dirs;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
 use tauri::utils::config::Config;
-use dirs;
 
 pub fn get_tauri_conf() -> Option<Config> {
     let config_file = include_str!("../tauri.conf.json");

@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, path::PathBuf};
 
 use log::{error, info};
 use serde_json::Value;
-use tauri::{AppHandle};
+use tauri::AppHandle;
 
 use crate::utils::{app_root, create_file, exists};
 
