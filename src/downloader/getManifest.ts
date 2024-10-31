@@ -47,8 +47,6 @@ const getManifestFromLive = async (
     `https://usher.ttvnw.net/api/channel/hls/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
       method: 'GET',
-      timeout: 30,
-      responseType: 2
     }
   )
 
@@ -68,8 +66,6 @@ const getManifestFromVod = async (
     `https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
       method: 'GET',
-      timeout: 30,
-      responseType: 2
     }
   )
 
@@ -87,7 +83,6 @@ const getManifestFromClip = async (
 ): Promise<string | null> => {
   const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
-    timeout: 30,
     body: JSON.stringify(getAuthVariables(ContentTypes.CLIP, id)),
     headers: getAuthHeaders()
   })

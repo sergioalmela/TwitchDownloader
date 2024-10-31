@@ -25,7 +25,6 @@ export const getCredentials = async (
 ): Promise<Credentials> => {
   const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
-    timeout: 30,
     body: JSON.stringify(getAuthVariables(contentType, id)),
     headers: getAuthHeaders()
   })
