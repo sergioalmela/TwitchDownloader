@@ -46,7 +46,7 @@ const getManifestFromLive = async (
   const response = await fetch(
     `https://usher.ttvnw.net/api/channel/hls/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET',
+      method: 'GET'
     }
   )
 
@@ -65,7 +65,7 @@ const getManifestFromVod = async (
   const response = await fetch(
     `https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET',
+      method: 'GET'
     }
   )
 
