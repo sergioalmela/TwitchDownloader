@@ -1,7 +1,7 @@
 import { ContentTypes } from './detectContentType.ts'
 import { ContentId } from './getContentId.ts'
 import { Credentials } from './auth/getCredentials.ts'
-import { Body, fetch } from '@tauri-apps/api/http'
+import { fetch } from '@tauri-apps/plugin-http'
 import { getAuthHeaders } from './auth/getAuthHeaders.ts'
 import { getAuthVariables } from './auth/getAuthVariables.ts'
 
@@ -19,20 +19,10 @@ type VideoQuality = {
 
 type ApiClipResponse = {
   data: {
-    data: {
-      clip: {
-        videoQualities: VideoQuality[]
-      }
+    clip: {
+      videoQualities: VideoQuality[]
     }
   }
-}
-
-type ApiVodResponse = {
-  data: string
-}
-
-type ApiLiveResponse = {
-  data: string
 }
 
 export const getManifest = async (
@@ -53,46 +43,57 @@ const getManifestFromLive = async (
   id: ContentId,
   credentials: Credentials
 ): Promise<string | null> => {
-  const response = (await fetch(
+  const response = await fetch(
     `https://usher.ttvnw.net/api/channel/hls/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET',
-      timeout: 30,
-      responseType: 2
+      method: 'GET'
     }
-  )) as ApiLiveResponse
+  )
 
-  return response.data
+  if (!response.ok) {
+    console.error('Failed to fetch manifest:', response.statusText)
+    return null
+  }
+
+  return await response.text()
 }
 
 const getManifestFromVod = async (
   id: ContentId,
   credentials: Credentials
 ): Promise<string | null> => {
-  const response = (await fetch(
+  const response = await fetch(
     `https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET',
-      timeout: 30,
-      responseType: 2
+      method: 'GET'
     }
-  )) as ApiVodResponse
+  )
 
-  return response.data
+  if (!response.ok) {
+    console.error('Failed to fetch manifest:', response.statusText)
+    return null
+  }
+
+  return await response.text()
 }
 
 const getManifestFromClip = async (
   id: ContentId,
   credentials: Credentials
 ): Promise<string | null> => {
-  const response = (await fetch('https://gql.twitch.tv/gql', {
+  const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
-    timeout: 30,
-    body: Body.json(getAuthVariables(ContentTypes.CLIP, id)),
+    body: JSON.stringify(getAuthVariables(ContentTypes.CLIP, id)),
     headers: getAuthHeaders()
-  })) as ApiClipResponse
+  })
 
-  const qualities = response.data.data.clip.videoQualities
+  if (!response.ok) {
+    console.error('Failed to fetch manifest:', response.statusText)
+    return null
+  }
+
+  const data = (await response.json()) as ApiClipResponse
+  const qualities = data.data.clip.videoQualities
 
   qualities.forEach((quality: VideoQuality) => {
     if (!quality.quality.endsWith('p')) {

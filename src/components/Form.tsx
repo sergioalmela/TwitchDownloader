@@ -29,7 +29,6 @@ const Form = () => {
   } = useForm(config)
 
   const { t } = useTranslation('translation')
-  console.log(downloadFolder)
 
   return (
     <div class="max-w-lg mx-auto p-4 w-4/5">

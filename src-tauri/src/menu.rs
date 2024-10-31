@@ -1,7 +1,11 @@
 use crate::translations::{English, French, German, Italian, Language, Spanish};
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
+use tauri::menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder};
+use tauri::{Manager, Runtime};
 
-pub fn create_menu(lang: &str) -> Menu {
+pub fn create_menu<'a, R: Runtime, M: Manager<R>>(
+    lang: &'a str,
+    manager: &'a M,
+) -> MenuBuilder<'a, R, M> {
     let translations: Box<dyn Language> = match lang {
         "de" => Box::new(German::new()),
         "en" => Box::new(English::new()),
@@ -11,31 +15,58 @@ pub fn create_menu(lang: &str) -> Menu {
         _ => Box::new(English::new()),
     };
 
+    let close_label = translations.close();
+    let close_s = MenuItemBuilder::new(close_label)
+        .id("quit")
+        .build(manager)
+        .unwrap();
+
+    let preferences_label = translations.preferences();
+    let preferences_s = MenuItemBuilder::new(preferences_label)
+        .id("preferences")
+        .build(manager)
+        .unwrap();
+
+    let about_label = translations.about();
+    let about_s = MenuItemBuilder::new(about_label)
+        .id("about")
+        .build(manager)
+        .unwrap();
+
+    let github_label = translations.github();
+    let github_s = MenuItemBuilder::new(github_label)
+        .id("github")
+        .build(manager)
+        .unwrap();
+
+    let donate_label = translations.donate();
+    let donate_s = MenuItemBuilder::new(donate_label)
+        .id("donate")
+        .build(manager)
+        .unwrap();
+
     let window_label = translations.window();
-    let close_s = CustomMenuItem::new("quit".to_string(), translations.close());
+    let submenu_window = SubmenuBuilder::new(manager, window_label)
+        .item(&close_s)
+        .build()
+        .unwrap();
 
     let config_label = translations.config();
-    let preferences_s = CustomMenuItem::new("preferences".to_string(), translations.preferences());
+    let submenu_config = SubmenuBuilder::new(manager, config_label)
+        .item(&preferences_s)
+        .build()
+        .unwrap();
 
     let help_label = translations.help();
-    let about_s = CustomMenuItem::new("about".to_string(), translations.about());
-    let github_s = CustomMenuItem::new("github".to_string(), translations.github());
-    let donate_s = CustomMenuItem::new("donate".to_string(), translations.donate());
+    let submenu_help = SubmenuBuilder::new(manager, help_label)
+        .item(&about_s)
+        .item(&github_s)
+        .item(&donate_s)
+        .build()
+        .unwrap();
 
-    let submenu_window = Submenu::new(window_label, Menu::new().add_item(close_s));
-
-    Menu::new()
-        .add_native_item(MenuItem::Copy)
-        .add_submenu(submenu_window)
-        .add_submenu(Submenu::new(
-            config_label,
-            Menu::new().add_item(preferences_s),
-        ))
-        .add_submenu(Submenu::new(
-            help_label,
-            Menu::new()
-                .add_item(about_s)
-                .add_item(github_s)
-                .add_item(donate_s),
-        ))
+    MenuBuilder::new(manager)
+        .item(&submenu_window)
+        .item(&submenu_config)
+        .item(&submenu_help)
 }

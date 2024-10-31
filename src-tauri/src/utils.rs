@@ -13,13 +13,11 @@ pub fn get_tauri_conf() -> Option<Config> {
 }
 
 pub fn app_root() -> PathBuf {
-    tauri::api::path::home_dir()
-        .unwrap()
-        .join(".twitch-downloader")
+    dirs::home_dir().unwrap().join(".twitch-downloader")
 }
 
 pub fn exists(path: &Path) -> bool {
-    Path::new(path).exists()
+    path.exists()
 }
 
 pub fn create_file<P: AsRef<Path>>(filename: P) -> Result<()> {

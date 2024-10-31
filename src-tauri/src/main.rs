@@ -1,14 +1,6 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
-use std::env;
-
-use tauri::{AppHandle, Manager};
-
-use download::{download_clip, download_live, download_vod};
-use menu::create_menu;
-
-use crate::config::AppConf;
+use tauri::Manager;
+use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_shell::ShellExt;
 
 mod config;
 mod download;
@@ -17,19 +9,30 @@ mod translations;
 mod utils;
 mod window;
 
-pub fn open(app: &AppHandle, path: &str) {
-    tauri::api::shell::open(&app.shell_scope(), path, None).unwrap();
-}
+use crate::download::{download_clip, download_live, download_vod};
+use crate::menu::create_menu;
 
 fn main() {
-    let app_conf = AppConf::read().write();
-    let _theme = AppConf::theme_mode();
+    let app_conf = config::AppConf::read().write();
 
     let language = app_conf.language();
-
-    let menu = create_menu(&language);
+    let language_clone = language.clone();
 
     tauri::Builder::default()
+        .setup(move |app| {
+            app.manage(language.clone());
+
+            Ok(())
+        })
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_http::init())
         .invoke_handler(tauri::generate_handler![
             download_live,
             download_vod,
@@ -38,36 +41,34 @@ fn main() {
             config::get_preferences,
             config::cmd::form_confirm,
         ])
-        .menu(menu)
-        .on_menu_event(|event| match event.menu_item_id() {
+        .menu(move |app_handle| {
+            let menu_builder = create_menu(&language_clone, app_handle);
+            let menu = menu_builder.build().expect("Failed to build menu");
+            Ok(menu)
+        })
+        .on_menu_event(|app_handle, event| match event.id.as_ref() {
             "quit" => {
                 std::process::exit(0);
             }
             "github" => {
-                let win = event.window();
-                let app = win.app_handle();
-                open(&app, "https://github.com/sergioalmela/TwitchDownloader");
+                let _ = app_handle
+                    .shell()
+                    .open("https://github.com/sergioalmela/TwitchDownloader", None);
             }
             "donate" => {
-                let win = event.window();
-                let app = win.app_handle();
-                open(&app, "https://www.buymeacoffee.com/sergioalmela");
+                let _ = app_handle
+                    .shell()
+                    .open("https://www.buymeacoffee.com/sergioalmela", None);
             }
             "about" => {
-                let win = event.window();
-                let app = win.app_handle();
                 let tauri_conf = utils::get_tauri_conf().unwrap();
-                tauri::api::dialog::message(
-                    app.get_window("core").as_ref(),
-                    "Twitch Downloader",
-                    format!("Version {}", tauri_conf.package.version.unwrap()),
-                );
+                app_handle
+                    .dialog()
+                    .message(format!("Version {}", tauri_conf.version.unwrap()))
+                    .show(|_| {});
             }
             "preferences" => {
-                let win = event.window();
-                let app = win.app_handle();
-
-                window::cmd::control_window(app, "preferences".into());
+                window::cmd::control_window(app_handle.clone(), "preferences".into());
             }
             _ => {}
         })

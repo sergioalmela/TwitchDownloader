@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'preact/hooks'
-import { open } from '@tauri-apps/api/dialog'
-import { dialog, invoke, process } from '@tauri-apps/api'
+import { open } from '@tauri-apps/plugin-dialog'
+import { invoke } from '@tauri-apps/api/core'
 import { ConfigContext } from '../ConfigContext.ts'
 import {
   Config,
@@ -10,6 +10,8 @@ import {
   DEFAULT_THEME,
   SetConfig
 } from '../types.ts'
+import * as dialog from '@tauri-apps/plugin-dialog'
+import * as process from '@tauri-apps/plugin-process'
 
 export const useConfig = () => {
   const configContext = useContext(ConfigContext)

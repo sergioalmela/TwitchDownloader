@@ -1,14 +1,14 @@
 pub mod cmd {
-    use tauri::{utils::config::WindowUrl, window::WindowBuilder, Manager};
+    use tauri::{utils::config::WebviewUrl, Manager, WebviewWindowBuilder};
 
     #[tauri::command]
     pub fn control_window(handle: tauri::AppHandle, win_type: String) {
         tauri::async_runtime::spawn(async move {
-            if handle.get_window("preferences").is_none() {
-                WindowBuilder::new(
+            if handle.get_webview_window("preferences").is_none() {
+                WebviewWindowBuilder::new(
                     &handle,
                     "preferences",
-                    WindowUrl::App(format!("index.html?type={}", win_type).into()),
+                    WebviewUrl::App(format!("index.html?type={}", win_type).into()),
                 )
                 .title("Preferences")
                 .resizable(true)
@@ -18,7 +18,7 @@ pub mod cmd {
                 .build()
                 .unwrap();
             } else {
-                let main_win = handle.get_window("preferences").unwrap();
+                let main_win = handle.get_webview_window("preferences").unwrap();
                 main_win.show().unwrap();
                 main_win.set_focus().unwrap();
             }

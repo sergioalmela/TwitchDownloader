@@ -3,7 +3,6 @@ use std::{collections::BTreeMap, path::PathBuf};
 use log::{error, info};
 use serde_json::Value;
 use tauri::AppHandle;
-use tauri::Theme;
 
 use crate::utils::{app_root, create_file, exists};
 
@@ -109,22 +108,6 @@ impl AppConf {
 
     pub fn language(&self) -> String {
         self.language.to_lowercase()
-    }
-
-    pub fn theme_mode() -> Theme {
-        match Self::get_theme().as_str() {
-            "system" => match dark_light::detect() {
-                dark_light::Mode::Dark => Theme::Dark,
-                dark_light::Mode::Light => Theme::Light,
-                dark_light::Mode::Default => Theme::Light,
-            },
-            "dark" => Theme::Dark,
-            _ => Theme::Light,
-        }
-    }
-
-    pub fn get_theme() -> String {
-        Self::read().theme.to_lowercase()
     }
 }
 
