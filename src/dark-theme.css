@@ -26,6 +26,31 @@ html, body, #root {
     background-color: #ef4444;
 }
 
+.dark .bg-gray-100 {
+    background-color: #111827;
+}
+
+.dark .bg-gray-200 {
+    background-color: #374151;
+}
+
+.dark .hover\:bg-gray-300:hover {
+    background-color: #4b5563;
+}
+
 .dark .border-gray-300 {
     border-color: #374151;
+}
+
+.dark .border {
+    border-color: #4b5563;
+}
+
+.dark label {
+    color: #d1d5db;
+}
+
+.dark select {
+    background-color: #1f2937;
+    color: #d1d5db;
 }
