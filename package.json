@@ -45,9 +45,8 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.5",
+    "@tailwindcss/vite": "^4.2.2",
     "@tauri-apps/cli": "^2.10.1",
-    "autoprefixer": "^10.4.27",
-    "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "typescript": "^6.0.2",
     "vite": "^8.0.3",
