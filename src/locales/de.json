@@ -1,16 +1,16 @@
 {
   "appearance": "Aussehen",
-  "clear": "Klare",
+  "clear": "Löschen",
   "close": "Schließen",
   "dark": "Dunkel",
   "dontOpen": "Nicht öffnen",
   "download": "Herunterladen",
   "downloadFolder": "Download-Ordner",
   "downloads": "Downloads",
-  "downloadAnother": "Laden Sie einen anderen herunter",
+  "downloadAnother": "Weitere Datei herunterladen",
   "fileName": "Dateiname",
   "general": "Allgemeines",
-  "getQualities": "Qualitäten erhalten",
+  "getQualities": "Qualitäten abrufen",
   "language": "Sprache",
   "languages": {
     "de": "Deutsch",
@@ -20,13 +20,13 @@
     "it": "Italienisch"
   },
   "loading": "Laden...",
-  "light": "Licht",
+  "light": "Hell",
   "open": "Öffnen",
   "openFolderOnDownload": "Ordner öffnen beim Download",
   "save": "Speichern",
   "selectFolder": "Ordner auswählen",
   "selectedFolder": "Ausgewählter Ordner: ",
-  "selectQuality": "Wählen Sie Qualität:",
-  "theme": "Thema",
+  "selectQuality": "Qualität auswählen:",
+  "theme": "Design",
   "twitchUrl": "Twitch-URL"
 }
