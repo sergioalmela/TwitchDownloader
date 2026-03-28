@@ -16,6 +16,8 @@ const Preferences = () => {
     activeTab,
     setActiveTab,
     downloadFolder,
+    isSaving,
+    saved,
     selectFolder,
     updatePreferences,
     closePreferences,
@@ -149,7 +151,7 @@ const Preferences = () => {
         </div>
         <div className="w-full max-w-4xl px-4 flex justify-end gap-2">
           <button
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
             onClick={(event) => {
               event.preventDefault()
               closePreferences()
@@ -158,13 +160,14 @@ const Preferences = () => {
             {t('close')}
           </button>
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer disabled:opacity-50"
+            disabled={isSaving}
             onClick={(event) => {
               event.preventDefault()
               updatePreferences()
             }}
           >
-            {t('save')}
+            {isSaving ? '...' : saved ? '\u2713' : t('save')}
           </button>
         </div>
       </div>

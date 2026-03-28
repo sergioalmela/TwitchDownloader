@@ -10,6 +10,7 @@ import frTranslations from './locales/fr.json'
 import itTranslations from './locales/it.json'
 import ptTranslations from './locales/pt.json'
 import { useEffect, useState } from 'preact/hooks'
+import { listen } from '@tauri-apps/api/event'
 import { ConfigContext } from './ConfigContext.ts'
 
 export const ConfigProvider = ({
@@ -59,13 +60,21 @@ export const ConfigProvider = ({
     }
   }, [config])
 
-  useEffect(() => {
-    const fetchConfig = async () => {
-      const fetchedConfig = await invoke('get_preferences')
-      setConfig(fetchedConfig as Config)
-    }
+  const fetchConfig = async () => {
+    const fetchedConfig = await invoke('get_preferences')
+    setConfig(fetchedConfig as Config)
+  }
 
+  useEffect(() => {
     fetchConfig()
+
+    const unlisten = listen('preferences-updated', () => {
+      fetchConfig()
+    })
+
+    return () => {
+      unlisten.then((fn) => fn())
+    }
   }, [])
 
   return (

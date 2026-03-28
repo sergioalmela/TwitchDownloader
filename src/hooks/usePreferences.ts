@@ -23,6 +23,8 @@ export const usePreferences = (
   setConfig: SetConfig | null
 ) => {
   const [activeTab, setActiveTab] = useState(DEFAULT_ACTIVE_TAB)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [language, setLanguage] = useState(
     config ? config.language : DEFAULT_LANGUAGE
   )
@@ -71,6 +73,8 @@ export const usePreferences = (
   }
 
   const updatePreferences = async () => {
+    setIsSaving(true)
+    setSaved(false)
     const languageChanged = config && language !== config.language
 
     const values = {
@@ -87,9 +91,16 @@ export const usePreferences = (
         await invoke('rebuild_menu', { language })
       }
 
-      await closePreferences()
+      // Notify main window to refresh config
+      const { emit } = await import('@tauri-apps/api/event')
+      await emit('preferences-updated')
+
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
     } catch (error) {
       console.error('Error submitting form:', error)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -128,6 +139,8 @@ export const usePreferences = (
     activeTab,
     setActiveTab,
     downloadFolder,
+    isSaving,
+    saved,
     selectFolder,
     updatePreferences,
     closePreferences,

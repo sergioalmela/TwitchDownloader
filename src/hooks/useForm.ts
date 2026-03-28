@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/core'
 import { open } from '@tauri-apps/plugin-dialog'
 import { listen } from '@tauri-apps/api/event'
-import { open as openShell } from '@tauri-apps/plugin-shell'
+import { revealItemInDir } from '@tauri-apps/plugin-opener'
 import { detectContentType } from '../downloader/detectContentType.ts'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
 import { getCredentials } from '../downloader/auth/getCredentials.ts'
@@ -62,6 +62,9 @@ export const useForm = (config: Config | null) => {
     const target = event.target as HTMLInputElement
     setUrl(target.value)
     setError('')
+    setShowQualities(false)
+    setPlaylists([])
+    setSelectedPlaylistUrl('')
   }
 
   const selectFolder = async () => {
@@ -177,9 +180,7 @@ export const useForm = (config: Config | null) => {
 
       if (config && config.open_on_download === 'open') {
         const filePath = `${downloadData.args.download_path}/${downloadData.args.file_name}`
-        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'))
-
-        await openShell(dirPath)
+        await revealItemInDir(filePath)
       }
     } catch (error) {
       if (error instanceof Error) {
