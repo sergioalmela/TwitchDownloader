@@ -3,7 +3,11 @@ html, body, #root {
 }
 
 .dark .text-gray-700 {
-    color: #d1d5db;
+    color: #d1d5db !important;
+}
+
+.dark .text-gray-500 {
+    color: #9ca3af !important;
 }
 
 .dark .text-white {
@@ -11,7 +15,7 @@ html, body, #root {
 }
 
 .dark .bg-white {
-    background-color: #1f2937;
+    background-color: #1f2937 !important;
 }
 
 .dark .bg-green-600 {
@@ -27,19 +31,19 @@ html, body, #root {
 }
 
 .dark .bg-gray-100 {
-    background-color: #111827;
+    background-color: #111827 !important;
 }
 
 .dark .bg-gray-200 {
-    background-color: #374151;
+    background-color: #374151 !important;
 }
 
 .dark .hover\:bg-gray-300:hover {
-    background-color: #4b5563;
+    background-color: #4b5563 !important;
 }
 
 .dark .border-gray-300 {
-    border-color: #374151;
+    border-color: #374151 !important;
 }
 
 .dark .border {
@@ -47,10 +51,21 @@ html, body, #root {
 }
 
 .dark label {
-    color: #d1d5db;
+    color: #d1d5db !important;
 }
 
+.dark input,
 .dark select {
-    background-color: #1f2937;
-    color: #d1d5db;
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+    border-color: #4b5563 !important;
+}
+
+.dark input::placeholder {
+    color: #9ca3af;
+}
+
+.dark option {
+    background-color: #374151;
+    color: #f3f4f6;
 }

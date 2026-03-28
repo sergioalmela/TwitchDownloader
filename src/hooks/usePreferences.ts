@@ -67,7 +67,14 @@ export const usePreferences = (
     }
   }
 
+  const closePreferences = async () => {
+    const { getCurrentWindow } = await import('@tauri-apps/api/window')
+    await getCurrentWindow().close()
+  }
+
   const updatePreferences = async () => {
+    const languageChanged = config && language !== config.language
+
     const values = {
       language,
       download_folder: downloadFolder,
@@ -77,17 +84,22 @@ export const usePreferences = (
 
     try {
       await invoke('update_preferences', { data: values })
-      const isOk = await dialog.ask(
-        `Configuration saved successfully, do you want to restart?`,
-        {
-          title: 'Twitch Downloader Preferences'
-        }
-      )
 
-      if (isOk) {
-        await process.relaunch()
-        return
+      if (languageChanged) {
+        const isOk = await dialog.ask(
+          `Configuration saved. Language change requires a restart. Restart now?`,
+          {
+            title: 'Twitch Downloader Preferences'
+          }
+        )
+
+        if (isOk) {
+          await process.relaunch()
+          return
+        }
       }
+
+      await closePreferences()
     } catch (error) {
       console.error('Error submitting form:', error)
     }
@@ -130,6 +142,7 @@ export const usePreferences = (
     downloadFolder,
     selectFolder,
     updatePreferences,
+    closePreferences,
     handleLanguageChange,
     handleOpenOnDownloadChange,
     handleThemeChange,

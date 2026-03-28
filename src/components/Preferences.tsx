@@ -15,6 +15,7 @@ const Preferences = () => {
     downloadFolder,
     selectFolder,
     updatePreferences,
+    closePreferences,
     handleLanguageChange,
     handleOpenOnDownloadChange,
     handleThemeChange,
@@ -130,7 +131,16 @@ const Preferences = () => {
             </div>
           </div>
         </div>
-        <div className="w-full max-w-4xl px-4 flex justify-end">
+        <div className="w-full max-w-4xl px-4 flex justify-end gap-2">
+          <button
+            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+            onClick={(event) => {
+              event.preventDefault()
+              closePreferences()
+            }}
+          >
+            {t('close')}
+          </button>
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             onClick={(event) => {
