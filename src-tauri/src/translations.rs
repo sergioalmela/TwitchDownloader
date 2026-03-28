@@ -154,3 +154,48 @@ define_language!(
         window: "Finestra",
     }
 );
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn all_languages_implement_trait() {
+        let languages: Vec<Box<dyn Language>> = vec![
+            Box::new(English::new()),
+            Box::new(Spanish::new()),
+            Box::new(German::new()),
+            Box::new(French::new()),
+            Box::new(Italian::new()),
+        ];
+
+        for lang in &languages {
+            assert!(!lang.about().is_empty());
+            assert!(!lang.close().is_empty());
+            assert!(!lang.config().is_empty());
+            assert!(!lang.donate().is_empty());
+            assert!(!lang.github().is_empty());
+            assert!(!lang.help().is_empty());
+            assert!(!lang.preferences().is_empty());
+            assert!(!lang.window().is_empty());
+        }
+    }
+
+    #[test]
+    fn github_is_same_across_languages() {
+        assert_eq!(English::new().github(), "GitHub");
+        assert_eq!(Spanish::new().github(), "GitHub");
+        assert_eq!(German::new().github(), "GitHub");
+        assert_eq!(French::new().github(), "GitHub");
+        assert_eq!(Italian::new().github(), "GitHub");
+    }
+
+    #[test]
+    fn english_has_expected_values() {
+        let en = English::new();
+        assert_eq!(en.about(), "About us");
+        assert_eq!(en.close(), "Close");
+        assert_eq!(en.help(), "Help");
+        assert_eq!(en.window(), "Window");
+    }
+}
