@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
 import { ContentTypes } from '../downloader/detectContentType.ts'
 
