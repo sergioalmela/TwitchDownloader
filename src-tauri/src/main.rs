@@ -39,7 +39,6 @@ fn main() {
             download_clip,
             config::update_preferences,
             config::get_preferences,
-            config::cmd::form_confirm,
         ])
         .menu(move |app_handle| {
             let menu_builder = create_menu(&language_clone, app_handle);
@@ -48,7 +47,7 @@ fn main() {
         })
         .on_menu_event(|app_handle, event| match event.id.as_ref() {
             "quit" => {
-                std::process::exit(0);
+                app_handle.exit(0);
             }
             "github" => {
                 let _ = app_handle
@@ -61,7 +60,7 @@ fn main() {
                     .open("https://www.buymeacoffee.com/sergioalmela", None);
             }
             "about" => {
-                let tauri_conf = utils::get_tauri_conf().unwrap();
+                let tauri_conf = utils::get_tauri_conf();
                 app_handle
                     .dialog()
                     .message(format!("Version {}", tauri_conf.version.unwrap()))

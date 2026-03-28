@@ -18,21 +18,13 @@ pub fn get_preferences() -> AppConf {
     AppConf::read()
 }
 
-macro_rules! pub_struct {
-  ($name:ident {$($field:ident: $t:ty,)*}) => {
-    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
-    pub struct $name {
-      $(pub $field: $t),*
-    }
-  }
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct AppConf {
+    pub theme: String,
+    pub language: String,
+    pub download_folder: String,
+    pub open_on_download: String,
 }
-
-pub_struct!(AppConf {
-    theme: String,
-    language: String,
-    download_folder: String,
-    open_on_download: String,
-});
 
 impl AppConf {
     pub fn new() -> Self {
@@ -72,10 +64,9 @@ impl AppConf {
             info!("conf_create");
         }
         if let Ok(v) = serde_json::to_string_pretty(&self) {
-            std::fs::write(path, v).unwrap_or_else(|err| {
+            if let Err(err) = std::fs::write(path, v) {
                 error!("conf_write: {}", err);
-                Self::default().write();
-            });
+            }
         } else {
             error!("conf_ser");
         }
@@ -114,16 +105,5 @@ impl AppConf {
 impl Default for AppConf {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-pub mod cmd {
-    use tauri::{command, AppHandle};
-
-    use super::AppConf;
-
-    #[command]
-    pub fn form_confirm(_app: AppHandle, data: serde_json::Value) {
-        AppConf::read().amend(serde_json::json!(data)).write();
     }
 }

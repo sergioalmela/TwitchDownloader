@@ -41,14 +41,6 @@ export const useForm = (config: Config | null) => {
     }
   }, [config])
 
-  useEffect(() => {
-    if (config && config.theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [config])
-
   const clearErrors = () => {
     setError('')
   }
@@ -143,14 +135,14 @@ export const useForm = (config: Config | null) => {
         handleError('Failed to get video content')
         return
       }
+      setShowQualities(true)
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        handleError(error.message)
-      }
+      const message =
+        error instanceof Error ? error.message : String(error)
+      handleError(message)
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
-    setShowQualities(true)
   }
 
   const handleQualityChange = (event: Event) => {

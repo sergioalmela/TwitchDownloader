@@ -46,6 +46,12 @@ export const ConfigProvider = ({
   useEffect(() => {
     if (config) {
       i18next.changeLanguage(config.language)
+
+      if (config.theme === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
     }
   }, [config])
 
