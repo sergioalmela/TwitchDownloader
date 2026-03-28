@@ -4,23 +4,46 @@
 ## About
 Twitch Downloader is a free utility made to download Twitch content (streams, videos, highlights, clips).
 
-## Features:
+## Features
 
+- Download live streams, VODs, highlights, and clips
+- Quality selector for each content type
+- Dark and light theme
+- 6 languages: English, Spanish, Portuguese, French, German, Italian
+- Configurable download folder
+- Open file in file manager after download
+- Cross-platform (Linux, macOS, Windows)
 
-Twitch Downloader is a versatile tool that offers a range of features to enhance your Twitch content downloading experience. It comes with a user-friendly GUI, making it easy for anyone to use. You can download live streams, VODs, highlights, and clips with just a few clicks.  The application also supports multi-language, allowing users from different regions to use it with ease. User preferences are another highlight of Twitch Downloader, enabling you to customize the application according to your needs.  Whether you're a streamer wanting to archive your streams or a viewer looking to save your favorite moments, Twitch Downloader is the tool for you.
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+)
+- [Rust](https://www.rust-lang.org/tools/install)
+- System dependencies for Tauri: see [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/)
 
 ## How to execute
 
-### GUI
+### Development
 
 ```
 npm install
 npm run tauri dev
 ```
 
-It will open a new window with the GUI. Enter the URL of the stream, video, highlight or clip you want to download. Then, select the folder, file name and click on Get Qualities button. Then,  select the quality you want to download and click on Download button.
+### Build for production
+
+```
+npm run tauri build
+```
+
+It will open a new window with the GUI. Enter the URL of the stream, video, highlight or clip you want to download. Then, select the folder, file name and click on Get Qualities button. Select the quality you want to download and click on Download.
 
 ![How to use the GUI](public/how-to-use.gif)
+
+## Tests
+
+```
+npm test
+```
 
 ## Donate
 If you want to support the project, you can buy me a coffee. Thanks!
@@ -28,11 +51,14 @@ If you want to support the project, you can buy me a coffee. Thanks!
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/sergioalmela)
 
 ## Technologies used
-- [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en/)
-- [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)](https://www.typescriptlang.org/)
-- [![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white)](https://jestjs.io/)
-- [![Tauri](https://img.shields.io/badge/Tauri-421C87?style=for-the-badge&logo=Tauri&logoColor=white)](https://tauri.studio/)
+- [![Tauri](https://img.shields.io/badge/Tauri_2-421C87?style=for-the-badge&logo=Tauri&logoColor=white)](https://tauri.app/)
 - [![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=Rust&logoColor=white)](https://www.rust-lang.org/)
+- [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)](https://www.typescriptlang.org/)
+- [![Preact](https://img.shields.io/badge/Preact-673AB8?style=for-the-badge&logo=Preact&logoColor=white)](https://preactjs.com/)
+- [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white)](https://vite.dev/)
+- [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white)](https://tailwindcss.com/)
+- [![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=Vitest&logoColor=white)](https://vitest.dev/)
+- [![Biome](https://img.shields.io/badge/Biome-60A5FA?style=for-the-badge&logo=Biome&logoColor=white)](https://biomejs.dev/)
 
 ## Issues
 
@@ -53,4 +79,4 @@ Before posting an issue, be sure to include (if applicable):
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
-Any contribution to the localization of the app is welcome. You can find the localization files in the ```src/locales``` folder. You can use the ```en.json``` file as example.
+Any contribution to the localization of the app is welcome. You can find the localization files in the `src/locales` folder. You can use the `en.json` file as example.
