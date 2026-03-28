@@ -1,6 +1,6 @@
 use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
-use tauri_plugin_shell::ShellExt;
+use tauri_plugin_opener::OpenerExt;
 
 mod config;
 mod download;
@@ -33,6 +33,7 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             download_live,
             download_vod,
@@ -51,13 +52,13 @@ fn main() {
             }
             "github" => {
                 let _ = app_handle
-                    .shell()
-                    .open("https://github.com/sergioalmela/TwitchDownloader", None);
+                    .opener()
+                    .open_url("https://github.com/sergioalmela/TwitchDownloader", None::<&str>);
             }
             "donate" => {
                 let _ = app_handle
-                    .shell()
-                    .open("https://www.buymeacoffee.com/sergioalmela", None);
+                    .opener()
+                    .open_url("https://www.buymeacoffee.com/sergioalmela", None::<&str>);
             }
             "about" => {
                 let tauri_conf = utils::get_tauri_conf();
