@@ -10,8 +10,6 @@ import {
   DEFAULT_THEME,
   SetConfig
 } from '../types.ts'
-import * as dialog from '@tauri-apps/plugin-dialog'
-import * as process from '@tauri-apps/plugin-process'
 
 export const useConfig = () => {
   const configContext = useContext(ConfigContext)
@@ -86,17 +84,7 @@ export const usePreferences = (
       await invoke('update_preferences', { data: values })
 
       if (languageChanged) {
-        const isOk = await dialog.ask(
-          `Configuration saved. Language change requires a restart. Restart now?`,
-          {
-            title: 'Twitch Downloader Preferences'
-          }
-        )
-
-        if (isOk) {
-          await process.relaunch()
-          return
-        }
+        await invoke('rebuild_menu', { language })
       }
 
       await closePreferences()
@@ -133,7 +121,7 @@ export const usePreferences = (
     `flex-1 cursor-pointer text-center p-4 ${
       activeTab === tabName
         ? 'bg-blue-500 text-white'
-        : 'bg-gray-200 hover:bg-gray-300'
+        : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-200'
     }`
 
   return {

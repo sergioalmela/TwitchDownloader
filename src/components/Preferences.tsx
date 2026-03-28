@@ -4,6 +4,9 @@ import { usePreferences } from '../hooks/usePreferences.ts'
 import { DEFAULT_ACTIVE_TAB, DEFAULT_OPEN_ON_DOWNLOAD } from '../types.ts'
 import { useTranslation } from 'react-i18next'
 
+const selectClass =
+  'border border-gray-300 dark:border-gray-600 p-2 rounded w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+
 const Preferences = () => {
   const configContext: ConfigContextType | null = useContext(ConfigContext)
   const config = configContext?.config || null
@@ -26,8 +29,8 @@ const Preferences = () => {
 
   return (
     <form>
-      <div className="App bg-gray-100 min-h-screen p-4 flex flex-col items-center">
-        <div className="bg-white shadow rounded-lg w-full max-w-4xl mb-4">
+      <div className="App bg-gray-100 dark:bg-gray-900 min-h-screen p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg w-full max-w-4xl mb-4">
           <div className="flex">
             <div className="w-1/4 flex flex-col">
               <div
@@ -52,18 +55,22 @@ const Preferences = () => {
             <div className="w-3/4 p-4 overflow-auto">
               {activeTab === DEFAULT_ACTIVE_TAB && (
                 <div>
-                  <label htmlFor="language" className="block mb-2">
+                  <label
+                    htmlFor="language"
+                    className="block mb-2 text-gray-900 dark:text-gray-200"
+                  >
                     {t('language')}
                   </label>
                   <select
                     name="language"
                     id="language"
-                    className="border p-2 rounded w-full"
+                    className={selectClass}
                     value={config?.language}
                     onChange={handleLanguageChange}
                   >
                     <option value="en">{t('languages.en')}</option>
                     <option value="es">{t('languages.es')}</option>
+                    <option value="pt">{t('languages.pt')}</option>
                     <option value="fr">{t('languages.fr')}</option>
                     <option value="it">{t('languages.it')}</option>
                     <option value="de">{t('languages.de')}</option>
@@ -73,7 +80,10 @@ const Preferences = () => {
               {activeTab === 'Downloads' && (
                 <div>
                   <div className="mb-4">
-                    <label htmlFor="download-folder" className="block mb-2">
+                    <label
+                      htmlFor="download-folder"
+                      className="block mb-2 text-gray-900 dark:text-gray-200"
+                    >
                       {t('downloadFolder')}
                     </label>
                     <button
@@ -86,19 +96,22 @@ const Preferences = () => {
                     </button>
 
                     {downloadFolder && (
-                      <div className="mt-4">
+                      <div className="mt-4 text-gray-700 dark:text-gray-300">
                         {t('selectedFolder')}
                         <span className="font-semibold">{downloadFolder}</span>
                       </div>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="open-folder" className="block mb-2">
+                    <label
+                      htmlFor="open-folder"
+                      className="block mb-2 text-gray-900 dark:text-gray-200"
+                    >
                       {t('openFolderOnDownload')}
                     </label>
                     <select
                       id="open-folder"
-                      className="border p-2 rounded w-full"
+                      className={selectClass}
                       name="open-folder"
                       value={config?.open_on_download}
                       onChange={handleOpenOnDownloadChange}
@@ -113,18 +126,21 @@ const Preferences = () => {
               )}
               {activeTab === 'Appearance' && (
                 <div>
-                  <label htmlFor="theme" className="block mb-2">
+                  <label
+                    htmlFor="theme"
+                    className="block mb-2 text-gray-900 dark:text-gray-200"
+                  >
                     {t('theme')}
                   </label>
                   <select
                     name="theme"
                     id="theme"
-                    className="border p-2 rounded w-full"
+                    className={selectClass}
                     value={config?.theme}
                     onChange={handleThemeChange}
                   >
                     <option value="light">{t('light')}</option>
-                    <option value="dark"> {t('dark')}</option>
+                    <option value="dark">{t('dark')}</option>
                   </select>
                 </div>
               )}

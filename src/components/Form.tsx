@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from '../hooks/useForm.ts'
 import { ConfigContext, ConfigContextType } from '../ConfigContext.ts'
 
+const inputClass =
+  'mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
+
 const Form = () => {
   const configContext: ConfigContextType | null = useContext(ConfigContext)
   const config = configContext?.config || null
@@ -36,7 +39,7 @@ const Form = () => {
         <div>
           <label
             htmlFor="twitchUrl"
-            class="block text-sm font-medium text-gray-700"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             {t('twitchUrl')}
           </label>
@@ -46,7 +49,7 @@ const Form = () => {
             name="twitchUrl"
             value={url}
             onChange={handleUrlChange}
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            class={inputClass}
           />
         </div>
 
@@ -59,9 +62,11 @@ const Form = () => {
             {t('selectFolder')}
           </button>
           {folder ? (
-            <span class="text-sm text-gray-500 text-center">{folder}</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400 text-center">
+              {folder}
+            </span>
           ) : downloadFolder ? (
-            <span class="text-sm text-gray-500 text-center">
+            <span class="text-sm text-gray-500 dark:text-gray-400 text-center">
               {downloadFolder}
             </span>
           ) : null}
@@ -70,7 +75,7 @@ const Form = () => {
         <div>
           <label
             htmlFor="fileName"
-            class="block text-sm font-medium text-gray-700"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             {t('fileName')}:
           </label>
@@ -80,7 +85,7 @@ const Form = () => {
             name="fileName"
             value={fileName}
             onChange={handleFileNameChange}
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            class={inputClass}
           />
         </div>
 
@@ -105,7 +110,7 @@ const Form = () => {
             <div>
               <label
                 htmlFor="selectQuality"
-                class="block text-sm font-medium text-gray-700"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 {t('selectQuality')}
               </label>
@@ -113,7 +118,7 @@ const Form = () => {
                 id="selectQuality"
                 name="selectQuality"
                 onChange={handleQualityChange}
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                class={inputClass}
               >
                 {playlists.map((playlist) => (
                   <option value={playlist.url}>{playlist.video}</option>
@@ -133,7 +138,7 @@ const Form = () => {
       {isLoading && (
         <div className="flex justify-center mt-4">
           <div
-            className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500"
+            className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500 rounded-full"
             role="status"
             aria-label="loading"
           >

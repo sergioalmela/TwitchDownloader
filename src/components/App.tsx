@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next'
 function App() {
   return (
     <I18nextProvider i18n={i18next}>
-      <div className="bg-white flex flex-col items-center justify-center h-full">
+      <div className="bg-white dark:bg-gray-800 flex flex-col items-center justify-center h-full">
         <div>
           <img
             src="/logo.png"

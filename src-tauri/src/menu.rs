@@ -1,4 +1,4 @@
-use crate::translations::{English, French, German, Italian, Language, Spanish};
+use crate::translations::{English, French, German, Italian, Language, Portuguese, Spanish};
 use tauri::menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder};
 use tauri::{Manager, Runtime};
 
@@ -12,6 +12,7 @@ pub fn create_menu<'a, R: Runtime, M: Manager<R>>(
         "es" => Box::new(Spanish::new()),
         "fr" => Box::new(French::new()),
         "it" => Box::new(Italian::new()),
+        "pt" => Box::new(Portuguese::new()),
         _ => Box::new(English::new()),
     };
 

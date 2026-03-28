@@ -155,6 +155,20 @@ define_language!(
     }
 );
 
+define_language!(
+    Portuguese,
+    Translations {
+        about: "Sobre nós",
+        close: "Fechar",
+        config: "Configuração",
+        donate: "Doar",
+        github: "GitHub",
+        help: "Ajuda",
+        preferences: "Preferências",
+        window: "Janela",
+    }
+);
+
 #[cfg(test)]
 mod tests {
     use super::*;

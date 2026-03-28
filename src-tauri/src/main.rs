@@ -12,6 +12,14 @@ mod window;
 use crate::download::{download_clip, download_live, download_vod};
 use crate::menu::create_menu;
 
+#[tauri::command]
+fn rebuild_menu(app: tauri::AppHandle, language: String) -> Result<(), String> {
+    let menu_builder = create_menu(&language, &app);
+    let menu = menu_builder.build().map_err(|e| e.to_string())?;
+    app.set_menu(menu).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
 fn main() {
     let app_conf = config::AppConf::read().write();
 
@@ -40,6 +48,7 @@ fn main() {
             download_clip,
             config::update_preferences,
             config::get_preferences,
+            rebuild_menu,
         ])
         .menu(move |app_handle| {
             let menu_builder = create_menu(&language_clone, app_handle);

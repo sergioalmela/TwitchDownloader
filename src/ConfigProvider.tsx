@@ -8,6 +8,7 @@ import enTranslations from './locales/en.json'
 import esTranslations from './locales/es.json'
 import frTranslations from './locales/fr.json'
 import itTranslations from './locales/it.json'
+import ptTranslations from './locales/pt.json'
 import { useEffect, useState } from 'preact/hooks'
 import { ConfigContext } from './ConfigContext.ts'
 
@@ -34,6 +35,9 @@ export const ConfigProvider = ({
       },
       it: {
         translation: itTranslations
+      },
+      pt: {
+        translation: ptTranslations
       }
     },
     lng: DEFAULT_LANGUAGE,
