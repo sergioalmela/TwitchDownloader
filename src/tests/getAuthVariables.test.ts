@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { getAuthVariables } from '../downloader/auth/getAuthVariables.ts'
 import { ContentTypes } from '../downloader/detectContentType.ts'
 
@@ -42,7 +42,7 @@ describe('getAuthVariables', () => {
       const clip = getAuthVariables(ContentTypes.CLIP, 'slug')
       const live = getAuthVariables(ContentTypes.LIVE, 'user')
       expect(clip.extensions?.persistedQuery.sha256Hash).not.toBe(
-        live.extensions?.persistedQuery.sha256Hash
+        live.extensions?.persistedQuery.sha256Hash,
       )
     })
   })

@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/core'
-import { open } from '@tauri-apps/plugin-dialog'
 import { listen } from '@tauri-apps/api/event'
+import { open } from '@tauri-apps/plugin-dialog'
 import { revealItemInDir } from '@tauri-apps/plugin-opener'
+import { useEffect, useState } from 'preact/hooks'
+import { getCredentials } from '../downloader/auth/getCredentials.ts'
 import { detectContentType } from '../downloader/detectContentType.ts'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
-import { getCredentials } from '../downloader/auth/getCredentials.ts'
 import { getManifest } from '../downloader/getManifest.ts'
-import { getPlaylist, Playlist } from '../downloader/getPlaylist.ts'
+import { type Playlist, getPlaylist } from '../downloader/getPlaylist.ts'
 import {
-  Config,
+  type Config,
   DEFAULT_DOWNLOAD_COMMAND,
   DEFAULT_FILE_NAME,
-  DOWNLOAD_COMMANDS
+  type DOWNLOAD_COMMANDS,
 } from '../types.ts'
 
 export const useForm = (config: Config | null) => {
@@ -29,10 +29,10 @@ export const useForm = (config: Config | null) => {
   const [isDownloading, setIsDownloading] = useState(false)
   const [fileName, setFileName] = useState(DEFAULT_FILE_NAME)
   const [downloadCommand, setDownloadCommand] = useState<DOWNLOAD_COMMANDS>(
-    DEFAULT_DOWNLOAD_COMMAND
+    DEFAULT_DOWNLOAD_COMMAND,
   )
   const [downloadFolder, setDownloadFolder] = useState(
-    config ? config.download_folder : ''
+    config ? config.download_folder : '',
   )
 
   useEffect(() => {
@@ -71,12 +71,12 @@ export const useForm = (config: Config | null) => {
     try {
       const selectedFolder = await open({
         directory: true,
-        multiple: false
+        multiple: false,
       })
 
       if (selectedFolder) {
         setFolder(
-          Array.isArray(selectedFolder) ? selectedFolder[0] : selectedFolder
+          Array.isArray(selectedFolder) ? selectedFolder[0] : selectedFolder,
         )
       }
     } catch (error) {
@@ -110,7 +110,7 @@ export const useForm = (config: Config | null) => {
           ? 'download_clip'
           : contentType === 'live'
             ? 'download_live'
-            : 'download_vod'
+            : 'download_vod',
       )
 
       const id = getContentIdFromUrl(contentType, url)
@@ -140,8 +140,7 @@ export const useForm = (config: Config | null) => {
       }
       setShowQualities(true)
     } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : String(error)
+      const message = error instanceof Error ? error.message : String(error)
       handleError(message)
     } finally {
       setIsLoading(false)
@@ -171,8 +170,8 @@ export const useForm = (config: Config | null) => {
         args: {
           m3u8_url: selectedPlaylistUrl,
           download_path: folder || downloadFolder,
-          file_name: fileName
-        }
+          file_name: fileName,
+        },
       }
 
       clearErrors()
@@ -222,6 +221,6 @@ export const useForm = (config: Config | null) => {
     handleQualityChange,
     handleFileNameChange,
     handleSubmit,
-    resetForm
+    resetForm,
   }
 }

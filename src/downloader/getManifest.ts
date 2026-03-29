@@ -1,9 +1,9 @@
-import { ContentTypes } from './detectContentType.ts'
-import { ContentId } from './getContentId.ts'
-import { Credentials } from './auth/getCredentials.ts'
 import { fetch } from '@tauri-apps/plugin-http'
 import { getAuthHeaders } from './auth/getAuthHeaders.ts'
 import { getAuthVariables } from './auth/getAuthVariables.ts'
+import type { Credentials } from './auth/getCredentials.ts'
+import { ContentTypes } from './detectContentType.ts'
+import type { ContentId } from './getContentId.ts'
 
 type VideoQuality = {
   sourceURL: string
@@ -28,7 +28,7 @@ type ApiClipResponse = {
 export const getManifest = async (
   contentType: ContentTypes,
   id: ContentId,
-  credentials: Credentials
+  credentials: Credentials,
 ) => {
   if (contentType === ContentTypes.LIVE)
     return getManifestFromLive(id, credentials)
@@ -41,13 +41,13 @@ export const getManifest = async (
 
 const getManifestFromLive = async (
   id: ContentId,
-  credentials: Credentials
+  credentials: Credentials,
 ): Promise<string | null> => {
   const response = await fetch(
     `https://usher.ttvnw.net/api/channel/hls/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET'
-    }
+      method: 'GET',
+    },
   )
 
   if (!response.ok) {
@@ -60,13 +60,13 @@ const getManifestFromLive = async (
 
 const getManifestFromVod = async (
   id: ContentId,
-  credentials: Credentials
+  credentials: Credentials,
 ): Promise<string | null> => {
   const response = await fetch(
     `https://usher.ttvnw.net/vod/${id}.m3u8?sig=${credentials.signature}&token=${credentials.value}&allow_source=true&player=twitchweb&allow_spectre=true&allow_audio_only=true`,
     {
-      method: 'GET'
-    }
+      method: 'GET',
+    },
   )
 
   if (!response.ok) {
@@ -79,12 +79,12 @@ const getManifestFromVod = async (
 
 const getManifestFromClip = async (
   id: ContentId,
-  credentials: Credentials
+  credentials: Credentials,
 ): Promise<string | null> => {
   const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     body: JSON.stringify(getAuthVariables(ContentTypes.CLIP, id)),
-    headers: getAuthHeaders()
+    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
@@ -95,11 +95,11 @@ const getManifestFromClip = async (
   const data = (await response.json()) as ApiClipResponse
   const qualities = data.data.clip.videoQualities
 
-  qualities.forEach((quality: VideoQuality) => {
+  for (const quality of qualities) {
     if (!quality.quality.endsWith('p')) {
       quality.quality += 'p'
     }
-  })
+  }
 
   return completeManifest(qualities, credentials)
 }
@@ -110,24 +110,24 @@ const manifestHeaders = (): string => {
 
 const manifestContent = (
   qualities: VideoQuality[],
-  credentials: Credentials
+  credentials: Credentials,
 ): string => {
   let content = ''
-  qualities.forEach((quality: VideoQuality) => {
+  for (const quality of qualities) {
     content +=
       `#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID="${quality.quality}",NAME="${quality.quality}",AUTOSELECT=NO,DEFAULT=NO\n` +
       `#EXT-X-STREAM-INF:BANDWIDTH=0,CODECS="${DEFAULT_VIDEO_CODEC}",RESOLUTION=${quality.quality},VIDEO="${quality.quality}",FRAME-RATE=${quality.frameRate} \n` +
       `${quality.sourceURL}?sig=${
         credentials.signature
       }&token=${encodeURIComponent(credentials.value)} \n`
-  })
+  }
 
   return content
 }
 
 const completeManifest = (
   qualities: VideoQuality[],
-  credentials: Credentials
+  credentials: Credentials,
 ): string => {
   return manifestHeaders() + manifestContent(qualities, credentials)
 }

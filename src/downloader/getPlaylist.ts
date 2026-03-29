@@ -38,7 +38,7 @@ export const getPlaylist = (manifest: string): Playlist[] => {
       url: playlist.uri,
       framerate: playlist.attributes['FRAME-RATE'],
       bandwidth: playlist.attributes.BANDWIDTH,
-      codecs: playlist.attributes.CODECS
+      codecs: playlist.attributes.CODECS,
     }
   })
 }

@@ -19,5 +19,5 @@ render(
   <ConfigProvider>
     <Component />
   </ConfigProvider>,
-  rootElement
+  rootElement,
 )

@@ -1,5 +1,5 @@
-import { ContentId } from '../getContentId.ts'
 import { ContentTypes } from '../detectContentType.ts'
+import type { ContentId } from '../getContentId.ts'
 
 interface AuthVariables {
   operationName: string
@@ -21,7 +21,7 @@ interface AuthVariables {
 
 export const getAuthVariables = (
   contentType: ContentTypes,
-  id: ContentId
+  id: ContentId,
 ): AuthVariables => {
   if (contentType === ContentTypes.LIVE) return getLiveVariables(id)
   if (contentType === ContentTypes.VOD) return getVodVariables(id)
@@ -37,15 +37,15 @@ const getLiveVariables = (id: ContentId): AuthVariables => {
       login: id,
       isVod: false,
       vodID: '',
-      playerType: 'embed'
+      playerType: 'embed',
     },
     extensions: {
       persistedQuery: {
         version: 1,
         sha256Hash:
-          '0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712'
-      }
-    }
+          '0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712',
+      },
+    },
   }
 }
 const getVodVariables = (id: ContentId): AuthVariables => {
@@ -56,15 +56,15 @@ const getVodVariables = (id: ContentId): AuthVariables => {
       login: '',
       isVod: true,
       vodID: id,
-      playerType: 'site'
+      playerType: 'site',
     },
     extensions: {
       persistedQuery: {
         version: 1,
         sha256Hash:
-          '0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712'
-      }
-    }
+          '0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712',
+      },
+    },
   }
 }
 
@@ -72,14 +72,14 @@ const getClipVariables = (id: ContentId): AuthVariables => {
   return {
     operationName: 'VideoAccessToken_Clip',
     variables: {
-      slug: id
+      slug: id,
     },
     extensions: {
       persistedQuery: {
         version: 1,
         sha256Hash:
-          '36b89d2507fce29e5ca551df756d27c1cfe079e2609642b4390aa4c35796eb11'
-      }
-    }
+          '36b89d2507fce29e5ca551df756d27c1cfe079e2609642b4390aa4c35796eb11',
+      },
+    },
   }
 }

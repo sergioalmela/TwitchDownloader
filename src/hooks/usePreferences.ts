@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from 'preact/hooks'
-import { open } from '@tauri-apps/plugin-dialog'
 import { invoke } from '@tauri-apps/api/core'
+import { open } from '@tauri-apps/plugin-dialog'
+import { useContext, useEffect, useState } from 'preact/hooks'
 import { ConfigContext } from '../ConfigContext.ts'
 import {
-  Config,
+  type Config,
   DEFAULT_ACTIVE_TAB,
   DEFAULT_LANGUAGE,
   DEFAULT_OPEN_ON_DOWNLOAD,
   DEFAULT_THEME,
-  SetConfig
+  type SetConfig,
 } from '../types.ts'
 
 export const useConfig = () => {
@@ -20,20 +20,20 @@ export const useConfig = () => {
 
 export const usePreferences = (
   config: Config | null,
-  setConfig: SetConfig | null
+  setConfig: SetConfig | null,
 ) => {
   const [activeTab, setActiveTab] = useState(DEFAULT_ACTIVE_TAB)
   const [isSaving, setIsSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [language, setLanguage] = useState(
-    config ? config.language : DEFAULT_LANGUAGE
+    config ? config.language : DEFAULT_LANGUAGE,
   )
   const [openOnDownload, setOpenOnDownload] = useState(
-    config ? config.open_on_download : DEFAULT_OPEN_ON_DOWNLOAD
+    config ? config.open_on_download : DEFAULT_OPEN_ON_DOWNLOAD,
   )
   const [theme, setTheme] = useState(config ? config.theme : DEFAULT_THEME)
   const [downloadFolder, setDownloadFolder] = useState(
-    config ? config.download_folder : ''
+    config ? config.download_folder : '',
   )
 
   useEffect(() => {
@@ -45,6 +45,7 @@ export const usePreferences = (
     }
   }, [config])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: only trigger on folder change
   useEffect(() => {
     if (config && setConfig && downloadFolder !== config.download_folder) {
       setConfig({ ...config, download_folder: downloadFolder })
@@ -55,7 +56,7 @@ export const usePreferences = (
     try {
       const path = await open({
         directory: true,
-        multiple: false
+        multiple: false,
       })
 
       if (path) {
@@ -81,7 +82,7 @@ export const usePreferences = (
       language,
       download_folder: downloadFolder,
       open_on_download: openOnDownload,
-      theme
+      theme,
     }
 
     try {
@@ -147,6 +148,6 @@ export const usePreferences = (
     handleLanguageChange,
     handleOpenOnDownloadChange,
     handleThemeChange,
-    tabClass
+    tabClass,
   }
 }

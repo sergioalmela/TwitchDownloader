@@ -1,8 +1,8 @@
 import { useContext } from 'preact/hooks'
-import ProgressBar from './ProgressBar.tsx'
 import { useTranslation } from 'react-i18next'
+import { ConfigContext, type ConfigContextType } from '../ConfigContext.ts'
 import { useForm } from '../hooks/useForm.ts'
-import { ConfigContext, ConfigContextType } from '../ConfigContext.ts'
+import ProgressBar from './ProgressBar.tsx'
 
 const inputClass =
   'mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
@@ -28,7 +28,7 @@ const Form = () => {
     handleQualityChange,
     handleFileNameChange,
     handleSubmit,
-    resetForm
+    resetForm,
   } = useForm(config)
 
   const { t } = useTranslation('translation')
@@ -121,7 +121,9 @@ const Form = () => {
                 class={inputClass}
               >
                 {playlists.map((playlist) => (
-                  <option value={playlist.url}>{playlist.video}</option>
+                  <option key={playlist.url} value={playlist.url}>
+                    {playlist.video}
+                  </option>
                 ))}
               </select>
             </div>
@@ -137,13 +139,12 @@ const Form = () => {
       </form>
       {isLoading && (
         <div className="flex justify-center mt-4">
-          <div
+          <output
             className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500 rounded-full"
-            role="status"
             aria-label="loading"
           >
             <span className="sr-only">{t('loading')}</span>
-          </div>
+          </output>
         </div>
       )}
 

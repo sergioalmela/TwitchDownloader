@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { getPlaylist } from '../downloader/getPlaylist.ts'
 
 const VALID_MANIFEST = `#EXTM3U
@@ -29,7 +29,7 @@ describe('getPlaylist', () => {
   it('should extract correct URL, resolution, and codecs', () => {
     const playlists = getPlaylist(VALID_MANIFEST)
     expect(playlists[0].url).toBe(
-      'https://video-weaver.example.com/chunked/index-dvr.m3u8'
+      'https://video-weaver.example.com/chunked/index-dvr.m3u8',
     )
     expect(playlists[0].quality).toEqual({ width: 1920, height: 1080 })
     expect(playlists[0].codecs).toBe('avc1.4D402A,mp4a.40.2')
@@ -42,7 +42,7 @@ describe('getPlaylist', () => {
 
   it('should throw on manifest with no playlists', () => {
     expect(() => getPlaylist('#EXTM3U\n#EXT-X-VERSION:3')).toThrow(
-      'Content not found or not started'
+      'Content not found or not started',
     )
   })
 })

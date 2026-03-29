@@ -1,17 +1,17 @@
-import { describe, it, expect } from 'vitest'
-import { getContentIdFromUrl } from '../downloader/getContentId.ts'
+import { describe, expect, it } from 'vitest'
 import { ContentTypes } from '../downloader/detectContentType.ts'
+import { getContentIdFromUrl } from '../downloader/getContentId.ts'
 
 describe('getContentId', () => {
   it('should return ID from Live URL', () => {
     expect(
-      getContentIdFromUrl(ContentTypes.LIVE, 'https://www.twitch.tv/username')
+      getContentIdFromUrl(ContentTypes.LIVE, 'https://www.twitch.tv/username'),
     ).toBe('username')
   })
 
   it('should return null from Live URL', () => {
     expect(
-      getContentIdFromUrl(ContentTypes.LIVE, 'https://www.twitch.tv/')
+      getContentIdFromUrl(ContentTypes.LIVE, 'https://www.twitch.tv/'),
     ).toBe(null)
   })
 
@@ -19,14 +19,14 @@ describe('getContentId', () => {
     expect(
       getContentIdFromUrl(
         ContentTypes.CLIP,
-        'https://www.twitch.tv/clip/123456789'
-      )
+        'https://www.twitch.tv/clip/123456789',
+      ),
     ).toBe('123456789')
   })
 
   it('should return null from Clip URL', () => {
     expect(
-      getContentIdFromUrl(ContentTypes.CLIP, 'https://www.twitch.tv/clip/')
+      getContentIdFromUrl(ContentTypes.CLIP, 'https://www.twitch.tv/clip/'),
     ).toBe(null)
   })
 
@@ -34,14 +34,14 @@ describe('getContentId', () => {
     expect(
       getContentIdFromUrl(
         ContentTypes.VOD,
-        'https://www.twitch.tv/videos/123456789'
-      )
+        'https://www.twitch.tv/videos/123456789',
+      ),
     ).toBe('123456789')
   })
 
   it('should return null from VOD URL', () => {
     expect(
-      getContentIdFromUrl(ContentTypes.VOD, 'https://www.twitch.tv/videos/')
+      getContentIdFromUrl(ContentTypes.VOD, 'https://www.twitch.tv/videos/'),
     ).toBe(null)
   })
 })

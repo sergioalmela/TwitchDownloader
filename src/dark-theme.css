@@ -1,7 +1,9 @@
-html, body, #root {
-    height: 100%;
+html,
+body,
+#root {
+  height: 100%;
 }
 
 .dark {
-    color-scheme: dark;
+  color-scheme: dark;
 }

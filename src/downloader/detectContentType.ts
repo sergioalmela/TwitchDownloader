@@ -1,7 +1,7 @@
 export enum ContentTypes {
-  'VOD' = 'vod',
-  'LIVE' = 'live',
-  'CLIP' = 'clip'
+  VOD = 'vod',
+  LIVE = 'live',
+  CLIP = 'clip',
 }
 
 const isVod = /videos\/\d+/i
