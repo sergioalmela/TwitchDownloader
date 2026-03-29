@@ -7,7 +7,7 @@ import { getCredentials } from '../downloader/auth/getCredentials.ts'
 import { detectContentType } from '../downloader/detectContentType.ts'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
 import { getManifest } from '../downloader/getManifest.ts'
-import { type Playlist, getPlaylist } from '../downloader/getPlaylist.ts'
+import { getPlaylist, type Playlist } from '../downloader/getPlaylist.ts'
 import {
   type Config,
   DEFAULT_DOWNLOAD_COMMAND,

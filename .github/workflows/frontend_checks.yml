@@ -18,7 +18,7 @@ jobs:
         run: npm install
 
       - name: Run Biome
-        run: npx @biomejs/biome check src
+        run: npx biome ci src
 
       - name: Run tests
         run: npx vitest run

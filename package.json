@@ -21,8 +21,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "npx @biomejs/biome check src",
-    "format": "npx @biomejs/biome check --fix src",
+    "lint": "biome check src",
+    "format": "biome check --fix src",
     "preview": "vite preview",
     "tauri": "tauri",
     "test": "vitest run"
@@ -45,7 +45,7 @@
     "react-i18next": "^17.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "2.4.9",
     "@preact/preset-vite": "^2.10.5",
     "@tailwindcss/vite": "^4.2.2",
     "@tauri-apps/cli": "^2.10.1",

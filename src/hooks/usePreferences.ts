@@ -45,7 +45,6 @@ export const usePreferences = (
     }
   }, [config])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: only trigger on folder change
   useEffect(() => {
     if (config && setConfig && downloadFolder !== config.download_folder) {
       setConfig({ ...config, download_folder: downloadFolder })
