@@ -25,7 +25,8 @@
     "format": "biome check --fix src",
     "preview": "vite preview",
     "tauri": "tauri",
-    "test": "vitest run"
+    "test": "vitest run",
+    "check": "biome ci src && vitest run && cd src-tauri && cargo fmt -- --check && cargo clippy -- -D warnings && cargo test"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
