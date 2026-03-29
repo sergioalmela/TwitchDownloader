@@ -60,9 +60,10 @@ fn main() {
                 app_handle.exit(0);
             }
             "github" => {
-                let _ = app_handle
-                    .opener()
-                    .open_url("https://github.com/sergioalmela/TwitchDownloader", None::<&str>);
+                let _ = app_handle.opener().open_url(
+                    "https://github.com/sergioalmela/TwitchDownloader",
+                    None::<&str>,
+                );
             }
             "donate" => {
                 let _ = app_handle
