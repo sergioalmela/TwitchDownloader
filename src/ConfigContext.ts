@@ -1,5 +1,5 @@
 import { createContext } from 'preact'
-import { Config, SetConfig } from './types.ts'
+import type { Config, SetConfig } from './types.ts'
 
 export type ConfigContextType = {
   config: Config | null

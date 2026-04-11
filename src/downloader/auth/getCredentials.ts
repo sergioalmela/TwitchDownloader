@@ -1,8 +1,8 @@
 import { fetch } from '@tauri-apps/plugin-http'
-import { getAuthHeaders } from './getAuthHeaders.ts'
-import { ContentId } from '../getContentId.ts'
-import { getAuthVariables } from './getAuthVariables.ts'
 import { ContentTypes } from '../detectContentType.ts'
+import type { ContentId } from '../getContentId.ts'
+import { getAuthHeaders } from './getAuthHeaders.ts'
+import { getAuthVariables } from './getAuthVariables.ts'
 
 export type Credentials = {
   signature: string
@@ -21,12 +21,12 @@ type AuthResponse = {
 
 export const getCredentials = async (
   contentType: ContentTypes,
-  id: ContentId
+  id: ContentId,
 ): Promise<Credentials> => {
   const response = await fetch('https://gql.twitch.tv/gql', {
     method: 'POST',
     body: JSON.stringify(getAuthVariables(contentType, id)),
-    headers: getAuthHeaders()
+    headers: getAuthHeaders(),
   })
 
   const responseData: AuthResponse = await response.json()
@@ -36,13 +36,13 @@ export const getCredentials = async (
 
 const getAccessTokenFromResponse = (
   contentType: ContentTypes,
-  response: AuthResponse
+  response: AuthResponse,
 ): Credentials => {
   if (contentType === ContentTypes.VOD) {
     return response.data.videoPlaybackAccessToken
-  } else if (contentType === ContentTypes.CLIP) {
-    return response.data.clip.playbackAccessToken
-  } else {
-    return response.data.streamPlaybackAccessToken
   }
+  if (contentType === ContentTypes.CLIP) {
+    return response.data.clip.playbackAccessToken
+  }
+  return response.data.streamPlaybackAccessToken
 }

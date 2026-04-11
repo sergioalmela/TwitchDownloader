@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'preact/hooks'
 import { invoke } from '@tauri-apps/api/core'
-import { open } from '@tauri-apps/plugin-dialog'
 import { listen } from '@tauri-apps/api/event'
-import { open as openShell } from '@tauri-apps/plugin-shell'
+import { open } from '@tauri-apps/plugin-dialog'
+import { revealItemInDir } from '@tauri-apps/plugin-opener'
+import { useEffect, useState } from 'preact/hooks'
+import { getCredentials } from '../downloader/auth/getCredentials.ts'
 import { detectContentType } from '../downloader/detectContentType.ts'
 import { getContentIdFromUrl } from '../downloader/getContentId.ts'
-import { getCredentials } from '../downloader/auth/getCredentials.ts'
 import { getManifest } from '../downloader/getManifest.ts'
-import { getPlaylist, Playlist } from '../downloader/getPlaylist.ts'
+import { getPlaylist, type Playlist } from '../downloader/getPlaylist.ts'
 import {
-  Config,
+  type Config,
   DEFAULT_DOWNLOAD_COMMAND,
   DEFAULT_FILE_NAME,
-  DOWNLOAD_COMMANDS
+  type DOWNLOAD_COMMANDS,
 } from '../types.ts'
 
 export const useForm = (config: Config | null) => {
@@ -29,23 +29,15 @@ export const useForm = (config: Config | null) => {
   const [isDownloading, setIsDownloading] = useState(false)
   const [fileName, setFileName] = useState(DEFAULT_FILE_NAME)
   const [downloadCommand, setDownloadCommand] = useState<DOWNLOAD_COMMANDS>(
-    DEFAULT_DOWNLOAD_COMMAND
+    DEFAULT_DOWNLOAD_COMMAND,
   )
   const [downloadFolder, setDownloadFolder] = useState(
-    config ? config.download_folder : ''
+    config ? config.download_folder : '',
   )
 
   useEffect(() => {
     if (config) {
       setDownloadFolder(config.download_folder)
-    }
-  }, [config])
-
-  useEffect(() => {
-    if (config && config.theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
     }
   }, [config])
 
@@ -70,18 +62,21 @@ export const useForm = (config: Config | null) => {
     const target = event.target as HTMLInputElement
     setUrl(target.value)
     setError('')
+    setShowQualities(false)
+    setPlaylists([])
+    setSelectedPlaylistUrl('')
   }
 
   const selectFolder = async () => {
     try {
       const selectedFolder = await open({
         directory: true,
-        multiple: false
+        multiple: false,
       })
 
       if (selectedFolder) {
         setFolder(
-          Array.isArray(selectedFolder) ? selectedFolder[0] : selectedFolder
+          Array.isArray(selectedFolder) ? selectedFolder[0] : selectedFolder,
         )
       }
     } catch (error) {
@@ -115,7 +110,7 @@ export const useForm = (config: Config | null) => {
           ? 'download_clip'
           : contentType === 'live'
             ? 'download_live'
-            : 'download_vod'
+            : 'download_vod',
       )
 
       const id = getContentIdFromUrl(contentType, url)
@@ -143,14 +138,13 @@ export const useForm = (config: Config | null) => {
         handleError('Failed to get video content')
         return
       }
+      setShowQualities(true)
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        handleError(error.message)
-      }
+      const message = error instanceof Error ? error.message : String(error)
+      handleError(message)
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
-    setShowQualities(true)
   }
 
   const handleQualityChange = (event: Event) => {
@@ -176,8 +170,8 @@ export const useForm = (config: Config | null) => {
         args: {
           m3u8_url: selectedPlaylistUrl,
           download_path: folder || downloadFolder,
-          file_name: fileName
-        }
+          file_name: fileName,
+        },
       }
 
       clearErrors()
@@ -185,9 +179,7 @@ export const useForm = (config: Config | null) => {
 
       if (config && config.open_on_download === 'open') {
         const filePath = `${downloadData.args.download_path}/${downloadData.args.file_name}`
-        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'))
-
-        await openShell(dirPath)
+        await revealItemInDir(filePath)
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -229,6 +221,6 @@ export const useForm = (config: Config | null) => {
     handleQualityChange,
     handleFileNameChange,
     handleSubmit,
-    resetForm
+    resetForm,
   }
 }

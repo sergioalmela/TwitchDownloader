@@ -1,11 +1,13 @@
 {
   "appearance": "Apariencia",
   "clear": "Limpiar",
+  "close": "Cerrar",
   "dark": "Oscuro",
   "dontOpen": "No Abrir",
   "download": "Descargar",
   "downloadFolder": "Carpeta de Descarga",
   "downloads": "Descargas",
+  "downloadAnother": "Descargar Otro",
   "fileName": "Nombre del Archivo",
   "general": "General",
   "getQualities": "Obtener Formatos",
@@ -15,7 +17,8 @@
     "en": "Inglés",
     "es": "Español",
     "fr": "Francés",
-    "it": "Italiano"
+    "it": "Italiano",
+    "pt": "Portugués"
   },
   "light": "Claro",
   "loading": "Cargando...",

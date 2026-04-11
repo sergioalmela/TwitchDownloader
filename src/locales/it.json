@@ -1,11 +1,12 @@
 {
   "appearance": "Aspetto",
   "clear": "Cancella",
+  "close": "Chiudi",
   "dark": "Scuro",
   "dontOpen": "Non aprire",
   "download": "Scarica",
-  "downloadFolder": "Cartella di scaricamento",
-  "downloads": "Scaricamenti",
+  "downloadFolder": "Cartella di download",
+  "downloads": "Download",
   "downloadAnother": "Scarica un altro",
   "fileName": "Nome del file",
   "general": "Generale",
@@ -16,10 +17,11 @@
     "en": "Inglese",
     "es": "Spagnolo",
     "fr": "Francese",
-    "it": "Italiano"
+    "it": "Italiano",
+    "pt": "Portoghese"
   },
   "loading": "Caricamento...",
-  "light": "Luce",
+  "light": "Chiaro",
   "open": "Apri",
   "openFolderOnDownload": "Apri cartella al download",
   "save": "Salva",

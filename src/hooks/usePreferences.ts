@@ -1,17 +1,15 @@
-import { useContext, useEffect, useState } from 'preact/hooks'
-import { open } from '@tauri-apps/plugin-dialog'
 import { invoke } from '@tauri-apps/api/core'
+import { open } from '@tauri-apps/plugin-dialog'
+import { useContext, useEffect, useState } from 'preact/hooks'
 import { ConfigContext } from '../ConfigContext.ts'
 import {
-  Config,
+  type Config,
   DEFAULT_ACTIVE_TAB,
   DEFAULT_LANGUAGE,
   DEFAULT_OPEN_ON_DOWNLOAD,
   DEFAULT_THEME,
-  SetConfig
+  type SetConfig,
 } from '../types.ts'
-import * as dialog from '@tauri-apps/plugin-dialog'
-import * as process from '@tauri-apps/plugin-process'
 
 export const useConfig = () => {
   const configContext = useContext(ConfigContext)
@@ -22,18 +20,20 @@ export const useConfig = () => {
 
 export const usePreferences = (
   config: Config | null,
-  setConfig: SetConfig | null
+  setConfig: SetConfig | null,
 ) => {
   const [activeTab, setActiveTab] = useState(DEFAULT_ACTIVE_TAB)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [language, setLanguage] = useState(
-    config ? config.language : DEFAULT_LANGUAGE
+    config ? config.language : DEFAULT_LANGUAGE,
   )
   const [openOnDownload, setOpenOnDownload] = useState(
-    config ? config.open_on_download : DEFAULT_OPEN_ON_DOWNLOAD
+    config ? config.open_on_download : DEFAULT_OPEN_ON_DOWNLOAD,
   )
   const [theme, setTheme] = useState(config ? config.theme : DEFAULT_THEME)
   const [downloadFolder, setDownloadFolder] = useState(
-    config ? config.download_folder : ''
+    config ? config.download_folder : '',
   )
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const usePreferences = (
     try {
       const path = await open({
         directory: true,
-        multiple: false
+        multiple: false,
       })
 
       if (path) {
@@ -67,29 +67,40 @@ export const usePreferences = (
     }
   }
 
+  const closePreferences = async () => {
+    const { getCurrentWindow } = await import('@tauri-apps/api/window')
+    await getCurrentWindow().close()
+  }
+
   const updatePreferences = async () => {
+    setIsSaving(true)
+    setSaved(false)
+    const languageChanged = config && language !== config.language
+
     const values = {
       language,
       download_folder: downloadFolder,
       open_on_download: openOnDownload,
-      theme
+      theme,
     }
 
     try {
       await invoke('update_preferences', { data: values })
-      const isOk = await dialog.ask(
-        `Configuration saved successfully, do you want to restart?`,
-        {
-          title: 'Twitch Downloader Preferences'
-        }
-      )
 
-      if (isOk) {
-        await process.relaunch()
-        return
+      if (languageChanged) {
+        await invoke('rebuild_menu', { language })
       }
+
+      // Notify main window to refresh config
+      const { emit } = await import('@tauri-apps/api/event')
+      await emit('preferences-updated')
+
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
     } catch (error) {
       console.error('Error submitting form:', error)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -121,18 +132,21 @@ export const usePreferences = (
     `flex-1 cursor-pointer text-center p-4 ${
       activeTab === tabName
         ? 'bg-blue-500 text-white'
-        : 'bg-gray-200 hover:bg-gray-300'
+        : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-200'
     }`
 
   return {
     activeTab,
     setActiveTab,
     downloadFolder,
+    isSaving,
+    saved,
     selectFolder,
     updatePreferences,
+    closePreferences,
     handleLanguageChange,
     handleOpenOnDownloadChange,
     handleThemeChange,
-    tabClass
+    tabClass,
   }
 }

@@ -1,18 +1,20 @@
-import { ComponentChildren } from 'preact'
-import { Config, DEFAULT_LANGUAGE } from './types.ts'
 import { invoke } from '@tauri-apps/api/core'
+import { listen } from '@tauri-apps/api/event'
 import i18next from 'i18next'
+import type { ComponentChildren } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 import { initReactI18next } from 'react-i18next'
+import { ConfigContext } from './ConfigContext.ts'
 import deTranslations from './locales/de.json'
 import enTranslations from './locales/en.json'
 import esTranslations from './locales/es.json'
 import frTranslations from './locales/fr.json'
 import itTranslations from './locales/it.json'
-import { useEffect, useState } from 'preact/hooks'
-import { ConfigContext } from './ConfigContext.ts'
+import ptTranslations from './locales/pt.json'
+import { type Config, DEFAULT_LANGUAGE } from './types.ts'
 
 export const ConfigProvider = ({
-  children
+  children,
 }: {
   children: ComponentChildren
 }) => {
@@ -21,31 +23,40 @@ export const ConfigProvider = ({
   i18next.use(initReactI18next).init({
     resources: {
       de: {
-        translation: deTranslations
+        translation: deTranslations,
       },
       en: {
-        translation: enTranslations
+        translation: enTranslations,
       },
       es: {
-        translation: esTranslations
+        translation: esTranslations,
       },
       fr: {
-        translation: frTranslations
+        translation: frTranslations,
       },
       it: {
-        translation: itTranslations
-      }
+        translation: itTranslations,
+      },
+      pt: {
+        translation: ptTranslations,
+      },
     },
     lng: DEFAULT_LANGUAGE,
     fallbackLng: DEFAULT_LANGUAGE,
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   })
 
   useEffect(() => {
     if (config) {
       i18next.changeLanguage(config.language)
+
+      if (config.theme === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
     }
   }, [config])
 
@@ -56,6 +67,14 @@ export const ConfigProvider = ({
     }
 
     fetchConfig()
+
+    const unlisten = listen('preferences-updated', () => {
+      fetchConfig()
+    })
+
+    return () => {
+      unlisten.then((fn) => fn())
+    }
   }, [])
 
   return (

@@ -1,6 +1,7 @@
 {
   "appearance": "Appearance",
   "clear": "Clear",
+  "close": "Close",
   "dark": "Dark",
   "dontOpen": "Don't Open",
   "download": "Download",
@@ -12,11 +13,12 @@
   "getQualities": "Get Qualities",
   "language": "Language",
   "languages": {
-    "de": "Deutsch",
+    "de": "German",
     "en": "English",
     "es": "Spanish",
     "fr": "French",
-    "it": "Italian"
+    "it": "Italian",
+    "pt": "Portuguese"
   },
   "loading": "Loading...",
   "light": "Light",

@@ -18,21 +18,13 @@ pub fn get_preferences() -> AppConf {
     AppConf::read()
 }
 
-macro_rules! pub_struct {
-  ($name:ident {$($field:ident: $t:ty,)*}) => {
-    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
-    pub struct $name {
-      $(pub $field: $t),*
-    }
-  }
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct AppConf {
+    pub theme: String,
+    pub language: String,
+    pub download_folder: String,
+    pub open_on_download: String,
 }
-
-pub_struct!(AppConf {
-    theme: String,
-    language: String,
-    download_folder: String,
-    open_on_download: String,
-});
 
 impl AppConf {
     pub fn new() -> Self {
@@ -72,10 +64,9 @@ impl AppConf {
             info!("conf_create");
         }
         if let Ok(v) = serde_json::to_string_pretty(&self) {
-            std::fs::write(path, v).unwrap_or_else(|err| {
+            if let Err(err) = std::fs::write(path, v) {
                 error!("conf_write: {}", err);
-                Self::default().write();
-            });
+            }
         } else {
             error!("conf_ser");
         }
@@ -117,13 +108,62 @@ impl Default for AppConf {
     }
 }
 
-pub mod cmd {
-    use tauri::{command, AppHandle};
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    use super::AppConf;
+    #[test]
+    fn new_returns_correct_defaults() {
+        let conf = AppConf::new();
+        assert_eq!(conf.theme, "light");
+        assert_eq!(conf.language, "en");
+        assert_eq!(conf.download_folder, "");
+        assert_eq!(conf.open_on_download, "open");
+    }
 
-    #[command]
-    pub fn form_confirm(_app: AppHandle, data: serde_json::Value) {
-        AppConf::read().amend(serde_json::json!(data)).write();
+    #[test]
+    fn language_returns_lowercase() {
+        let mut conf = AppConf::new();
+        conf.language = "EN".into();
+        assert_eq!(conf.language(), "en");
+
+        conf.language = "Es".into();
+        assert_eq!(conf.language(), "es");
+    }
+
+    #[test]
+    fn amend_updates_existing_fields() {
+        let conf = AppConf::new();
+        let updated = conf.amend(serde_json::json!({
+            "theme": "dark",
+            "language": "es"
+        }));
+        assert_eq!(updated.theme, "dark");
+        assert_eq!(updated.language, "es");
+        assert_eq!(updated.download_folder, "");
+        assert_eq!(updated.open_on_download, "open");
+    }
+
+    #[test]
+    fn amend_preserves_unmodified_fields() {
+        let conf = AppConf::new();
+        let updated = conf.amend(serde_json::json!({
+            "theme": "dark"
+        }));
+        assert_eq!(updated.theme, "dark");
+        assert_eq!(updated.language, "en");
+        assert_eq!(updated.download_folder, "");
+        assert_eq!(updated.open_on_download, "open");
+    }
+
+    #[test]
+    fn serialization_roundtrip() {
+        let conf = AppConf::new();
+        let json = serde_json::to_string(&conf).unwrap();
+        let deserialized: AppConf = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.theme, conf.theme);
+        assert_eq!(deserialized.language, conf.language);
+        assert_eq!(deserialized.download_folder, conf.download_folder);
+        assert_eq!(deserialized.open_on_download, conf.open_on_download);
     }
 }

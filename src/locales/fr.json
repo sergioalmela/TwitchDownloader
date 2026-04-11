@@ -1,6 +1,7 @@
 {
   "appearance": "Apparence",
   "clear": "Effacer",
+  "close": "Fermer",
   "dark": "Sombre",
   "dontOpen": "Ne pas ouvrir",
   "download": "Télécharger",
@@ -16,10 +17,11 @@
     "en": "Anglais",
     "es": "Espagnol",
     "fr": "Français",
-    "it": "Italien"
+    "it": "Italien",
+    "pt": "Portugais"
   },
   "loading": "Chargement...",
-  "light": "Lumière",
+  "light": "Clair",
   "open": "Ouvrir",
   "openFolderOnDownload": "Ouvrir le dossier lors du téléchargement",
   "save": "Enregistrer",

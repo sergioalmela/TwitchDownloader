@@ -1,4 +1,4 @@
-import { Dispatch, StateUpdater } from 'preact/hooks'
+import type { Dispatch, StateUpdater } from 'preact/hooks'
 
 export type Config = {
   theme: string
