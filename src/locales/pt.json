@@ -1,5 +1,6 @@
 {
   "appearance": "Aparência",
+  "cancel": "Cancelar",
   "clear": "Limpar",
   "close": "Fechar",
   "dark": "Escuro",
@@ -28,6 +29,7 @@
   "selectFolder": "Selecionar pasta",
   "selectedFolder": "Pasta selecionada: ",
   "selectQuality": "Selecionar qualidade:",
+  "stop": "Parar",
   "theme": "Tema",
   "twitchUrl": "URL do Twitch:"
 }

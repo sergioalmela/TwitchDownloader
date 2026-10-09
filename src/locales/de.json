@@ -1,5 +1,6 @@
 {
   "appearance": "Aussehen",
+  "cancel": "Abbrechen",
   "clear": "Löschen",
   "close": "Schließen",
   "dark": "Dunkel",
@@ -28,6 +29,7 @@
   "selectFolder": "Ordner auswählen",
   "selectedFolder": "Ausgewählter Ordner: ",
   "selectQuality": "Qualität auswählen:",
+  "stop": "Stoppen",
   "theme": "Design",
   "twitchUrl": "Twitch-URL"
 }

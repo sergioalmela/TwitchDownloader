@@ -11,11 +11,11 @@ export type Credentials = {
 
 type AuthResponse = {
   data: {
-    videoPlaybackAccessToken: Credentials
-    clip: {
-      playbackAccessToken: Credentials
-    }
-    streamPlaybackAccessToken: Credentials
+    videoPlaybackAccessToken?: Credentials | null
+    clip?: {
+      playbackAccessToken: Credentials | null
+    } | null
+    streamPlaybackAccessToken?: Credentials | null
   }
 }
 
@@ -29,20 +29,29 @@ export const getCredentials = async (
     headers: getAuthHeaders(),
   })
 
-  const responseData: AuthResponse = await response.json()
+  if (!response.ok) {
+    throw new Error(`Twitch returned HTTP ${response.status}`)
+  }
 
-  return getAccessTokenFromResponse(contentType, responseData)
+  const responseData: AuthResponse = await response.json()
+  const credentials = getAccessTokenFromResponse(contentType, responseData)
+
+  if (!credentials) {
+    throw new Error('Content not found')
+  }
+
+  return credentials
 }
 
 const getAccessTokenFromResponse = (
   contentType: ContentTypes,
   response: AuthResponse,
-): Credentials => {
+): Credentials | null | undefined => {
   if (contentType === ContentTypes.VOD) {
-    return response.data.videoPlaybackAccessToken
+    return response.data?.videoPlaybackAccessToken
   }
   if (contentType === ContentTypes.CLIP) {
-    return response.data.clip.playbackAccessToken
+    return response.data?.clip?.playbackAccessToken
   }
-  return response.data.streamPlaybackAccessToken
+  return response.data?.streamPlaybackAccessToken
 }

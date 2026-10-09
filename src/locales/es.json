@@ -1,5 +1,6 @@
 {
   "appearance": "Apariencia",
+  "cancel": "Cancelar",
   "clear": "Limpiar",
   "close": "Cerrar",
   "dark": "Oscuro",
@@ -28,6 +29,7 @@
   "selectFolder": "Seleccionar Carpeta",
   "selectedFolder": "Carpeta Seleccionada: ",
   "selectQuality": "Seleccionar Calidad:",
+  "stop": "Detener",
   "theme": "Tema",
   "twitchUrl": "URL de Twitch:"
 }

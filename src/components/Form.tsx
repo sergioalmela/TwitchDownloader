@@ -22,12 +22,14 @@ const Form = () => {
     isLoading,
     error,
     downloadFolder,
+    isLive,
     handleUrlChange,
     selectFolder,
     handleGetQualities,
     handleQualityChange,
     handleFileNameChange,
     handleSubmit,
+    cancelDownload,
     resetForm,
   } = useForm(config)
 
@@ -130,7 +132,8 @@ const Form = () => {
 
             <button
               type="submit"
-              class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isDownloading}
+              class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
               {t('download')}
             </button>
@@ -148,7 +151,18 @@ const Form = () => {
         </div>
       )}
 
-      {isDownloading && <ProgressBar progress={downloadProgress} />}
+      {isDownloading && (
+        <>
+          <ProgressBar progress={downloadProgress} />
+          <button
+            type="button"
+            onClick={cancelDownload}
+            className="py-2 px-4 w-full border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            {isLive ? t('stop') : t('cancel')}
+          </button>
+        </>
+      )}
 
       {!isDownloading && downloadProgress === 100 && (
         <button
