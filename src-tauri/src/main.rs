@@ -5,11 +5,14 @@ use tauri_plugin_opener::OpenerExt;
 mod config;
 mod download;
 mod menu;
+mod playlist;
 mod translations;
 mod utils;
 mod window;
 
-use crate::download::{download_clip, download_live, download_vod};
+use crate::download::{
+    cancel_download, download_clip, download_live, download_vod, ActiveDownload,
+};
 use crate::menu::create_menu;
 
 #[tauri::command]
@@ -32,20 +35,15 @@ fn main() {
 
             Ok(())
         })
+        .manage(ActiveDownload::default())
         .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_fs::init())
-        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
-        .plugin(tauri_plugin_process::init())
-        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             download_live,
             download_vod,
             download_clip,
+            cancel_download,
             config::update_preferences,
             config::get_preferences,
             rebuild_menu,

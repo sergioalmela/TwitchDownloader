@@ -8,6 +8,7 @@ Twitch Downloader is a free utility made to download Twitch content (streams, vi
 
 - Download live streams, VODs, highlights, and clips
 - Quality selector for each content type
+- Cancel a download, or stop a live recording and keep what was captured
 - Dark and light theme
 - 6 languages: English, Spanish, Portuguese, French, German, Italian
 - Configurable download folder
@@ -16,7 +17,7 @@ Twitch Downloader is a free utility made to download Twitch content (streams, vi
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+)
+- [Node.js](https://nodejs.org/) (v20.19+ or v22.12+)
 - [Rust](https://www.rust-lang.org/tools/install)
 - System dependencies for Tauri: see [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/)
 

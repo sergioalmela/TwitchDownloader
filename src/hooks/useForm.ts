@@ -27,6 +27,7 @@ export const useForm = (config: Config | null) => {
   const [folder, setFolder] = useState('')
   const [downloadProgress, setDownloadProgress] = useState(0)
   const [isDownloading, setIsDownloading] = useState(false)
+  const [isLiveDownload, setIsLiveDownload] = useState(false)
   const [fileName, setFileName] = useState(DEFAULT_FILE_NAME)
   const [downloadCommand, setDownloadCommand] = useState<DOWNLOAD_COMMANDS>(
     DEFAULT_DOWNLOAD_COMMAND,
@@ -49,7 +50,6 @@ export const useForm = (config: Config | null) => {
     const progress = listen('download-progress', (event) => {
       if (typeof event.payload === 'number') {
         setDownloadProgress(event.payload)
-        setIsDownloading(event.payload < 100)
       }
     })
 
@@ -175,7 +175,11 @@ export const useForm = (config: Config | null) => {
       }
 
       clearErrors()
+      setDownloadProgress(0)
+      setIsLiveDownload(downloadCommand === 'download_live')
+      setIsDownloading(true)
       await invoke(downloadCommand, downloadData)
+      setDownloadProgress(100)
 
       if (config && config.open_on_download === 'open') {
         const filePath = `${downloadData.args.download_path}/${downloadData.args.file_name}`
@@ -187,6 +191,17 @@ export const useForm = (config: Config | null) => {
       } else if (typeof error === 'string') {
         setError(error)
       }
+    } finally {
+      setIsDownloading(false)
+    }
+  }
+
+  // A cancelled live recording keeps what was captured; other downloads are discarded.
+  const cancelDownload = async () => {
+    try {
+      await invoke('cancel_download')
+    } catch (error) {
+      setError(String(error))
     }
   }
 
@@ -215,12 +230,14 @@ export const useForm = (config: Config | null) => {
     isLoading,
     error,
     downloadFolder,
+    isLive: isLiveDownload,
     handleUrlChange,
     selectFolder,
     handleGetQualities,
     handleQualityChange,
     handleFileNameChange,
     handleSubmit,
+    cancelDownload,
     resetForm,
   }
 }
