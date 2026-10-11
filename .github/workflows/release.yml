@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - master
+    # Docs and CI changes do not ship a new app version.
+    paths-ignore:
+      - "**.md"
+      - ".github/**"
+  workflow_dispatch:
 
 jobs:
   publish-tauri:

@@ -15,6 +15,22 @@ Twitch Downloader is a free utility made to download Twitch content (streams, vi
 - Open file in file manager after download
 - Cross-platform (Linux, macOS, Windows)
 
+## Download
+
+Get the latest version from the [Releases page](https://github.com/sergioalmela/TwitchDownloader/releases/latest).
+
+| System | File |
+|---|---|
+| Windows | `*_x64-setup.exe` or `*_x64_en-US.msi` |
+| macOS (Apple Silicon) | `*_aarch64.dmg` |
+| macOS (Intel) | `*_x64.dmg` |
+| Linux | `*.AppImage`, `*.deb` or `*.rpm` |
+
+The app is not code-signed, so the system may warn you on first launch:
+
+- **Windows:** if SmartScreen says "Windows protected your PC", click **More info**, then **Run anyway**.
+- **macOS:** if it says the app "is damaged and can't be opened", move it to Applications and run `xattr -cr /Applications/twitch-downloader.app`. If it says Apple cannot verify the developer, go to **System Settings > Privacy & Security** and click **Open Anyway**.
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v20.19+ or v22.12+)
@@ -44,6 +60,12 @@ It will open a new window with the GUI. Enter the URL of the stream, video, high
 
 ```
 npm test
+```
+
+Run every check (lint, frontend tests, Rust format, clippy and Rust tests):
+
+```
+npm run check
 ```
 
 ## Donate
